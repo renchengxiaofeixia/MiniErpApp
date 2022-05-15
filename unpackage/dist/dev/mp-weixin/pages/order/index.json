@@ -1,0 +1,15 @@
+{
+  "navigationBarTitleText": "",
+  "navigationStyle": "custom",
+  "navigationBarTextStyle": "white",
+  "usingComponents": {
+    "uni-datetime-picker": "/uni_modules/uni-datetime-picker/components/uni-datetime-picker/uni-datetime-picker",
+    "header-tab": "/components/headerTab/index",
+    "searchbox": "/components/searchbox/index",
+    "data-grid": "/components/dataGrid/index",
+    "add-order": "/components/addOrder",
+    "filtrate-popup": "/components/filtratePopup/index",
+    "pulldown": "/components/pulldown",
+    "state-bar": "/components/stateBar"
+  }
+}

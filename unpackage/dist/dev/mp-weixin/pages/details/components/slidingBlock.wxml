@@ -1,0 +1,1 @@
+<view class="sliding"><block wx:for="{{toggle}}" wx:for-item="item" wx:for-index="index" wx:key="index"><block><view data-event-opts="{{[['tap',[['slideshow',['$0'],[[['toggle','',index]]]]]]]}}" class="{{['switch',(index==tabIndex)?'checked':'']}}" bindtap="__e">{{''+item.name+''}}</view></block></block></view>

@@ -1,0 +1,1 @@
+<view class="{{['copyreader',show]}}"><view data-event-opts="{{[['tap',[['handleClose']]]]}}" class="cover mask" bindtap="__e"></view><view class="layer"><view class="listing"><slot></slot></view><view data-event-opts="{{[['tap',[['handleClose']]]]}}" class="cancel" bindtap="__e">取消</view></view></view>

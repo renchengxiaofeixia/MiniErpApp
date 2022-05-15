@@ -1,0 +1,1 @@
+<view class="search"><view class="search-input"><text class="iconfont icon-sousuotianchong"></text><input type="text" value="" placeholder="客户/销售/物品名称"/></view><text data-event-opts="{{[['tap',[['filterShow']]]]}}" class="iconfont icon-shaixuan" bindtap="__e"></text></view>

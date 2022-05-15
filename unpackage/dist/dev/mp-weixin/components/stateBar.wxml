@@ -1,0 +1,1 @@
+<view class="fold-flex"><block wx:for="{{list}}" wx:for-item="item" wx:for-index="index" wx:key="index"><block><text data-event-opts="{{[['tap',[['switchover',[index]]]]]}}" class="{{['fold-text',(index==option)?'fold-selected':'']}}" style="{{'width:'+(breadth)+';'}}" bindtap="__e">{{item.monicker}}</text></block></block></view>

@@ -1,0 +1,12 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "header-tab": "/components/headerTab/index",
+    "pulldown": "/components/pulldown",
+    "product-message": "/pages/details/components/productMessage",
+    "operator": "/pages/details/components/operator",
+    "linkman": "/pages/details/components/linkman",
+    "add-order": "/components/addOrder",
+    "copyreader": "/components/copyreader/index"
+  }
+}
