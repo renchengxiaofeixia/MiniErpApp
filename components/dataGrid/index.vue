@@ -1,6 +1,6 @@
 <template>
 	<view class="listing">
-		
+
 		<view class="amount">
 			<text class="sum">
 				一共1条数据
@@ -10,30 +10,34 @@
 			</text>
 		</view>
 		<view class="tabulation">
-			<view class="date gray">
+
+			<view class="date gray" v-if="date">
 				2032-05-03
 			</view>
-			<!-- @click="$navto.navto(url)" @touchstart="logoTime" @touchend="loosenTime"
-				:style="{'background': touch ? '#bababa':''}" -->
+
 			<scroll-view class="scroll-view" scroll-x="true">
-				<view class="scroll-item">
-					<view class="goods-list" @click="$navto.navto(url)">
+				<view class="scroll-item" v-for="(item,index) in list" :key="index">
+					<view class="goods-list" @click="$navto.navto(url,{id:item.id})">
 						<view class="goods-flex gauge">
 							<view class="black name">
-								<block>李三</block>
+								{{item.prodName}}
+								<!-- <block>李三</block>
 								<text class="gray shift">调拨到</text>
-								<block>李三</block>
+								<block>李三</block> -->
 							</view>
-							<view class="green">￥6262</view>
+							<view class="green">
+								<text>0 </text>
+								<text>{{item.unit}}</text>
+							</view>
 						</view>
 						<view class="goods-flex gray">
 							<view>
-								<view>xsjiudwmqwuf</view>
-								<view class="part">大佳品等1项</view>
+								<view>{{item.prodNo}}</view>
+								<!-- <view class="part">大佳品等1项</view> -->
 							</view>
-							<view class="storage">
+							<!-- <view class="storage">
 								未完成出库
-							</view>
+							</view> -->
 						</view>
 					</view>
 					<view class="goods-btn">
@@ -41,6 +45,7 @@
 					</view>
 				</view>
 			</scroll-view>
+
 		</view>
 	</view>
 </template>
@@ -48,6 +53,7 @@
 <script>
 	export default {
 		props: {
+			list: Array,
 			url: {
 				type: String,
 				default: ''
@@ -55,6 +61,11 @@
 			icon: {
 				type: Number,
 				default: 0
+			},
+			date: {
+				type: Boolean,
+				default: true,
+
 			}
 		},
 		data() {
@@ -103,7 +114,6 @@
 				border-top: 1rpx solid #ccc;
 				border-bottom: 1rpx solid #ccc;
 				width: 750rpx;
-				height: 210rpx;
 
 				.scroll-item {
 					display: flex;
@@ -112,7 +122,7 @@
 				}
 
 				.goods-list {
-					padding-bottom: 50rpx;
+					padding-bottom: 20rpx;
 					width: 750rpx;
 					flex-shrink: 0;
 					height: 100%;

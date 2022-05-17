@@ -1,0 +1,9 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "header-tab": "/components/headerTab/index",
+    "pulldown": "/components/pulldown",
+    "state-bar": "/components/stateBar",
+    "select-goods": "/components/selectGoods"
+  }
+}

@@ -54,13 +54,13 @@
 			</swiper>
 		</view>
 		<copyreader :show="compileShow" @close="handleClose()">
-			<view class="operation">
+			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/plusForm/addSupplier')">
 				修改
 			</view>
-			<view class="operation red" @touchstart="touch()" @click="amend()">
+			<view class="operation red" hover-class="checkActive">
 				删除
 			</view>
-			<view class="operation">
+			<view class="operation" hover-class="checkActive">
 				隐藏
 			</view>
 		</copyreader>

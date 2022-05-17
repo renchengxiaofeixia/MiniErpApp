@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<block v-if="type == 1">
-			<view class="add bg-green" @click="$navto.navto(url)">
+			<view class="add bg-green" @click="navto() ">
 				<text class="iconfont icon-tianjia"></text>
 			</view>
 		</block>
@@ -54,6 +54,13 @@
 			append() {
 				this.$emit("click");
 			},
+			navto() {
+				this.$api.isLogin();
+				if (this.$api.token) {
+					this.$navto.navto(this.url);
+				}
+
+			}
 		}
 	}
 </script>

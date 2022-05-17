@@ -46,7 +46,6 @@
   border-top: 1rpx solid #ccc;
   border-bottom: 1rpx solid #ccc;
   width: 750rpx;
-  height: 210rpx;
 }
 .listing .tabulation .scroll-view .scroll-item {
   display: flex;
@@ -54,7 +53,7 @@
   height: 100%;
 }
 .listing .tabulation .scroll-view .goods-list {
-  padding-bottom: 50rpx;
+  padding-bottom: 20rpx;
   width: 750rpx;
   flex-shrink: 0;
   height: 100%;

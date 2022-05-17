@@ -1,12 +1,13 @@
 import App from './App'
 
-
+import request from '@/libs/request.js'
+import * as api from '@/libs/api.js'
 import * as navTo from '@/libs/navTo'
 
-import * as data from '@/libs/data'
 
-Vue.prototype.$data = data;
 Vue.prototype.$navto = navTo;
+Vue.prototype.$request = request;
+Vue.prototype.$api = api;
 
 // #ifndef VUE3
 import Vue from 'vue'

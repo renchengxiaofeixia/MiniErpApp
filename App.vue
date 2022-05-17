@@ -18,6 +18,6 @@
 	@import url('@/static/css/base.css');
 	@import url('@/static/css/style.css');
 	page{
-		background-color: #efeef3;
+		background-color: #f2f2f2;
 	}
 </style>

@@ -12,7 +12,8 @@
         "addGoods",
         "addSupplier",
         "addCustomer",
-        "addAccess",
+        "addStorage",
+        "adddElivery",
         "addAllot",
         "addPurchase",
         "addMarket"
@@ -39,6 +40,37 @@
         "storage"
       ],
       "name": "address"
+    },
+    {
+      "root": "pages/print",
+      "pages": [
+        "index"
+      ],
+      "name": "print"
+    },
+    {
+      "root": "pages/addend",
+      "pages": [
+        "payment",
+        "tickets"
+      ],
+      "name": "addend"
+    },
+    {
+      "root": "pages/shortcutKey",
+      "pages": [
+        "index"
+      ],
+      "name": "shortcutKey"
+    },
+    {
+      "root": "pages/user",
+      "pages": [
+        "login",
+        "register",
+        "personal"
+      ],
+      "name": "user"
     }
   ],
   "window": {

@@ -6,10 +6,7 @@
 			<swiper class="swiper" :current="first.id" @change="slidingBlock">
 				<swiper-item>
 					<view class="swiper-item">
-						<dataGrid url="pages/details/commodity">
-							<button class="pinless" style="background-color: #cccccc;">
-								隐藏
-							</button>
+						<dataGrid url="pages/details/commodity" :list="productList" :date="false">
 							<button class="pinless" style="background-color: #ffb535;">
 								修改
 							</button>
@@ -22,9 +19,6 @@
 				<swiper-item>
 					<view class="swiper-item">
 						<dataGrid url="pages/details/supplier">
-							<button class="pinless" style="background-color: #cccccc;">
-								隐藏
-							</button>
 							<button class="pinless" style="background-color: #ffb535;">
 								修改
 							</button>
@@ -37,9 +31,6 @@
 				<swiper-item>
 					<view class="swiper-item">
 						<dataGrid url="pages/details/client">
-							<button class="pinless" style="background-color: #cccccc;">
-								隐藏
-							</button>
 							<button class="pinless" style="background-color: #ffb535;">
 								修改
 							</button>
@@ -124,14 +115,25 @@
 					id: 0,
 					url: "pages/plusForm/addGoods",
 				},
-				filterShow: 'none'
+				filterShow: 'none',
+				productList: [],
 
 			}
 		},
 		onLoad() {
-
+			this.getData();
 		},
 		methods: {
+			getData() {
+				let _this = this;
+				_this.$request.get('prods', {
+					page: 1,
+					size: 10,
+				}).then(res => {
+					let data = res.data
+					_this.productList = data.data;
+				})
+			},
 			openFilter() {
 				if (this.filterShow == 'none') {
 					this.filterShow = 'show';

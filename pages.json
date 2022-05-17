@@ -5,8 +5,7 @@
 			"style": {
 				"navigationBarTitleText": "",
 				"navigationStyle": "custom",
-				"navigationBarTextStyle": "white",
-				"enablePullDownRefresh": true
+				"navigationBarTextStyle": "white"
 			}
 		},
 		{
@@ -77,7 +76,19 @@
 				}
 			}
 		}, {
-			"path": "addAccess",
+			"path": "addStorage",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}, {
+			"path": "adddElivery",
 			"style": {
 				"navigationStyle": "custom",
 				"app-plus": {
@@ -230,6 +241,106 @@
 		"name": "address",
 		"pages": [{
 			"path": "storage",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}]
+	}, {
+		"root": "pages/print",
+		"name": "print",
+		"pages": [{
+			"path": "index",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}]
+	}, {
+		"root": "pages/addend",
+		"name": "addend",
+		"pages": [{
+			"path": "payment",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}, {
+			"path": "tickets",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}]
+	}, {
+		"root": "pages/shortcutKey",
+		"name": "shortcutKey",
+		"pages": [{
+			"path": "index",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}]
+	}, {
+		"root": "pages/user",
+		"name": "user",
+		"pages": [{
+			"path": "login",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		},{
+			"path": "register",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		},{
+			"path": "personal",
 			"style": {
 				"navigationStyle": "custom",
 				"app-plus": {

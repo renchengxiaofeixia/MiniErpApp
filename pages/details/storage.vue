@@ -49,19 +49,19 @@
 		</view>
 		<operator></operator>
 		<copyreader :show="compileShow" @close="handleClose()">
-			<view class="operation" @touchstart="touch()" @click="amend()">
+			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/print/index')">
 				打印
 			</view>
-			<view class="operation">
+			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/plusForm/addStorage')">
 				修改
 			</view>
-			<view class="operation red">
+			<view class="operation red" hover-class="checkActive">
 				删除
 			</view>
-			<view class="operation">
+			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/plusForm/addStorage')">
 				复制
 			</view>
-			<view class="operation">
+			<view class="operation" hover-class="checkActive">
 				一键出库
 			</view>
 		</copyreader>

@@ -40,7 +40,7 @@
         {
           "name": "物品详情",
           "pathName": "pages/details/commodity",
-          "query": "",
+          "query": "id=2",
           "launchMode": "default",
           "scene": null
         },
@@ -92,10 +92,35 @@
           "query": "",
           "launchMode": "default",
           "scene": null
+        },
+        {
+          "name": "登入",
+          "pathName": "pages/user/login",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "注册",
+          "pathName": "pages/user/register",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "账号信息",
+          "pathName": "pages/user/personal",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }
   },
   "description": "项目私有配置文件。此文件中的内容将覆盖 project.config.json 中的相同字段。项目的改动优先同步到此文件中。详见文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/projectconfig.html",
-  "libVersion": "2.24.1"
+  "libVersion": "2.24.1",
+  "projectname": "采购订单",
+  "setting": {
+    "compileHotReLoad": false
+  }
 }

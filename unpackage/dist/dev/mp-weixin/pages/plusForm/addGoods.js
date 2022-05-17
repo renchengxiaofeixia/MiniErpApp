@@ -1,9 +1,9 @@
 (global["webpackJsonp"] = global["webpackJsonp"] || []).push([["pages/plusForm/addGoods"],{
 
 /***/ 40:
-/*!**********************************************************************************!*\
-  !*** C:/Users/admin/Desktop/采购订单/main.js?{"page":"pages%2FplusForm%2FaddGoods"} ***!
-  \**********************************************************************************/
+/*!*********************************************************************************************!*\
+  !*** C:/Users/admin/Desktop/采购订单/MiniErpApp/main.js?{"page":"pages%2FplusForm%2FaddGoods"} ***!
+  \*********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -17,9 +17,9 @@ createPage(_addGoods.default);
 /***/ }),
 
 /***/ 41:
-/*!***************************************************************!*\
-  !*** C:/Users/admin/Desktop/采购订单/pages/plusForm/addGoods.vue ***!
-  \***************************************************************/
+/*!**************************************************************************!*\
+  !*** C:/Users/admin/Desktop/采购订单/MiniErpApp/pages/plusForm/addGoods.vue ***!
+  \**************************************************************************/
 /*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -58,9 +58,9 @@ component.options.__file = "pages/plusForm/addGoods.vue"
 /***/ }),
 
 /***/ 42:
-/*!**********************************************************************************************!*\
-  !*** C:/Users/admin/Desktop/采购订单/pages/plusForm/addGoods.vue?vue&type=template&id=267cca7d& ***!
-  \**********************************************************************************************/
+/*!*********************************************************************************************************!*\
+  !*** C:/Users/admin/Desktop/采购订单/MiniErpApp/pages/plusForm/addGoods.vue?vue&type=template&id=267cca7d& ***!
+  \*********************************************************************************************************/
 /*! exports provided: render, staticRenderFns, recyclableRender, components */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -80,9 +80,9 @@ __webpack_require__.r(__webpack_exports__);
 /***/ }),
 
 /***/ 43:
-/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--16-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/template.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-uni-app-loader/page-meta.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!C:/Users/admin/Desktop/采购订单/pages/plusForm/addGoods.vue?vue&type=template&id=267cca7d& ***!
-  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--16-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/template.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-uni-app-loader/page-meta.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!C:/Users/admin/Desktop/采购订单/MiniErpApp/pages/plusForm/addGoods.vue?vue&type=template&id=267cca7d& ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns, recyclableRender, components */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -122,9 +122,9 @@ render._withStripped = true
 /***/ }),
 
 /***/ 44:
-/*!****************************************************************************************!*\
-  !*** C:/Users/admin/Desktop/采购订单/pages/plusForm/addGoods.vue?vue&type=script&lang=js& ***!
-  \****************************************************************************************/
+/*!***************************************************************************************************!*\
+  !*** C:/Users/admin/Desktop/采购订单/MiniErpApp/pages/plusForm/addGoods.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -138,21 +138,14 @@ __webpack_require__.r(__webpack_exports__);
 /***/ }),
 
 /***/ 45:
-/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--12-1!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!C:/Users/admin/Desktop/采购订单/pages/plusForm/addGoods.vue?vue&type=script&lang=js& ***!
-  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--12-1!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!C:/Users/admin/Desktop/采购订单/MiniErpApp/pages/plusForm/addGoods.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var headerTab = function headerTab() {__webpack_require__.e(/*! require.ensure | components/headerTab/index */ "components/headerTab/index").then((function () {return resolve(__webpack_require__(/*! @/components/headerTab/index.vue */ 175));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
-
-
-
-
-
-
-
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _regenerator = _interopRequireDefault(__webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ 404));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var headerTab = function headerTab() {__webpack_require__.e(/*! require.ensure | components/headerTab/index */ "components/headerTab/index").then((function () {return resolve(__webpack_require__(/*! @/components/headerTab/index.vue */ 213));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
 
 
 
@@ -246,22 +239,114 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
     headerTab: headerTab },
 
   data: function data() {
-    return {};
-
-
+    return {
+      id: '', //id
+      productSeries: '', //物品编号
+      productName: '', //产品名称
+      productType: '', //型号
+      productBrand: '', //品牌
+      purchasePrice: Number, //采购价
+      salePrice: Number, //销售价
+      inventoryFloor: Number, //库存下限
+      inventoryUpper: Number, //库存上限
+      remarks: '', //备注
+      unit: '件', //单位
+      catCode: '其他', //类目
+      prodImage: [] //上传图片
+    };
 
   },
-  onLoad: function onLoad() {
-
+  onLoad: function onLoad(option) {
+    var _this = this;
+    _this.id = option.id ? option.id : '';
+    if (_this.id) {
+      _this.$request.get('prod/' + _this.id).then(function (res) {
+        var data = res.data;
+        _this.productSeries = data.prodNo;
+        _this.productName = data.prodCustomNo;
+        _this.productName = data.prodName;
+        _this.unit = data.unit;
+        _this.productType = data.prodModel;
+        _this.purchasePrice = data.purchasePrice;
+        _this.salePrice = data.salePrice;
+        _this.remarks = data.remarks;
+        _this.catCode = data.catCode;
+        _this.prodImage = data.prodImage;
+        _this.productBrand = data.prodBrand;
+        _this.inventoryFloor = data.upperQuantity;
+        _this.inventoryUpper = data.lowerQuantity;
+      });
+    }
   },
-  methods: {} };exports.default = _default;
+  methods: {
+    addProducts: function addProducts() {
+      var _this = this;
+      if (_this.productSeries == "") {
+        _this.$api.msg('物品编号不能为空');
+        return;
+      }
+      if (_this.productName == "") {
+        _this.$api.msg('物品名称不能为空');
+        return;
+      }
+      var data = {
+        prodNo: _this.productSeries,
+        prodCustomNo: _this.productName,
+        prodName: _this.productName,
+        unit: _this.unit,
+        prodModel: _this.productType,
+        purchasePrice: _this.purchasePrice,
+        salePrice: _this.salePrice,
+        remarks: _this.remarks,
+        catCode: _this.catCode,
+        // prodImage: _this.prodImage,
+        prodBrand: _this.productBrand,
+        upperQuantity: _this.inventoryFloor,
+        lowerQuantity: _this.inventoryUpper };
+
+      if (_this.id != '') {
+        _this.$request.put('prod/' + _this.id, data).then(function (res) {
+          setTimeout(function () {
+            _this.$navto.navBack();
+          }, 1000);
+          _this.$api.pageUpdate();
+          _this.$api.msg('修改成功');
+        }).catch(function (error) {
+          _this.$api.msg('修改失败，请联系管理员！');
+        });
+      } else {
+        _this.$request.post('prod', data).then(function (res) {
+          setTimeout(function () {
+            _this.$navto.navBack();
+          }, 1000);
+          _this.$api.msg('添加成功');
+        }).catch(function (error) {
+          _this.$api.msg('新建物品失败，请联系管理员！');
+        });
+      }
+    },
+    //*选择图片*//
+    addImg: function () {var _addImg = _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {var _this;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:
+                _this = this;
+                uni.chooseImage({
+                  count: 9, // 最多可以选择的图片张数，默认9
+                  sizeType: ['compressed'], // original 原图，compressed 压缩图，默认二者都有
+                  sourceType: ['album', 'camera'], // album 从相册选图，camera 使用相机，默认二者都有
+                  success: function success(res) {
+                    if (_this.prodImage.length === 0) {
+                      _this.prodImage = res.tempFilePaths;
+                    } else if (_this.prodImage.length < 9) {
+                      _this.prodImage = _this.prodImage.concat(res.tempFilePaths); //concat追加到数组
+                    }
+                  } });case 2:case "end":return _context.stop();}}}, _callee, this);}));function addImg() {return _addImg.apply(this, arguments);}return addImg;}() } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 
 /***/ 46:
-/*!*************************************************************************************************!*\
-  !*** C:/Users/admin/Desktop/采购订单/pages/plusForm/addGoods.vue?vue&type=style&index=0&lang=scss& ***!
-  \*************************************************************************************************/
+/*!************************************************************************************************************!*\
+  !*** C:/Users/admin/Desktop/采购订单/MiniErpApp/pages/plusForm/addGoods.vue?vue&type=style&index=0&lang=scss& ***!
+  \************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -275,9 +360,9 @@ __webpack_require__.r(__webpack_exports__);
 /***/ }),
 
 /***/ 47:
-/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/mini-css-extract-plugin/dist/loader.js??ref--8-oneOf-1-0!./node_modules/css-loader/dist/cjs.js??ref--8-oneOf-1-1!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--8-oneOf-1-2!./node_modules/postcss-loader/src??ref--8-oneOf-1-3!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/sass-loader/dist/cjs.js??ref--8-oneOf-1-4!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--8-oneOf-1-5!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!C:/Users/admin/Desktop/采购订单/pages/plusForm/addGoods.vue?vue&type=style&index=0&lang=scss& ***!
-  \*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/mini-css-extract-plugin/dist/loader.js??ref--8-oneOf-1-0!./node_modules/css-loader/dist/cjs.js??ref--8-oneOf-1-1!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--8-oneOf-1-2!./node_modules/postcss-loader/src??ref--8-oneOf-1-3!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/sass-loader/dist/cjs.js??ref--8-oneOf-1-4!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--8-oneOf-1-5!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!C:/Users/admin/Desktop/采购订单/MiniErpApp/pages/plusForm/addGoods.vue?vue&type=style&index=0&lang=scss& ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 

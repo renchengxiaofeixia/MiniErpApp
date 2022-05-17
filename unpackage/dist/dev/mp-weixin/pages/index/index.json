@@ -2,6 +2,5 @@
   "navigationBarTitleText": "",
   "navigationStyle": "custom",
   "navigationBarTextStyle": "white",
-  "enablePullDownRefresh": true,
   "usingComponents": {}
 }

@@ -1,19 +1,23 @@
-
 const navto = function(url, data) {
 	console.log(url);
-	// url参数拼接
 	url += (url.indexOf('?') < 0 ? '?' : '&') + param(data)
-	
 	uni.navigateTo({
 		url: '/' + url
 	})
 }
- 
+
+const navtab = function(url, data) {
+	console.log(url);
+	uni.switchTab({
+		url: '/' + url
+	});
+}
+
 // 返回上一页
-const navBack = function(){
+const navBack = function() {
 	uni.navigateBack();
 }
- 
+
 // 格式化参数对象
 function param(data) {
 	let url = ''
@@ -23,9 +27,12 @@ function param(data) {
 	}
 	return url ? url.substring(1) : ''
 }
- // $navto.navto
-export{
+
+
+// $navto.navto
+export {
 	navto,
+	navtab,
 	navBack
 
 }

@@ -36,3 +36,9 @@ button::after {
 textarea{
 	line-height: 1.5;
 }
+.login-btn{
+	background-color: transparent;
+	border-radius: 0;
+	line-height: 1;
+	overflow: visible;
+}

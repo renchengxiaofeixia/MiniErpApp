@@ -1,9 +1,9 @@
 (global["webpackJsonp"] = global["webpackJsonp"] || []).push([["pages/warehouse/index"],{
 
 /***/ 28:
-/*!********************************************************************************!*\
-  !*** C:/Users/admin/Desktop/采购订单/main.js?{"page":"pages%2Fwarehouse%2Findex"} ***!
-  \********************************************************************************/
+/*!*******************************************************************************************!*\
+  !*** C:/Users/admin/Desktop/采购订单/MiniErpApp/main.js?{"page":"pages%2Fwarehouse%2Findex"} ***!
+  \*******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -17,9 +17,9 @@ createPage(_index.default);
 /***/ }),
 
 /***/ 29:
-/*!*************************************************************!*\
-  !*** C:/Users/admin/Desktop/采购订单/pages/warehouse/index.vue ***!
-  \*************************************************************/
+/*!************************************************************************!*\
+  !*** C:/Users/admin/Desktop/采购订单/MiniErpApp/pages/warehouse/index.vue ***!
+  \************************************************************************/
 /*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -56,9 +56,9 @@ component.options.__file = "pages/warehouse/index.vue"
 /***/ }),
 
 /***/ 30:
-/*!********************************************************************************************!*\
-  !*** C:/Users/admin/Desktop/采购订单/pages/warehouse/index.vue?vue&type=template&id=0e1a401d& ***!
-  \********************************************************************************************/
+/*!*******************************************************************************************************!*\
+  !*** C:/Users/admin/Desktop/采购订单/MiniErpApp/pages/warehouse/index.vue?vue&type=template&id=0e1a401d& ***!
+  \*******************************************************************************************************/
 /*! exports provided: render, staticRenderFns, recyclableRender, components */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -78,9 +78,9 @@ __webpack_require__.r(__webpack_exports__);
 /***/ }),
 
 /***/ 31:
-/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--16-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/template.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-uni-app-loader/page-meta.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!C:/Users/admin/Desktop/采购订单/pages/warehouse/index.vue?vue&type=template&id=0e1a401d& ***!
-  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--16-0!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/template.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-uni-app-loader/page-meta.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!C:/Users/admin/Desktop/采购订单/MiniErpApp/pages/warehouse/index.vue?vue&type=template&id=0e1a401d& ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns, recyclableRender, components */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -94,7 +94,7 @@ var components
 try {
   components = {
     uniDatetimePicker: function() {
-      return Promise.all(/*! import() | uni_modules/uni-datetime-picker/components/uni-datetime-picker/uni-datetime-picker */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-datetime-picker/components/uni-datetime-picker/uni-datetime-picker")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-datetime-picker/components/uni-datetime-picker/uni-datetime-picker.vue */ 164))
+      return Promise.all(/*! import() | uni_modules/uni-datetime-picker/components/uni-datetime-picker/uni-datetime-picker */[__webpack_require__.e("common/vendor"), __webpack_require__.e("uni_modules/uni-datetime-picker/components/uni-datetime-picker/uni-datetime-picker")]).then(__webpack_require__.bind(null, /*! @/uni_modules/uni-datetime-picker/components/uni-datetime-picker/uni-datetime-picker.vue */ 202))
     }
   }
 } catch (e) {
@@ -128,9 +128,9 @@ render._withStripped = true
 /***/ }),
 
 /***/ 32:
-/*!**************************************************************************************!*\
-  !*** C:/Users/admin/Desktop/采购订单/pages/warehouse/index.vue?vue&type=script&lang=js& ***!
-  \**************************************************************************************/
+/*!*************************************************************************************************!*\
+  !*** C:/Users/admin/Desktop/采购订单/MiniErpApp/pages/warehouse/index.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -144,14 +144,14 @@ __webpack_require__.r(__webpack_exports__);
 /***/ }),
 
 /***/ 33:
-/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--12-1!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!C:/Users/admin/Desktop/采购订单/pages/warehouse/index.vue?vue&type=script&lang=js& ***!
-  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/webpack-preprocess-loader??ref--12-1!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/script.js!./node_modules/@dcloudio/vue-cli-plugin-uni/packages/vue-loader/lib??vue-loader-options!./node_modules/@dcloudio/webpack-uni-mp-loader/lib/style.js!C:/Users/admin/Desktop/采购订单/MiniErpApp/pages/warehouse/index.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var headerTab = function headerTab() {__webpack_require__.e(/*! require.ensure | components/headerTab/index */ "components/headerTab/index").then((function () {return resolve(__webpack_require__(/*! @/components/headerTab/index.vue */ 175));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var searchbox = function searchbox() {__webpack_require__.e(/*! require.ensure | components/searchbox/index */ "components/searchbox/index").then((function () {return resolve(__webpack_require__(/*! @/components/searchbox/index.vue */ 182));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var dataGrid = function dataGrid() {__webpack_require__.e(/*! require.ensure | components/dataGrid/index */ "components/dataGrid/index").then((function () {return resolve(__webpack_require__(/*! @/components/dataGrid/index.vue */ 189));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var addOrder = function addOrder() {__webpack_require__.e(/*! require.ensure | components/addOrder */ "components/addOrder").then((function () {return resolve(__webpack_require__(/*! @/components/addOrder.vue */ 196));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var filtratePopup = function filtratePopup() {__webpack_require__.e(/*! require.ensure | components/filtratePopup/index */ "components/filtratePopup/index").then((function () {return resolve(__webpack_require__(/*! @/components/filtratePopup/index.vue */ 203));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var pulldown = function pulldown() {__webpack_require__.e(/*! require.ensure | components/pulldown */ "components/pulldown").then((function () {return resolve(__webpack_require__(/*! @/components/pulldown.vue */ 210));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var stateBar = function stateBar() {__webpack_require__.e(/*! require.ensure | components/stateBar */ "components/stateBar").then((function () {return resolve(__webpack_require__(/*! @/components/stateBar.vue */ 217));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var headerTab = function headerTab() {__webpack_require__.e(/*! require.ensure | components/headerTab/index */ "components/headerTab/index").then((function () {return resolve(__webpack_require__(/*! @/components/headerTab/index.vue */ 213));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var searchbox = function searchbox() {__webpack_require__.e(/*! require.ensure | components/searchbox/index */ "components/searchbox/index").then((function () {return resolve(__webpack_require__(/*! @/components/searchbox/index.vue */ 220));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var dataGrid = function dataGrid() {__webpack_require__.e(/*! require.ensure | components/dataGrid/index */ "components/dataGrid/index").then((function () {return resolve(__webpack_require__(/*! @/components/dataGrid/index.vue */ 227));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var addOrder = function addOrder() {__webpack_require__.e(/*! require.ensure | components/addOrder */ "components/addOrder").then((function () {return resolve(__webpack_require__(/*! @/components/addOrder.vue */ 234));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var filtratePopup = function filtratePopup() {__webpack_require__.e(/*! require.ensure | components/filtratePopup/index */ "components/filtratePopup/index").then((function () {return resolve(__webpack_require__(/*! @/components/filtratePopup/index.vue */ 241));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var pulldown = function pulldown() {__webpack_require__.e(/*! require.ensure | components/pulldown */ "components/pulldown").then((function () {return resolve(__webpack_require__(/*! @/components/pulldown.vue */ 248));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var stateBar = function stateBar() {__webpack_require__.e(/*! require.ensure | components/stateBar */ "components/stateBar").then((function () {return resolve(__webpack_require__(/*! @/components/stateBar.vue */ 255));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
 
 
 
@@ -245,11 +245,11 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
     return {
       scrollTab: [{
         text: '入库',
-        url: 'pages/plusForm/addAccess?title=新建入库单&id=1',
+        url: 'pages/plusForm/addStorage',
         id: 0 },
       {
         text: '出库',
-        url: 'pages/plusForm/addAccess?title=新建出库单&id=2',
+        url: 'pages/plusForm/adddElivery',
         id: 1 },
       {
         text: '盘点',
@@ -261,7 +261,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
       warehouse: {
         text: '入库',
-        url: 'pages/plusForm/addAccess?title=新建入库单&id=0',
+        url: 'pages/plusForm/addStorage',
         id: 0 },
 
 
