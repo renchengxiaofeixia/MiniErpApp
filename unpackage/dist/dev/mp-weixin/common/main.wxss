@@ -135,6 +135,12 @@ button::after {
 textarea{
 	line-height: 1.5;
 }
+.login-btn{
+	background-color: transparent;
+	border-radius: 0;
+	line-height: 1;
+	overflow: visible;
+}
 /* 列表滑动按钮 */
 .pinless {
 	width: 140rpx;
@@ -210,11 +216,6 @@ textarea{
 	margin-right: 10rpx;
 	color: #999;
 }
-.table .icon-saoma-big {
-	color: #54a26e;
-	margin-right: 20rpx;
-	font-size: 40rpx;
-}
 .table .icon-igw-l-user-2 {
 	font-size: 42rpx;
 	color: #54a26e;
@@ -227,6 +228,26 @@ textarea{
 }
 .remarks .from textarea {
 	padding-top: 20rpx;
+}
+.uploading {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	padding-bottom: 30rpx;
+}
+.uploading-img,
+.uploading image {
+	width: 120rpx;
+	height: 120rpx;
+	color: #9c9c9c;
+	text-align: center;
+	line-height: 120rpx;
+	background-color: #f2f2f2;
+	border-radius: 10rpx;
+	margin-left: 20rpx;
+	font-size: 26rpx;
+	border: 1rpx solid #eee;
+	margin-top: 30rpx;
 }
 /* 确定按钮 */
 .newBtn {
@@ -267,7 +288,10 @@ textarea{
 .bg-green {
 	background-color: #2ea469;
 }
+.checkActive {
+	background-color: #e0e0e0;
+}
 page{
-	background-color: #efeef3;
+	background-color: #f2f2f2;
 }
 

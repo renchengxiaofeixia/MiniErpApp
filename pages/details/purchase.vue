@@ -112,28 +112,28 @@
 		<productMessage></productMessage>
 		<operator></operator>
 		<copyreader :show="compileShow" @close="handleClose()">
-			<view class="operation">
+			<view class="operation" hover-class="checkActive" @click="share()">
 				分享
 			</view>
-			<view class="operation" @touchstart="touch()" @click="amend()">
+			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/print/index')">
 				打印
 			</view>
-			<view class="operation">
+			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/plusForm/addMarket')">
 				修改
 			</view>
-			<view class="operation red">
+			<view class="operation red" hover-class="checkActive">
 				删除
 			</view>
-			<view class="operation">
+			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/plusForm/addMarket')">
 				复制
 			</view>
-			<view class="operation">
+			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/plusForm/addStorage')">
 				入库
 			</view>
-			<view class="operation">
+			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/addend/payment')">
 				付款
 			</view>
-			<view class="operation">
+			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/addend/tickets')">
 				到票
 			</view>
 		</copyreader>
@@ -179,6 +179,10 @@
 					}, 200);
 				}
 			},
+			// 分享
+			share() {
+				console.log(3);
+			}
 		}
 	}
 </script>
@@ -215,4 +219,6 @@
 			font-size: 36rpx;
 		}
 	}
+
+	
 </style>

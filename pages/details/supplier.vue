@@ -2,7 +2,7 @@
 	<view class="">
 		<headerTab title="供应商详情"></headerTab>
 
-		<liaisons></liaisons>
+		<liaisons :list="contact"></liaisons>
 		<slidingBlock :toggle="toggle" :tabIndex="current" @slideshow="slideshow"></slidingBlock>
 
 		<view class="slide">
@@ -16,12 +16,10 @@
 							</view>
 							<view class="from from-details">
 								<text class="title gray">备注</text>
-								<text class="fill">15151</text>
+								<text class="fill">{{list.remarks}}</text>
 							</view>
 						</view>
-
-						<operator></operator>
-
+						<operator :list="operator"></operator>
 					</view>
 				</swiper-item>
 				<swiper-item>
@@ -54,14 +52,12 @@
 			</swiper>
 		</view>
 		<copyreader :show="compileShow" @close="handleClose()">
-			<view class="operation">
+			<view class="operation" hover-class="checkActive"
+				@click="$navto.navto('pages/plusForm/addSupplier',{id:id,header: '修改供应商',type:1})">
 				修改
 			</view>
-			<view class="operation red" @touchstart="touch()" @click="amend()">
+			<view class="operation red" hover-class="checkActive" @click="supplierDel">
 				删除
-			</view>
-			<view class="operation">
-				隐藏
 			</view>
 		</copyreader>
 		<addOrder type="2" @click="handleClose()"></addOrder>
@@ -98,15 +94,41 @@
 					id: 2
 				}],
 				current: 0,
-				title: '',
 				compileShow: "none",
+				id: '',
+				list: [],
+				contact: {}, //联络方式
+				operator: {}, //操作日记
 
 			}
 		},
-		onLoad(e) {
-			this.title = decodeURIComponent(e.title)
+		onLoad(option) {
+			this.id = option.id;
+			
+		},
+		onShow() {
+			this.getData();
 		},
 		methods: {
+			getData() {
+				let _this = this;
+				_this.$request.get('supplier/' + _this.id).then(res => {
+					let operator = {};
+					let contact = {};
+					_this.list = res.data;
+					contact.contacterName = res.data.contacterName;
+					contact.mobile = res.data.mobile;
+					contact.supplierName = res.data.supplierName;
+
+					operator.createTime = res.data.createTime;
+					operator.creator = res.data.creator;
+					operator.updatedTime = res.data.updatedTime;
+					operator.updator = res.data.updator;
+					_this.contact = contact;
+					_this.operator = operator;
+
+				})
+			},
 			handleClose() {
 				if (this.compileShow == 'none') {
 					this.compileShow = 'show';
@@ -116,6 +138,25 @@
 						this.compileShow = 'none';
 					}, 200);
 				}
+			},
+			supplierDel() {
+				let _this = this;
+				uni.showModal({
+					title: '提示',
+					content: '确定要删除供应商',
+					success: function(res) {
+						if (res.confirm) {
+							_this.$request.del('supplier/' + _this.id);
+							setTimeout(() => {
+								_this.$navto.navtab('pages/message/index')
+							}, 1000)
+							_this.$api.msg('删除成功')
+						} else if (res.cancel) {
+							// console.log('用户点击取消');
+						}
+					}
+				});
+
 			},
 			slideshow(e) {
 				this.current = e.id;

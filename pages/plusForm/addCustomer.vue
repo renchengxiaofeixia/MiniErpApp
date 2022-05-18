@@ -1,23 +1,23 @@
 <template>
 	<view class="supplier">
-		<headerTab title="新建客户"></headerTab>
+		<headerTab :title="header"></headerTab>
 
 		<view class="table">
 			<view class="from from-new">
 				<text class="title">客户名称</text>
-				<input type="text" placeholder="填写客户名称 (必填)" class="fill">
+				<input type="text" placeholder="填写客户名称 (必填)" class="fill" v-model="customerNo">
 			</view>
 		</view>
 
 		<view class="table">
 			<view class="from from-new">
 				<text class="title">联系人</text>
-				<input type="text" placeholder="填写/导入联系人" class="fill">
+				<input type="text" placeholder="填写/导入联系人" class="fill" v-model="customerName">
 				<text class="iconfont icon-igw-l-user-2"></text>
 			</view>
 			<view class="from from-new">
 				<text class="title">手机</text>
-				<input type="text" placeholder="填写填写联系电话" class="fill">
+				<input type="text" placeholder="填写填写联系电话" class="fill" v-model="mobile">
 			</view>
 		</view>
 
@@ -32,12 +32,12 @@
 		<view class="table remarks">
 			<view class="from from-new">
 				<text class="title">备注</text>
-				<textarea placeholder="填写备注"></textarea>
+				<textarea placeholder="填写备注" v-model="remarks"></textarea>
 			</view>
 		</view>
 
 		<view class="newBtn">
-			<button>确定</button>
+			<button @click="clientBtn()">确定</button>
 		</view>
 	</view>
 </template>
@@ -50,17 +50,63 @@
 		},
 		data() {
 			return {
-
+				header: '新建客户', //表头
+				id: '',
+				type: 0, // 0 创建 1是修改
+				customerNo: "", //客户名称
+				customerName: "", //联系人
+				mobile: "", //电话
+				remarks: "", //备注
+				contactStatus: "" //跟进状态
 			}
 		},
-		onLoad() {
+		onLoad(option) {
+			let _this = this;
+			_this.id = option.id ? option.id : '';
+			_this.type = option.type ? option.type : 0;
+			_this.header = option.header ? decodeURIComponent(option.header) : '新建供客户';
 
+			if (_this.type == 1) {
+				_this.$request.get('customer/' + _this.id).then(res => {
+					let data = res.data;
+					_this.customerNo = data.customerNo;
+					_this.customerName = data.customerName;
+					_this.mobile = data.mobile;
+					_this.remarks = data.remarks;
+					_this.contactStatus = data.contactStatus;
+				})
+			}
 		},
 		methods: {
-			navigation(url) {
-				uni.navigateTo({
-					url: '/' + url
-				});
+			clientBtn() {
+				let _this = this;
+				console.log(1);
+				let data = {
+					customerNo: _this.customerNo,
+					customerName: _this.customerName,
+					mobile: _this.mobile,
+					remarks: _this.remarks,
+					contactStatus: _this.contactStatus
+				}
+				if (_this.type == 0) {
+					_this.$request.post('customer', data).then(res => {
+						setTimeout(() => {
+							_this.$navto.navBack();
+						}, 1000)
+						_this.$api.msg('新建成功')
+					}).catch(error => {
+						_this.$api.msg(error.data);
+					})
+				} else {
+					_this.$request.put('customer/' + _this.id, data).then(res => {
+						setTimeout(() => {
+							_this.$navto.navBack();
+						}, 1000)
+						_this.$api.msg('修改成功')
+					}).catch(error => {
+						_this.$api.msg(error.data);
+					})
+				}
 			}
 		}
 	}

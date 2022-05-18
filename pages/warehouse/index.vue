@@ -92,11 +92,11 @@
 			return {
 				scrollTab: [{
 					text: '入库',
-					url: 'pages/plusForm/addAccess?title=新建入库单&id=1',
+					url: 'pages/plusForm/addStorage',
 					id: 0
 				}, {
 					text: '出库',
-					url: 'pages/plusForm/addAccess?title=新建出库单&id=2',
+					url: 'pages/plusForm/adddElivery',
 					id: 1
 				}, {
 					text: '盘点',
@@ -108,7 +108,7 @@
 				}],
 				warehouse: {
 					text: '入库',
-					url: 'pages/plusForm/addAccess?title=新建入库单&id=0',
+					url: 'pages/plusForm/addStorage',
 					id: 0
 
 				},

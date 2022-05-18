@@ -7,19 +7,19 @@
 		<view class="table">
 			<view class="from side">
 				<text class="title gray">制单人</text>
-				<text class="fill"> ￥999</text>
+				<text class="fill"> {{list.creator}}</text>
 			</view>
 			<view class="from side">
 				<text class="title gray">制单时间</text>
-				<text class="fill"> ￥999</text>
+				<text class="fill"> {{list.createTime}}</text>
 			</view>
 			<view class="from side">
 				<text class="title gray">修改人</text>
-				<text class="fill"> ￥999</text>
+				<text class="fill"> {{list.updator}}</text>
 			</view>
 			<view class="from side">
 				<text class="title gray">修改时间</text>
-				<text class="fill"> ￥999</text>
+				<text class="fill"> {{list.updatedTime}}</text>
 			</view>
 		</view>
 	</view>
@@ -27,6 +27,9 @@
 
 <script>
 	export default {
+		props: {
+			list: Object
+		},
 		data() {
 			return {
 

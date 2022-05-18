@@ -5,47 +5,25 @@
 		<view class="slide">
 			<swiper class="swiper" :current="first.id" @change="slidingBlock">
 				<swiper-item>
+					<scroll-view class="swiper-item" scroll-y="true">
+						<dataGrid url="pages/details/commodity" :list="productList" :date="false" tab="1"
+							@drop="dropProduct" @amend="amendProduct">
+
+						</dataGrid>
+					</scroll-view>
+				</swiper-item>
+				<swiper-item>
 					<view class="swiper-item">
-						<dataGrid url="pages/details/commodity">
-							<button class="pinless" style="background-color: #cccccc;">
-								隐藏
-							</button>
-							<button class="pinless" style="background-color: #ffb535;">
-								修改
-							</button>
-							<button class="pinless" style="background-color: #ff4622;">
-								删除
-							</button>
+						<dataGrid url="pages/details/supplier" :list="supplierList" :date="false" tab="2"
+							@drop="dropSupplier" @amend="amendSupplier">
+
 						</dataGrid>
 					</view>
 				</swiper-item>
 				<swiper-item>
 					<view class="swiper-item">
-						<dataGrid url="pages/details/supplier">
-							<button class="pinless" style="background-color: #cccccc;">
-								隐藏
-							</button>
-							<button class="pinless" style="background-color: #ffb535;">
-								修改
-							</button>
-							<button class="pinless" style="background-color: #ff4622;">
-								删除
-							</button>
-						</dataGrid>
-					</view>
-				</swiper-item>
-				<swiper-item>
-					<view class="swiper-item">
-						<dataGrid url="pages/details/client">
-							<button class="pinless" style="background-color: #cccccc;">
-								隐藏
-							</button>
-							<button class="pinless" style="background-color: #ffb535;">
-								修改
-							</button>
-							<button class="pinless" style="background-color: #ff4622;">
-								删除
-							</button>
+						<dataGrid url="pages/details/client" :list="clientlist" :date="false" tab="3" @drop="dropClient"
+							@amend="amendClient">
 						</dataGrid>
 					</view>
 				</swiper-item>
@@ -124,14 +102,130 @@
 					id: 0,
 					url: "pages/plusForm/addGoods",
 				},
-				filterShow: 'none'
+				filterShow: 'none',
+				productList: [], //物品
+				supplierList: [], //供应商
+				clientlist: [], //客户
 
 			}
 		},
 		onLoad() {
-
+			this.productData();
+			this.supplierData();
+			this.clientData();
 		},
 		methods: {
+			// 物品数据
+			productData() {
+				let _this = this;
+				_this.$request.get('prods', {
+					page: 1,
+					size: 10,
+				}).then(res => {
+					let data = res.data
+					_this.productList = data.data;
+				})
+			},
+			// 供应商数据
+			supplierData() {
+				let _this = this;
+				_this.$request.get('suppliers', {
+					page: 1,
+					size: 10,
+				}).then(res => {
+					let data = res.data
+					_this.supplierList = data.data;
+
+				})
+			},
+			// 客户数据
+			clientData() {
+				let _this = this;
+				_this.$request.get('customers', {
+					page: 1,
+					size: 10,
+				}).then(res => {
+					let data = res.data
+					_this.clientlist = data.data;
+
+				})
+			},
+			// 删除物品
+			dropProduct(id,index) {
+				let _this = this;
+				uni.showModal({
+					title: '提示',
+					content: '确定要删除物品',
+					success: function(res) {
+						if (res.confirm) {
+							_this.$request.del('prod/' + id).then(res=>{
+								_this.productList.splice(index,1)
+							});
+							_this.$api.msg('删除成功')
+						} else if (res.cancel) {
+							// console.log('用户点击取消');
+						}
+					}
+				});
+			},
+			// 修改物品
+			amendProduct(id) {
+				this.$navto.navto('pages/plusForm/addGoods', {
+					id: id,
+					type: 1,
+					header: '修改物品'
+				})
+			},
+			// 删除供应商
+			dropSupplier(id,index) {
+				let _this = this;
+				uni.showModal({
+					title: '提示',
+					content: '确定要删除供应商',
+					success: function(res) {
+						if (res.confirm) {
+							_this.$request.del('supplier/' + id).then(res=>{
+								_this.supplierList.splice(index,1)
+							});
+							_this.$api.msg('删除成功')
+						} else if (res.cancel) {
+							// console.log('用户点击取消');
+						}
+					}
+				});
+			},
+			// 修改供应商
+			amendSupplier(id) {
+				this.$navto.navto('pages/plusForm/addSupplier', {
+					id: id,
+					header: '修改供应商',
+					type: 1
+				})
+			},
+			// 删除客户
+			dropClient(id,index) {
+				let _this = this;
+				uni.showModal({
+					title: '提示',
+					content: '确定要删除供应商',
+					success: function(res) {
+						if (res.confirm) {
+							_this.$request.del('customer/' + id).then(res=>{
+								_this.clientlist.splice(index,1)
+							});
+							_this.$api.msg('删除成功')
+						} else if (res.cancel) {}
+					}
+				});
+			},
+			// 修改客户
+			amendClient(id) {
+				this.$navto.navto('pages/plusForm/addCustomer', {
+					id: id,
+					header: '修改客户',
+					type: 1
+				})
+			},
 			openFilter() {
 				if (this.filterShow == 'none') {
 					this.filterShow = 'show';
@@ -153,4 +247,5 @@
 </script>
 
 <style lang="scss">
+
 </style>

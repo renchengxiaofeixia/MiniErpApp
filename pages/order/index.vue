@@ -110,12 +110,12 @@
 					id: 0
 				}, {
 					text: '销售',
-					url: "pages/plusForm/addPurchase",
+					url: "pages/plusForm/addMarket",
 					id: 1
 				}],
 				order: {
 					text: '采购',
-					url: "pages/plusForm/addMarket",
+					url: "pages/plusForm/addPurchase",
 					id: 0
 				},
 				filterShow: 'none'

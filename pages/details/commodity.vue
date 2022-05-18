@@ -5,32 +5,33 @@
 			<view class="goods-list gray">
 				<view class="goods-flex gauge">
 					<view class="name black">
-						李三
+						{{list.prodName}}
 					</view>
-					<view class="red">
+					<view class="green">
+						<text>0</text>
+						<text>{{list.unit}}</text>
+					</view>
+					<!--<view class="red">
 						-2件
-					</view>
+					</view> -->
 				</view>
 				<view class="goods-flex">
 					<view class="track">
 						<text>物品编号：</text>
-						<text>wp002151</text>
+						<text>{{list.prodNo}}</text>
 					</view>
-					<view class="red">
+					<!-- <view class="red">
 						低于下限
-					</view>
+					</view> -->
 				</view>
 
 				<view class="goods-flex">
 					<view>
 						<view class="track">
-							<text>规格型号：</text> wp002151
+							<text>型号：</text> {{list.prodModel}}
 						</view>
 						<view class="track">
-							<text>品牌：</text> wp002151
-						</view>
-						<view class="track">
-							<text>制造商型号：</text> wp002151
+							<text>品牌：</text> {{list.prodBrand}}
 						</view>
 					</view>
 				</view>
@@ -52,23 +53,23 @@
 							</view>
 							<view class="from from-details">
 								<text class="title gray">采购价</text>
-								<text class="fill"> ￥999</text>
+								<text class="fill"> ￥{{list.purchasePrice}}</text>
 							</view>
 							<view class="from from-details">
 								<text class="title gray">销售价</text>
-								<text class="fill"> ￥999</text>
+								<text class="fill"> ￥{{list.salePrice}}</text>
 							</view>
 							<view class="from from-details">
 								<text class="title gray">所属类目</text>
-								<text class="fill"> ￥999</text>
+								<text class="fill">{{list.catCode}}</text>
 							</view>
 
 							<view class="from from-details">
 								<text class="title gray">备注</text>
-								<text class="fill">15151</text>
+								<text class="fill">{{list.remarks}}</text>
 							</view>
 						</view>
-                       <operator></operator>
+						<operator :list="operator"></operator>
 					</view>
 				</swiper-item>
 				<swiper-item>
@@ -76,34 +77,34 @@
 						<view class="table">
 							<view class="from from-details">
 								<text class="title gray">库存上限</text>
-								<text class="fill"> ￥999</text>
+								<text class="fill"> {{list.upperQuantity}}</text>
 							</view>
 							<view class="from from-details">
 								<text class="title gray">库存下限</text>
-								<text class="fill"> ￥999</text>
+								<text class="fill"> {{list.lowerQuantity}}</text>
 							</view>
 							<view class="from from-details">
 								<text class="title gray">本地</text>
-								<text class="fill"> ￥999</text>
+								<text class="fill"></text>
 							</view>
 							<view class="from from-details">
-								<text class="title gray">北京</text>
-								<text class="fill"> ￥999</text>
+								<text class="title gray">仓库</text>
+								<text class="fill"></text>
 							</view>
 						</view>
 
 						<view class="table">
 							<view class="from from-details">
 								<text class="title gray">销售占用量</text>
-								<text class="fill"> ￥999</text>
+								<text class="fill"></text>
 							</view>
 							<view class="from from-details">
 								<text class="title gray">采购在途量</text>
-								<text class="fill"> ￥999</text>
+								<text class="fill"></text>
 							</view>
 							<view class="from from-details">
 								<text class="title gray">当前可用量</text>
-								<text class="fill"> ￥999</text>
+								<text class="fill"></text>
 							</view>
 						</view>
 
@@ -111,7 +112,9 @@
 				</swiper-item>
 				<swiper-item>
 					<view class="swiper-item">
-						供应商
+						<dataGrid url="pages/details/supplier" 
+						:list="supplierList" :date="false" tab="2" :hide="false">
+						</dataGrid>
 					</view>
 				</swiper-item>
 				<swiper-item>
@@ -139,26 +142,16 @@
 			</swiper>
 		</view>
 		<copyreader :show="compileShow" @close="handleClose()">
-			<view class="operation" @touchstart="touch()" @click="amend()">
-				打印
-			</view>
-			<view class="operation">
+			<view class="operation" hover-class="checkActive"
+				@click="$navto.navto('pages/plusForm/addGoods',{id:id,type:1,header: '修改物品'})">
 				修改
 			</view>
-			<view class="operation red">
+			<view class="operation red" hover-class="checkActive" @click="cutproduct()">
 				删除
 			</view>
-			<view class="operation">
+			<view class="operation" hover-class="checkActive"
+				@click="$navto.navto('pages/plusForm/addGoods',{id:id,type:2})">
 				复制
-			</view>
-			<view class="operation">
-				入库
-			</view>
-			<view class="operation">
-				付款
-			</view>
-			<view class="operation">
-				到票
 			</view>
 		</copyreader>
 		<addOrder type="2" @click="handleClose()"></addOrder>
@@ -171,13 +164,15 @@
 	import operator from './components/operator.vue';
 	import addOrder from '@/components/addOrder.vue';
 	import copyreader from '@/components/copyreader/index.vue';
+	import dataGrid from '@/components/dataGrid/index.vue';
 	export default {
 		components: {
 			headerTab,
 			slidingBlock,
 			addOrder,
 			copyreader,
-			operator
+			operator,
+			dataGrid,
 		},
 		data() {
 			return {
@@ -188,7 +183,7 @@
 					name: "库存信息",
 					id: 1
 				}, {
-					name: "可供应商",
+					name: "可供供应商",
 					id: 2
 				}, {
 					name: "采购记录",
@@ -196,17 +191,53 @@
 				}],
 				current: 0,
 				compileShow: "none",
+				id: Number,
+				list: {},
+				operator: {},
+				supplierList: [],
 			}
 		},
-		onLoad() {
+		onLoad(option) {
+			this.id = option.id;
 
 		},
+		onShow() {
+			this.getData();
+		},
 		methods: {
-			amend() {
-				console.log(2);
+			getData() {
+				let _this = this;
+				_this.$request.get('prod/' + _this.id).then(res => {
+					let data = res.data;
+					let operator = {};
+					_this.list = res.data;
+					operator.createTime = data.createTime;
+					operator.creator = data.creator;
+					operator.updatedTime = data.updatedTime;
+					operator.updator = data.updator;
+					_this.operator = operator;
+				})
+				_this.$request.get('suppliers/' + _this.id).then(res => {
+					_this.supplierList = res.data;
+				})
 			},
-			touch() {
-				console.log(1);
+			cutproduct() {
+				let _this = this;
+				uni.showModal({
+					title: '提示',
+					content: '确定要删除物品',
+					success: function(res) {
+						if (res.confirm) {
+							_this.$request.del('prod/' + _this.id);
+							setTimeout(() => {
+								_this.$navto.navtab('pages/message/index')
+							}, 1000)
+							_this.$api.msg('删除成功')
+						} else if (res.cancel) {
+							// console.log('用户点击取消');
+						}
+					}
+				});
 			},
 			handleClose() {
 				if (this.compileShow == 'none') {

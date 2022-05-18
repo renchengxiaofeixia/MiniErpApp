@@ -2,7 +2,7 @@
 	<view class="">
 		<headerTab title="客户详情"></headerTab>
 
-		<liaisons></liaisons>
+		<liaisons :list="contact"></liaisons>
 		<slidingBlock :toggle="toggle" :tabIndex="current" @slideshow="slideshow"></slidingBlock>
 
 		<view class="slide">
@@ -19,7 +19,7 @@
 								<text class="fill">15151</text>
 							</view>
 						</view>
-						<operator></operator>
+						<operator :list="operator"></operator>
 					</view>
 				</swiper-item>
 				<swiper-item>
@@ -64,16 +64,14 @@
 			</swiper>
 		</view>
 		<copyreader :show="compileShow" @close="handleClose()">
-			<view class="operation">
+			<view class="operation" hover-class="checkActive"
+				@click="$navto.navto('pages/plusForm/addCustomer',{id: id,header: '修改客户',type:1})">
 				修改
 			</view>
-			<view class="operation red" @touchstart="touch()" @click="amend()">
+			<view class="operation red" hover-class="checkActive" @click="clientDel">
 				删除
 			</view>
-			<view class="operation">
-				隐藏
-			</view>
-			<view class="operation">
+			<view class="operation" hover-class="checkActive">
 				新建联系记录
 			</view>
 		</copyreader>
@@ -100,6 +98,7 @@
 		},
 		data() {
 			return {
+				id: '',
 				toggle: [{
 					name: "基本信息",
 					id: 0
@@ -111,15 +110,56 @@
 					id: 2
 				}],
 				current: 0,
-				title: '',
 				compileShow: "none",
+				contact: {},
+				operator: {},
+				list: {},
 
 			}
 		},
 		onLoad(e) {
-			this.title = decodeURIComponent(e.title)
+			this.id = e.id;
+		},
+		onShow() {
+			this.getData()
 		},
 		methods: {
+			getData() {
+				let _this = this;
+				_this.$request.get('customer/' + _this.id).then(res => {
+					let operator = {};
+					let contact = {};
+					_this.list = res.data;
+
+					contact.contacterName = res.data.customerName;
+					contact.mobile = res.data.mobile;
+					contact.supplierName = res.data.customerNo;
+
+					operator.createTime = res.data.createTime;
+					operator.creator = res.data.creator;
+					operator.updatedTime = res.data.updatedTime;
+					operator.updator = res.data.updator;
+					_this.contact = contact;
+					_this.operator = operator;
+
+				})
+			},
+			clientDel(){
+				let _this = this;
+				uni.showModal({
+					title: '提示',
+					content: '确定要删除供应商',
+					success: function(res) {
+						if (res.confirm) {
+							_this.$request.del('customer/' + _this.id);
+							setTimeout(() => {
+								_this.$navto.navtab('pages/message/index')
+							}, 1000)
+							_this.$api.msg('删除成功')
+						} else if (res.cancel) {}
+					}
+				});
+			},
 			handleClose() {
 				if (this.compileShow == 'none') {
 					this.compileShow = 'show';

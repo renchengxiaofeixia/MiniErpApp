@@ -114,34 +114,34 @@
 
 		<operator></operator>
 		<copyreader :show="compileShow" @close="handleClose()">
-			<view class="operation">
+			<view class="operation" hover-class="checkActive">
 				分享
 			</view>
-			<view class="operation" @touchstart="touch()" @click="amend()">
+			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/print/index')">
 				打印
 			</view>
-			<view class="operation">
+			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/plusForm/addPurchase')">
 				修改
 			</view>
-			<view class="operation red">
+			<view class="operation red" hover-class="checkActive">
 				删除
 			</view>
-			<view class="operation">
+			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/plusForm/addPurchase')">
 				复制
 			</view>
-			<view class="operation">
+			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/plusForm/addStorage')">
 				出库
 			</view>
-			<view class="operation">
+			<view class="operation" hover-class="checkActive">
 				一键询价
 			</view>
-			<view class="operation">
+			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/plusForm/addPurchase')">
 				采购
 			</view>
-			<view class="operation">
+			<view class="operation" hover-class="checkActive">
 				收款
 			</view>
-			<view class="operation">
+			<view class="operation" hover-class="checkActive">
 				开票
 			</view>
 		</copyreader>

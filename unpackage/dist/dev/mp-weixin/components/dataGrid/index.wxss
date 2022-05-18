@@ -25,12 +25,16 @@
 /* 透明度 */
 /* 文章场景相关 */
 .listing .amount {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 10rpx 20rpx;
   background-color: #fff;
   border-bottom: 1rpx solid #ccc;
+  z-index: 99;
 }
 .listing .amount .sum {
   color: #898989;
@@ -43,18 +47,22 @@
   padding: 16rpx 0;
 }
 .listing .tabulation .scroll-view {
-  border-top: 1rpx solid #ccc;
-  border-bottom: 1rpx solid #ccc;
   width: 750rpx;
-  height: 210rpx;
 }
 .listing .tabulation .scroll-view .scroll-item {
   display: flex;
   width: 100%;
   height: 100%;
 }
+.listing .tabulation .scroll-view .supply-img {
+  width: 114rpx;
+  height: 114rpx;
+  -webkit-transform: translateY(-16rpx);
+          transform: translateY(-16rpx);
+}
 .listing .tabulation .scroll-view .goods-list {
-  padding-bottom: 50rpx;
+  padding-bottom: 20rpx;
+  padding-top: 14rpx;
   width: 750rpx;
   flex-shrink: 0;
   height: 100%;
@@ -80,11 +88,6 @@
 .listing .tabulation .scroll-view .goods-btn {
   display: flex;
   align-items: center;
-  height: 100%;
-}
-.listing .tabulation .gauge {
-  padding: 14rpx 0;
-  padding-bottom: 20rpx;
 }
 .listing .tabulation .part {
   padding-bottom: 8rpx;
