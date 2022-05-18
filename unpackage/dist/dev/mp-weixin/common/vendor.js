@@ -2237,9 +2237,11 @@ function normalizeComponent (
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return _arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);}function _arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function _iterableToArrayLimit(arr, i) {if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;var _arr = [];var _n = true;var _d = false;var _e = undefined;try {for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;} // request.js
-// 通常可以吧 baseUrl 单独放在一个
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;function _slicedToArray(arr, i) {return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();}function _nonIterableRest() {throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}function _unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return _arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(o);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);}function _arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}function _iterableToArrayLimit(arr, i) {if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;var _arr = [];var _n = true;var _d = false;var _e = undefined;try {for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {_arr.push(_s.value);if (i && _arr.length === i) break;}} catch (err) {_d = true;_e = err;} finally {try {if (!_n && _i["return"] != null) _i["return"]();} finally {if (_d) throw _e;}}return _arr;}function _arrayWithHoles(arr) {if (Array.isArray(arr)) return arr;}
+
 var baseUrl = 'http://192.168.110.187:30008/';
+
+
 var request = function request() {var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   // options.header = {
   // 	"Content-Type": "application/x-www-form-urlencoded",
@@ -2258,15 +2260,17 @@ var request = function request() {var options = arguments.length > 0 && argument
       header: options.header || {} }).
     then(function (data) {var _data = _slicedToArray(
       data, 2),err = _data[0],res = _data[1];
-      console.log();
+      console.log(data);
       if (res.statusCode == 200 || res.statusCode == 201 || res.statusCode == 202 ||
       res.statusCode == 203 || res.statusCode == 204 || res.statusCode == 205 ||
       res.statusCode == 206) {
+
         resolve(res);
       } else {
-        reject(error);
+        reject(res);
       }
     }).catch(function (error) {
+      console.log(error);
       reject(error);
     });
   });
@@ -2313,6 +2317,49 @@ var del = function del(url, data) {var options = arguments.length > 2 && argumen
 /***/ }),
 
 /***/ 13:
+/*!**********************************************************!*\
+  !*** C:/Users/admin/Desktop/采购订单/MiniErpApp/libs/api.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.msg = exports.token = exports.isLogin = void 0; // 判断token是否存在
+var token = uni.getStorageSync('token') ? uni.getStorageSync('token') : '';
+
+// 判断用户是否登入或者登入是否过期
+exports.token = token;var isLogin = function isLogin() {
+  if (token == '') {
+    uni.showToast({
+      title: '请登录',
+      icon: 'none',
+      duration: 2000,
+      success: function success(res) {
+        setTimeout(function () {
+          uni.navigateTo({
+            url: "/pages/user/login" });
+
+        }, 2000);
+        return;
+      } });
+
+  }
+};exports.isLogin = isLogin;
+
+
+var msg = function msg(title) {var duration = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1500;var mask = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;var icon = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'none';
+  return uni.showToast({
+    title: title,
+    duration: duration,
+    mask: mask,
+    icon: icon });
+
+};exports.msg = msg;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+
+/***/ 14:
 /*!************************************************************!*\
   !*** C:/Users/admin/Desktop/采购订单/MiniErpApp/libs/navTo.js ***!
   \************************************************************/
@@ -2387,7 +2434,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 207:
+/***/ 227:
 /*!***************************************************************************************************************************!*\
   !*** C:/Users/admin/Desktop/采购订单/MiniErpApp/uni_modules/uni-datetime-picker/components/uni-datetime-picker/i18n/index.js ***!
   \***************************************************************************************************************************/
@@ -2395,9 +2442,9 @@ module.exports = g;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _en = _interopRequireDefault(__webpack_require__(/*! ./en.json */ 208));
-var _zhHans = _interopRequireDefault(__webpack_require__(/*! ./zh-Hans.json */ 209));
-var _zhHant = _interopRequireDefault(__webpack_require__(/*! ./zh-Hant.json */ 210));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _en = _interopRequireDefault(__webpack_require__(/*! ./en.json */ 228));
+var _zhHans = _interopRequireDefault(__webpack_require__(/*! ./zh-Hans.json */ 229));
+var _zhHant = _interopRequireDefault(__webpack_require__(/*! ./zh-Hant.json */ 230));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var _default =
 {
   en: _en.default,
   'zh-Hans': _zhHans.default,
@@ -2405,7 +2452,7 @@ var _zhHant = _interopRequireDefault(__webpack_require__(/*! ./zh-Hant.json */ 2
 
 /***/ }),
 
-/***/ 208:
+/***/ 228:
 /*!**************************************************************************************************************************!*\
   !*** C:/Users/admin/Desktop/采购订单/MiniErpApp/uni_modules/uni-datetime-picker/components/uni-datetime-picker/i18n/en.json ***!
   \**************************************************************************************************************************/
@@ -2416,7 +2463,7 @@ module.exports = JSON.parse("{\"uni-datetime-picker.selectDate\":\"select date\"
 
 /***/ }),
 
-/***/ 209:
+/***/ 229:
 /*!*******************************************************************************************************************************!*\
   !*** C:/Users/admin/Desktop/采购订单/MiniErpApp/uni_modules/uni-datetime-picker/components/uni-datetime-picker/i18n/zh-Hans.json ***!
   \*******************************************************************************************************************************/
@@ -2427,7 +2474,7 @@ module.exports = JSON.parse("{\"uni-datetime-picker.selectDate\":\"选择日期\
 
 /***/ }),
 
-/***/ 210:
+/***/ 230:
 /*!*******************************************************************************************************************************!*\
   !*** C:/Users/admin/Desktop/采购订单/MiniErpApp/uni_modules/uni-datetime-picker/components/uni-datetime-picker/i18n/zh-Hant.json ***!
   \*******************************************************************************************************************************/
@@ -8488,7 +8535,7 @@ internalMixin(Vue);
 
 /***/ }),
 
-/***/ 323:
+/***/ 343:
 /*!**************************************************************************************************!*\
   !*** C:/Users/admin/Desktop/采购订单/MiniErpApp/uni_modules/uni-icons/components/uni-icons/icons.js ***!
   \**************************************************************************************************/
@@ -9665,7 +9712,7 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 /***/ }),
 
-/***/ 331:
+/***/ 351:
 /*!*********************************************************************************************************************!*\
   !*** C:/Users/admin/Desktop/采购订单/MiniErpApp/uni_modules/uni-datetime-picker/components/uni-datetime-picker/util.js ***!
   \*********************************************************************************************************************/
@@ -10083,58 +10130,6 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 Calendar;exports.default = _default;
-
-/***/ }),
-
-/***/ 394:
-/*!**********************************************************!*\
-  !*** C:/Users/admin/Desktop/采购订单/MiniErpApp/libs/api.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.pageUpdate = exports.msg = exports.token = exports.isLogin = void 0; // 判断token是否存在
-var token = uni.getStorageSync('token') ? uni.getStorageSync('token') : '';
-
-// 判断用户是否登入或者登入是否过期
-exports.token = token;var isLogin = function isLogin() {
-  if (token == '') {
-    uni.showToast({
-      title: '请登录',
-      icon: 'none',
-      duration: 2000,
-      success: function success(res) {
-        setTimeout(function () {
-          uni.navigateTo({
-            url: "/pages/user/login" });
-
-        }, 2000);
-        return;
-      } });
-
-  }
-};exports.isLogin = isLogin;
-
-
-var msg = function msg(title) {var duration = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1500;var mask = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;var icon = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'none';
-  return uni.showToast({
-    title: title,
-    duration: duration,
-    mask: mask,
-    icon: icon });
-
-};exports.msg = msg;
-var pageUpdate = function pageUpdate() {
-  var pages = getCurrentPages(); // 当前页面
-  var beforePage = pages[pages.length - 2]; // 上一页
-  uni.navigateBack({
-    success: function success() {
-      beforePage.onLoad(); // 执行上一页的onLoad方法
-    } });
-
-};exports.pageUpdate = pageUpdate;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 
@@ -10602,18 +10597,18 @@ function resolveLocaleChain(locale) {
 
 /***/ }),
 
-/***/ 404:
+/***/ 47:
 /*!**********************************************************!*\
   !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
   \**********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! regenerator-runtime */ 405);
+module.exports = __webpack_require__(/*! regenerator-runtime */ 48);
 
 /***/ }),
 
-/***/ 405:
+/***/ 48:
 /*!************************************************************!*\
   !*** ./node_modules/regenerator-runtime/runtime-module.js ***!
   \************************************************************/
@@ -10644,7 +10639,7 @@ var oldRuntime = hadRuntime && g.regeneratorRuntime;
 // Force reevalutation of runtime.js.
 g.regeneratorRuntime = undefined;
 
-module.exports = __webpack_require__(/*! ./runtime */ 406);
+module.exports = __webpack_require__(/*! ./runtime */ 49);
 
 if (hadRuntime) {
   // Restore the original runtime.
@@ -10661,7 +10656,7 @@ if (hadRuntime) {
 
 /***/ }),
 
-/***/ 406:
+/***/ 49:
 /*!*****************************************************!*\
   !*** ./node_modules/regenerator-runtime/runtime.js ***!
   \*****************************************************/

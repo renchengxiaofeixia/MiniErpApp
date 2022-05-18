@@ -1,6 +1,6 @@
 <template>
 	<view class="">
-		<headerTab :title="'新建物品'"></headerTab>
+		<headerTab :title="header"></headerTab>
 		<view class="table">
 			<view class="from from-new">
 				<text class="title">物品编号</text>
@@ -78,8 +78,8 @@
 			</view>
 		</view>
 
-		<view class="newBtn" @click="addProducts()">
-			<button>确定</button>
+		<view class="newBtn">
+			<button @click="addProducts()">确定</button>
 		</view>
 
 	</view>
@@ -94,6 +94,8 @@
 		data() {
 			return {
 				id: '', //id
+				header: '新建物品', //表头
+				type: 0, // 复制 2 修改 1 创建 0
 				productSeries: '', //物品编号
 				productName: '', //产品名称
 				productType: '', //型号
@@ -112,7 +114,10 @@
 		onLoad(option) {
 			let _this = this;
 			_this.id = option.id ? option.id : '';
-			if (_this.id) {
+			_this.type = option.type ? option.type : 0;
+			_this.header = option.header ? decodeURIComponent(option.header) : '新建物品';
+
+			if (_this.id != '') {
 				_this.$request.get('prod/' + _this.id).then(res => {
 					let data = res.data;
 					_this.productSeries = data.prodNo;
@@ -124,7 +129,7 @@
 					_this.salePrice = data.salePrice;
 					_this.remarks = data.remarks;
 					_this.catCode = data.catCode;
-					_this.prodImage = data.prodImage;
+					// _this.prodImage = data.prodImage;
 					_this.productBrand = data.prodBrand;
 					_this.inventoryFloor = data.upperQuantity;
 					_this.inventoryUpper = data.lowerQuantity;
@@ -157,15 +162,14 @@
 					upperQuantity: _this.inventoryFloor,
 					lowerQuantity: _this.inventoryUpper
 				}
-				if (_this.id != '') {
+				if (_this.type == 1) {
 					_this.$request.put('prod/' + _this.id, data).then(res => {
 						setTimeout(() => {
 							_this.$navto.navBack();
 						}, 1000)
-						_this.$api.pageUpdate();
 						_this.$api.msg('修改成功');
 					}).catch(error => {
-						_this.$api.msg('修改失败，请联系管理员！');
+						_this.$api.msg(error.data);
 					})
 				} else {
 					_this.$request.post('prod', data).then(res => {
@@ -174,7 +178,7 @@
 						}, 1000)
 						_this.$api.msg('添加成功');
 					}).catch(error => {
-						_this.$api.msg('新建物品失败，请联系管理员！');
+						_this.$api.msg(error.data);
 					})
 				}
 			},

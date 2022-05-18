@@ -112,7 +112,9 @@
 				</swiper-item>
 				<swiper-item>
 					<view class="swiper-item">
-						供应商
+						<dataGrid url="pages/details/supplier" 
+						:list="supplierList" :date="false" tab="2" :hide="false">
+						</dataGrid>
 					</view>
 				</swiper-item>
 				<swiper-item>
@@ -140,13 +142,15 @@
 			</swiper>
 		</view>
 		<copyreader :show="compileShow" @close="handleClose()">
-			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/plusForm/addGoods',{id:id})">
+			<view class="operation" hover-class="checkActive"
+				@click="$navto.navto('pages/plusForm/addGoods',{id:id,type:1,header: '修改物品'})">
 				修改
 			</view>
 			<view class="operation red" hover-class="checkActive" @click="cutproduct()">
 				删除
 			</view>
-			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/plusForm/addGoods')">
+			<view class="operation" hover-class="checkActive"
+				@click="$navto.navto('pages/plusForm/addGoods',{id:id,type:2})">
 				复制
 			</view>
 		</copyreader>
@@ -160,13 +164,15 @@
 	import operator from './components/operator.vue';
 	import addOrder from '@/components/addOrder.vue';
 	import copyreader from '@/components/copyreader/index.vue';
+	import dataGrid from '@/components/dataGrid/index.vue';
 	export default {
 		components: {
 			headerTab,
 			slidingBlock,
 			addOrder,
 			copyreader,
-			operator
+			operator,
+			dataGrid,
 		},
 		data() {
 			return {
@@ -177,7 +183,7 @@
 					name: "库存信息",
 					id: 1
 				}, {
-					name: "可供应商",
+					name: "可供供应商",
 					id: 2
 				}, {
 					name: "采购记录",
@@ -188,32 +194,38 @@
 				id: Number,
 				list: {},
 				operator: {},
+				supplierList: [],
 			}
 		},
-		onLoad(e) {
-			this.id = e.id;
+		onLoad(option) {
+			this.id = option.id;
+
+		},
+		onShow() {
 			this.getData();
 		},
 		methods: {
 			getData() {
 				let _this = this;
-
 				_this.$request.get('prod/' + _this.id).then(res => {
 					let data = res.data;
 					let operator = {};
 					_this.list = res.data;
-					operator.createTime = res.data.createTime;
-					operator.creator = res.data.creator;
-					operator.updatedTime = res.data.updatedTime;
-					operator.updator = res.data.updator;
+					operator.createTime = data.createTime;
+					operator.creator = data.creator;
+					operator.updatedTime = data.updatedTime;
+					operator.updator = data.updator;
 					_this.operator = operator;
+				})
+				_this.$request.get('suppliers/' + _this.id).then(res => {
+					_this.supplierList = res.data;
 				})
 			},
 			cutproduct() {
 				let _this = this;
 				uni.showModal({
 					title: '提示',
-					content: '确定要删除改物品',
+					content: '确定要删除物品',
 					success: function(res) {
 						if (res.confirm) {
 							_this.$request.del('prod/' + _this.id);

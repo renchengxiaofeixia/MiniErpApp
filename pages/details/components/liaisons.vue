@@ -1,14 +1,14 @@
 <template>
 	<view>
 		<view class="head bg-green">
-			<view class="name white">供应商</view>
+			<view class="name white">{{list.supplierName}}</view>
 			<view class="personal">
 				<view class="personal-text">
 					<view class="part">
 						联系人
 					</view>
 					<view class="white">
-						李三
+						{{list.contacterName}}
 					</view>
 				</view>
 				<view class="personal-text">
@@ -24,7 +24,7 @@
 						联系电话
 					</view>
 					<view class="white">
-						8888
+						{{list.mobile}}
 					</view>
 				</view>
 			</view>
@@ -33,6 +33,23 @@
 </template>
 
 <script>
+	export default {
+		props: {
+			list: Object
+		},
+		data() {
+			return {
+		
+			}
+		},
+		onLoad() {
+		
+		},
+		methods: {
+		
+		
+		}
+	}
 </script>
 
 <style lang="scss">

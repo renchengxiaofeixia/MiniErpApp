@@ -82,14 +82,14 @@
         {
           "name": "供应商详情",
           "pathName": "pages/details/supplier",
-          "query": "",
+          "query": "id=3",
           "launchMode": "default",
           "scene": null
         },
         {
           "name": "客户详情",
           "pathName": "pages/details/client",
-          "query": "",
+          "query": "id=3",
           "launchMode": "default",
           "scene": null
         },

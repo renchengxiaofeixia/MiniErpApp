@@ -10,8 +10,8 @@
 /* WEBPACK VAR INJECTION */(function(createApp) {__webpack_require__(/*! uni-pages */ 5);var _App = _interopRequireDefault(__webpack_require__(/*! ./App */ 6));
 
 var _request = _interopRequireDefault(__webpack_require__(/*! @/libs/request.js */ 12));
-var api = _interopRequireWildcard(__webpack_require__(/*! @/libs/api.js */ 394));
-var navTo = _interopRequireWildcard(__webpack_require__(/*! @/libs/navTo */ 13));
+var api = _interopRequireWildcard(__webpack_require__(/*! @/libs/api.js */ 13));
+var navTo = _interopRequireWildcard(__webpack_require__(/*! @/libs/navTo */ 14));
 
 
 

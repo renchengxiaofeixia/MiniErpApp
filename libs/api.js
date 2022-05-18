@@ -29,21 +29,9 @@ const msg = (title, duration = 1500, mask = false, icon = 'none') => {
 		icon
 	});
 }
-const pageUpdate = () => {
-	let pages = getCurrentPages(); // 当前页面
-	let beforePage = pages[pages.length - 2]; // 上一页
-	uni.navigateBack({
-		success: function() {
-			beforePage.onLoad(); // 执行上一页的onLoad方法
-		}
-	});
-}
-
-
 
 export {
 	isLogin,
 	token,
-	msg,
-	pageUpdate
+	msg
 }
