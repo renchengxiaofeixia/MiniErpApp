@@ -5,10 +5,9 @@
 		<view class="slide">
 			<swiper class="swiper" :current="first.id" @change="slidingBlock">
 				<swiper-item>
-					<scroll-view class="swiper-item" scroll-y="true">
+					<scroll-view class="swiper-item scroll" scroll-y="true">
 						<dataGrid url="pages/details/commodity" :list="productList" :date="false" tab="1"
-							@drop="dropProduct" @amend="amendProduct">
-
+							@drop="dropProduct" @amend="amendProduct" :hide="false">
 						</dataGrid>
 					</scroll-view>
 				</swiper-item>
@@ -106,6 +105,7 @@
 				productList: [], //物品
 				supplierList: [], //供应商
 				clientlist: [], //客户
+		
 
 			}
 		},
@@ -113,6 +113,12 @@
 			this.productData();
 			this.supplierData();
 			this.clientData();
+		},
+		mounted() {
+		
+		},
+		computed: {
+
 		},
 		methods: {
 			// 物品数据
@@ -151,15 +157,15 @@
 				})
 			},
 			// 删除物品
-			dropProduct(id,index) {
+			dropProduct(id, index) {
 				let _this = this;
 				uni.showModal({
 					title: '提示',
 					content: '确定要删除物品',
 					success: function(res) {
 						if (res.confirm) {
-							_this.$request.del('prod/' + id).then(res=>{
-								_this.productList.splice(index,1)
+							_this.$request.del('prod/' + id).then(res => {
+								_this.productList.splice(index, 1)
 							});
 							_this.$api.msg('删除成功')
 						} else if (res.cancel) {
@@ -177,15 +183,15 @@
 				})
 			},
 			// 删除供应商
-			dropSupplier(id,index) {
+			dropSupplier(id, index) {
 				let _this = this;
 				uni.showModal({
 					title: '提示',
 					content: '确定要删除供应商',
 					success: function(res) {
 						if (res.confirm) {
-							_this.$request.del('supplier/' + id).then(res=>{
-								_this.supplierList.splice(index,1)
+							_this.$request.del('supplier/' + id).then(res => {
+								_this.supplierList.splice(index, 1)
 							});
 							_this.$api.msg('删除成功')
 						} else if (res.cancel) {
@@ -203,15 +209,15 @@
 				})
 			},
 			// 删除客户
-			dropClient(id,index) {
+			dropClient(id, index) {
 				let _this = this;
 				uni.showModal({
 					title: '提示',
 					content: '确定要删除供应商',
 					success: function(res) {
 						if (res.confirm) {
-							_this.$request.del('customer/' + id).then(res=>{
-								_this.clientlist.splice(index,1)
+							_this.$request.del('customer/' + id).then(res => {
+								_this.clientlist.splice(index, 1)
 							});
 							_this.$api.msg('删除成功')
 						} else if (res.cancel) {}
@@ -247,5 +253,7 @@
 </script>
 
 <style lang="scss">
-
+	.scroll {
+		height: 1000rpx;
+	}
 </style>

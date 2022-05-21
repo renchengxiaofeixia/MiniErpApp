@@ -30,8 +30,29 @@ const msg = (title, duration = 1500, mask = false, icon = 'none') => {
 	});
 }
 
+const dialPhone = (item) => {
+	uni.makePhoneCall({
+		phoneNumber: item.toString()
+	}).catch((e) => {
+		// console.log(e)  //用catch(e)来捕获错误{makePhoneCall:fail cancel}
+	})
+
+}
+
+
+const prePage = ()=>{
+	let pages = getCurrentPages();
+	let prePage = pages[pages.length - 2];
+	// #ifdef H5
+	return prePage;
+	// #endif
+	return prePage.$vm;
+}
+
 export {
 	isLogin,
 	token,
-	msg
+	msg,
+	dialPhone,
+	prePage
 }

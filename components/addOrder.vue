@@ -73,6 +73,7 @@
 		bottom: 40rpx;
 		width: 90rpx;
 		height: 90rpx;
+		z-index: 40;
 	}
 
 	.add {

@@ -1,23 +1,22 @@
 <template>
 	<view class="storage">
-		<headerTab :title="title"></headerTab>
-		<view class="storage-piece">
-			<text>件</text>
-			<text class="icon-shenglvehao iconfont" @click="handleClose()" v-if="id == 2"></text>
+		<headerTab :title="header"></headerTab>
+
+		<view class="storage-piece" v-for="(item,index) in unitList" :key="index" @click.stop="checked(item.propValue)">
+			<text>{{item.propValue}}</text>
+			<text class="icon-shenglvehao iconfont" @click.stop="handleClose(item)"></text>
 		</view>
 
 		<copyreader :show="compileShow" @close="handleClose()">
-			<view class="operation" @touchstart="touch()" @click="amend()">
+			<view class="operation" @click="append(2)">
 				修改
 			</view>
-			<view class="operation red">
+			<view class="operation red" @click="delUnit()">
 				删除
 			</view>
 		</copyreader>
-		<block v-if="id != 3">
-			<addOrder type="3" @click="append()"></addOrder>
-		</block>
-		<addPopup @close="append" :show="isShow" title="添加类目"></addPopup>
+		<addOrder type="3" @click="append(1)"></addOrder>
+		<addPopup @close="append(1)" :show="isShow" @confirm="addCat" :title="unitTitle" :content="content"></addPopup>
 	</view>
 </template>
 
@@ -35,21 +34,113 @@
 		},
 		data() {
 			return {
+				id: 1,
+				header: "选择单位",
 				isShow: false,
-				title: '',
-				id: -1,
 				compileShow: "none",
+				unitList: [], //单位列表
+				simple: {},
+				unitTitle: '添加单位',
+				content: '',
+				revamp: false, //是否修改
 			};
 		},
 		onLoad(e) {
-			this.title = decodeURIComponent(e.title);
-			this.id = e.id;
+			this.id = e.id
+			this.header = decodeURIComponent(e.header);
+			this.getData()
 		},
 		methods: {
-			append() {
+			getData() {
+				let _this = this;
+				if (_this.id == 1) {
+					_this.$request.get('customprop/ProdInfo/Unit').then(res => {
+						let data = res.data;
+						_this.unitList = res.data;
+					})
+				} else {
+					_this.$request.get('customprop/Customer/FollowStatus').then(res => {
+						let data = res.data;
+						_this.unitList = res.data;
+					})
+				}
+
+			},
+			// 添加
+			addCat(item) {
+				let _this = this;
+				let data = {};
+				if (_this.id == 1) {
+					data = {
+						module: "ProdInfo",
+						propName: "Unit",
+						propValue: item,
+					}
+				} else {
+					data = {
+						module: "Customer",
+						propName: "FollowStatus",
+						propValue: item,
+					}
+				}
+
+				if (!_this.revamp) {
+					_this.$request.post('customprop', data).then(res => {
+						_this.getData();
+					})
+				} else {
+					_this.$request.put('customprop/' + _this.simple.id, data).then(res => {
+						_this.getData();
+					})
+				}
+
+			},
+			// 删除
+			delUnit() {
+				let _this = this;
+				uni.showModal({
+					title: '提示',
+					content: '确定要删除该类目',
+					success: function(res) {
+						if (res.confirm) {
+							_this.$request.del('customprop/' + _this.simple.id).then(res => {
+								_this.getData();
+							})
+							_this.$api.msg('删除成功')
+						} else if (res.cancel) {}
+					}
+				});
+			},
+			// 选中
+			checked(val) {
+				if (this.id == 1) {
+					this.$api.prePage().$data.unit = val;
+				} else {
+					this.$api.prePage().$data.contactStatus = val;
+				}
+
+				setTimeout(() => {
+					this.$navto.navBack();
+				}, 500)
+			},
+			// 弹窗
+			append(top) {
+				if (top == 1) {
+					this.unitTitle = "添加单位"
+				} else {
+					this.content = this.simple.propValue;
+					this.revamp = true
+					this.unitTitle = "修改单位"
+				}
+				if (this.isShow) {
+					this.simple = {};
+					this.content = "";
+					this.revamp = false;
+				}
 				this.isShow = !this.isShow
 			},
-			handleClose() {
+			handleClose(item) {
+				this.simple = item;
 				if (this.compileShow == 'none') {
 					this.compileShow = 'show';
 				} else {

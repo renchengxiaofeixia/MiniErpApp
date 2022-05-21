@@ -24,19 +24,20 @@
 				</swiper-item>
 				<swiper-item>
 					<view class="swiper-item">
-						<view class="table record">
+						<view class="table record" v-for="(item,index) in contactList" :key="index" 
+						@click="$navto.navto('pages/details/contactRecord',{id: item.id})">
 							<view class="goods-flex ">
 								<view>
 									<text class="gray date">联系日期：</text>
-									<text class="">2022-5-11</text>
+									<text class="">{{item.contactTime}}</text>
 								</view>
 								<view>
 									<text class="gray date">下次联系时间：</text>
-									<text class="">2022-5-11</text>
+									<text class="">{{item.nextContactTime}}</text>
 								</view>
 							</view>
 							<view class="content">
-								你好
+								{{item.contactContent}}
 							</view>
 						</view>
 					</view>
@@ -71,7 +72,8 @@
 			<view class="operation red" hover-class="checkActive" @click="clientDel">
 				删除
 			</view>
-			<view class="operation" hover-class="checkActive">
+			<view class="operation" hover-class="checkActive"
+				@click="$navto.navto('pages/plusForm/addContactRecord',{name: contact.supplierName})">
 				新建联系记录
 			</view>
 		</copyreader>
@@ -114,6 +116,7 @@
 				contact: {},
 				operator: {},
 				list: {},
+				contactList: [],
 
 			}
 		},
@@ -121,7 +124,8 @@
 			this.id = e.id;
 		},
 		onShow() {
-			this.getData()
+			this.getData();
+			this.contactData()
 		},
 		methods: {
 			getData() {
@@ -144,7 +148,16 @@
 
 				})
 			},
-			clientDel(){
+			// 联系记录
+			contactData() {
+				let _this = this;
+
+				_this.$request.get('contactrecords/' + _this.id).then(res => {
+					_this.contactList = res.data
+				})
+			},
+			// 删除
+			clientDel() {
 				let _this = this;
 				uni.showModal({
 					title: '提示',

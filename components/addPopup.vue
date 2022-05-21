@@ -5,10 +5,10 @@
 			<view class="popup-title">
 				{{title}}
 			</view>
-			<input type="text" placeholder="填写单位名称">
+			<input type="text" placeholder="填写单位名称" v-model="content">
 			<view class="popup-bnt">
 				<button class="blue" @click="close">取消</button>
-				<button class="blue">确定</button>
+				<button class="blue" @click="confirm">确定</button>
 			</view>
 		</view>
 	</view>
@@ -24,17 +24,30 @@
 			show: {
 				type: Boolean,
 				default: false
+			},
+			content:{
+				type: String,
+				default: ''
 			}
 		},
 		data() {
 			return {
-
 			};
+		},
+		created() {
+
 		},
 		methods: {
 			close() {
 				this.$emit("close");
-			}
+			},
+			confirm() {
+				if (this.content == "") {
+					this.$api.msg('不能为空！');
+					return
+				}
+				this.$emit("confirm",this.content);
+			},
 		}
 	}
 </script>
@@ -69,8 +82,8 @@
 			left: 0;
 			margin: auto;
 			background-color: #fff;
-			width: 440rpx;
-			height: 270rpx;
+			width: 540rpx;
+			height: 310rpx;
 			border-radius: 14rpx;
 			overflow: hidden;
 
@@ -85,14 +98,14 @@
 				margin: 0 30rpx;
 				border: 1rpx solid #ccc;
 				border-radius: 10rpx;
-				padding: 10rpx 6rpx;
+				padding: 16rpx 12rpx;
 			}
 
 			.popup-bnt {
 				display: flex;
 				align-items: center;
 				border-top: 1rpx solid #ccc;
-				margin-top: 20rpx;
+				margin-top: 40rpx;
 
 				button {
 					flex: 1;

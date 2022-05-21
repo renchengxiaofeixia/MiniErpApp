@@ -1,5 +1,5 @@
 <template>
-	<view class="">
+	<view class="paddingBottom">
 		<headerTab :title="header"></headerTab>
 		<view class="table">
 			<view class="from from-new">
@@ -14,18 +14,18 @@
 		<view class="table">
 			<view class="from from-new">
 				<text class="title">规格型号</text>
-				<input type="text" placeholder="填写品牌" class="fill" v-model="productType">
+				<input type="text" placeholder="填写型号" class="fill" v-model="productType">
 			</view>
 			<view class="from from-new">
 				<text class="title">品牌</text>
 				<input type="text" placeholder="填写品牌" class="fill" v-model="productBrand">
 			</view>
-			<view class="from from-new" @click="$navto.navto('pages/address/storage',{title:'选择单位',id:1})">
+			<view class="from from-new" @click="$navto.navto('pages/address/storage',{id:1,header:'选择单位'})">
 				<text class="title">单位</text>
 				<text class="fill">{{unit}}</text>
 				<text class="iconfont icon-right-1-copy"></text>
 			</view>
-			<view class="from from-new" @click="$navto.navto('pages/address/storage',{title:'选择类目',id:2})">
+			<view class="from from-new" @click="$navto.navto('pages/address/category')">
 				<text class="title">类目</text>
 				<text class="fill">{{catCode}}</text>
 				<text class="iconfont icon-right-1-copy"></text>
@@ -78,18 +78,17 @@
 			</view>
 		</view>
 
-		<view class="newBtn">
-			<button @click="addProducts()">确定</button>
-		</view>
-
+		<footerBtn @confirm="addProducts()"></footerBtn>
 	</view>
 </template>
 
 <script>
 	import headerTab from '@/components/headerTab/index.vue';
+	import footerBtn from '@/components/footerBtn.vue';
 	export default {
 		components: {
-			headerTab
+			headerTab,
+			footerBtn
 		},
 		data() {
 			return {
@@ -108,6 +107,7 @@
 				unit: '件', //单位
 				catCode: '其他', //类目
 				prodImage: [], //上传图片
+
 
 			}
 		},
@@ -129,7 +129,7 @@
 					_this.salePrice = data.salePrice;
 					_this.remarks = data.remarks;
 					_this.catCode = data.catCode;
-					// _this.prodImage = data.prodImage;
+					_this.prodImage = data.prodImage;
 					_this.productBrand = data.prodBrand;
 					_this.inventoryFloor = data.upperQuantity;
 					_this.inventoryUpper = data.lowerQuantity;
@@ -157,7 +157,7 @@
 					salePrice: _this.salePrice,
 					remarks: _this.remarks,
 					catCode: _this.catCode,
-					// prodImage: _this.prodImage,
+					prodImage: _this.prodImage,
 					prodBrand: _this.productBrand,
 					upperQuantity: _this.inventoryFloor,
 					lowerQuantity: _this.inventoryUpper

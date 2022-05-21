@@ -16,12 +16,12 @@
 		<view class="table">
 			<view class="from from-new">
 				<text class="title">联系人</text>
-				<input type="text" placeholder="填写/导入联系人" class="fill" v-model="contacterName">
+				<input type="text" placeholder="填写/导入联系人(必填)" class="fill" v-model="contacterName">
 				<text class="iconfont icon-igw-l-user-2"></text>
 			</view>
 			<view class="from from-new">
 				<text class="title">手机</text>
-				<input type="text" placeholder="填写填写联系电话" class="fill" v-model="mobile">
+				<input type="text" placeholder="填写填写联系电话(必填)" class="fill" v-model="mobile">
 			</view>
 		</view>
 
@@ -31,18 +31,18 @@
 				<textarea placeholder="填写备注" v-model="remarks"></textarea>
 			</view>
 		</view>
-
-		<view class="newBtn">
-			<button @click="supplierBnt()">确定</button>
-		</view>
+		
+		<footerBtn @confirm="supplierBnt()"></footerBtn>
 	</view>
 </template>
 
 <script>
 	import headerTab from '@/components/headerTab/index.vue';
+	import footerBtn from '@/components/footerBtn.vue';
 	export default {
 		components: {
-			headerTab
+			headerTab,
+			footerBtn
 		},
 		data() {
 			return {
@@ -76,9 +76,21 @@
 		methods: {
 			supplierBnt() {
 				let _this = this;
+				if (_this.supplierNo) {
+					_this.$api.msg('供应商编号不能为空！')
+				}
+
 				if (_this.supplierName) {
 					_this.$api.msg('供应商名称不能为空！')
 				}
+
+				if (_this.contacterName) {
+					_this.$api.msg('联系人不能为空！')
+				}
+				if (_this.mobile) {
+					_this.$api.msg('手机不能为空！')
+				}
+
 				let data = {
 					supplierNo: _this.supplierNo,
 					supplierName: _this.supplierName,

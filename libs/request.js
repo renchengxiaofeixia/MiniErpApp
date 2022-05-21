@@ -21,7 +21,7 @@ const request = (options = {}) => {
 			header: options.header || {}
 		}).then(data => {
 			let [err, res] = data;
-			console.log(data)
+			// console.log(data)
 			if (res.statusCode == 200 || res.statusCode == 201 || res.statusCode == 202 ||
 				res.statusCode == 203 || res.statusCode == 204 || res.statusCode == 205 ||
 				res.statusCode == 206) {

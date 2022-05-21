@@ -129,23 +129,8 @@
 	margin-top: 30rpx;
 }
 
-/* 确定按钮 */
-.newBtn {
-	width: 200rpx;
-	margin: 40rpx auto;
-	padding-bottom: 80rpx;
-
-}
-
-.newBtn button {
-	background-color: #2ea469;
-	color: #fff;
-	font-size: 30rpx;
-
-}
-
 .swiper {
-	height: 83vh;
+	height: 82vh;
 }
 
 .paddingBottom {

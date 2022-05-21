@@ -17,7 +17,7 @@
 
 			<scroll-view class="scroll-view" scroll-x="true" v-for="(item,index) in list" :key="index">
 				<view class="scroll-item">
-					<view class="goods-list" @click="$navto.navto(url,{id:item.id})">
+					<view class="goods-list" @click.stop="$navto.navto(url,{id:item.id})">
 						<view class="goods-flex">
 							<view class="black name">
 								<block v-if="tab == 1">{{item.prodName}}</block>
@@ -48,7 +48,7 @@
 								</block>
 								<!-- <view class="part">大佳品等1项</view> -->
 							</view>
-							<view class="supply-img" v-if="tab == 2">
+							<view class="supply-img" v-if="tab == 2" @click.stop="$api.dialPhone(item.mobile)">
 								<image src="../../static/image/adapter_supplier_search_result_item_phone_call.png"
 									mode="aspectFit"></image>
 							</view>
@@ -62,10 +62,10 @@
 						</view>
 					</view>
 					<view class="goods-btn" v-if="hide">
-						<button class="pinless" style="background-color: #ffb535;" @click="amend(item.id)">
+						<button class="pinless" style="background-color: #ffb535;" @click.stop="amend(item.id)">
 							修改
 						</button>
-						<button class="pinless" style="background-color: #ff4622;" @click="drop(item.id,index)">
+						<button class="pinless" style="background-color: #ff4622;" @click.stop="drop(item.id,index)">
 							删除
 						</button>
 					</view>
@@ -96,7 +96,7 @@
 				type: Boolean,
 				default: true,
 			},
-			hide:{
+			hide: {
 				type: Boolean,
 				default: true,
 			}
@@ -117,10 +117,10 @@
 				this.touch = false;
 			},
 			amend(id) {
-				this.$emit("amend",id);
+				this.$emit("amend", id);
 			},
 			drop(id) {
-				this.$emit("drop",id);
+				this.$emit("drop", id);
 			}
 		}
 	}
@@ -157,6 +157,7 @@
 
 			.scroll-view {
 				width: 750rpx;
+				border-bottom: 1rpx solid #eee;
 
 				.scroll-item {
 					display: flex;

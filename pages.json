@@ -135,6 +135,18 @@
 					// #endif
 				}
 			}
+		}, {
+			"path": "addContactRecord",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
 		}]
 	}, {
 		"root": "pages/details",
@@ -235,12 +247,36 @@
 					// #endif
 				}
 			}
+		}, {
+			"path": "contactRecord",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
 		}]
 	}, {
 		"root": "pages/address",
 		"name": "address",
 		"pages": [{
 			"path": "storage",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}, {
+			"path": "category",
 			"style": {
 				"navigationStyle": "custom",
 				"app-plus": {
@@ -327,7 +363,7 @@
 					// #endif
 				}
 			}
-		},{
+		}, {
 			"path": "register",
 			"style": {
 				"navigationStyle": "custom",
@@ -339,7 +375,7 @@
 					// #endif
 				}
 			}
-		},{
+		}, {
 			"path": "personal",
 			"style": {
 				"navigationStyle": "custom",
