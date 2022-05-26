@@ -2,7 +2,6 @@
 
 const baseUrl = 'http://192.168.110.187:30008/';
 
-
 const request = (options = {}) => {
 	// options.header = {
 	// 	"Content-Type": "application/x-www-form-urlencoded",
@@ -25,13 +24,11 @@ const request = (options = {}) => {
 			if (res.statusCode == 200 || res.statusCode == 201 || res.statusCode == 202 ||
 				res.statusCode == 203 || res.statusCode == 204 || res.statusCode == 205 ||
 				res.statusCode == 206) {
-
 				resolve(res);
 			} else {
 				reject(res)
 			}
 		}).catch(error => {
-			console.log(error)
 			reject(error)
 		})
 	});

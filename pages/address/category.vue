@@ -119,7 +119,7 @@
 				if (top == 1) {
 					this.addCategory = "添加类目"
 				} else if (top == 2) {
-				    this.handleClose();
+					this.handleClose();
 					this.addCategory = "添加子类目";
 				} else if (top == 3) {
 					this.content = this.sonCategory.categoryName;

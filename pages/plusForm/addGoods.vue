@@ -147,6 +147,7 @@
 					_this.$api.msg('物品名称不能为空');
 					return
 				}
+				
 				let data = {
 					prodNo: _this.productSeries,
 					prodCustomNo: _this.productName,
@@ -181,6 +182,9 @@
 						_this.$api.msg(error.data);
 					})
 				}
+				
+				// this.$api.prePage().onLoad();
+				console.log(_this.$api.prePage().$vm);
 			},
 			//*选择图片*//
 			addImg: async function() {

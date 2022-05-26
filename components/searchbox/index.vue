@@ -1,10 +1,12 @@
 <template>
-	<view class="search">
-		<view class="search-input">
-			<text class="iconfont icon-sousuotianchong"></text>
-			<input type="text" value="" placeholder="客户/销售/物品名称" />
+	<view>
+		<view class="search">
+			<view class="search-input">
+				<text class="iconfont icon-sousuotianchong"></text>
+				<input type="text" value="" placeholder="客户/销售/物品名称" />
+			</view>
+			<text class="iconfont icon-shaixuan" @click="filterShow()"></text>
 		</view>
-		<text class="iconfont icon-shaixuan" @click="filterShow()"></text>
 	</view>
 </template>
 
@@ -26,9 +28,11 @@
 
 <style lang="scss">
 	.search {
+		width: 100%;
 		display: flex;
 		align-items: center;
-		margin: 20rpx;
+		padding: 20rpx;
+		background-color: #f2f2f2;
 
 		.search-input {
 			display: flex;

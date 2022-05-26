@@ -1,15 +1,15 @@
 <template>
 	<view class="table">
-		<pulldown headline="入库方" size="32rpx" detail="详细">
+		<pulldown :headline="list.name" size="32rpx" detail="详细">
 			<view class="goods-flex shove">
 				<view>
 					<view class="track">
 						<text class="gray">联系人：</text>
-						<text class="black"> 阿三</text>
+						<text class="black">{{list.linkman}}</text>
 					</view>
 					<view class="track">
 						<text class="gray">电话：</text>
-						<text class="black"> 110</text>
+						<text class="black">{{list.phone}}</text>
 					</view>
 				</view>
 				<view class="phone">
@@ -26,6 +26,12 @@
 	export default {
 		components: {
 			pulldown
+		},
+		props: {
+			list: {
+				type: Object,
+				default: {}
+			},
 		},
 		data() {
 			return {

@@ -69,8 +69,10 @@
 	.recompile,
 	.add {
 		position: fixed;
-		right: 18rpx;
-		bottom: 40rpx;
+		right: 30rpx;
+		top: 72%;
+		bottom: 0;
+		margin: auto;
 		width: 90rpx;
 		height: 90rpx;
 		z-index: 40;

@@ -112,8 +112,7 @@
 				</swiper-item>
 				<swiper-item>
 					<view class="swiper-item">
-						<dataGrid url="pages/details/supplier" 
-						:list="supplierList" :date="false" tab="2" :hide="false">
+						<dataGrid url="pages/details/supplier" :list="supplierList" :date="false" tab="2" :hide="false">
 						</dataGrid>
 					</view>
 				</swiper-item>

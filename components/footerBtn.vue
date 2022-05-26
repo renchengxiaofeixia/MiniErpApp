@@ -4,6 +4,8 @@
 			<button class="cancel" @click="$navto.navBack">取消</button>
 			<button class="confirm" @tap.stop="confirm">确定</button>
 		</view>
+
+
 	</view>
 
 </template>
@@ -52,7 +54,7 @@
 		z-index: 6;
 
 		button {
-			width: 50%;
+			flex: 1;
 			color: #fff;
 			font-size: 30rpx;
 			margin: 0 30rpx;

@@ -5,73 +5,88 @@
 			<text class="sum">
 				一共1条数据
 			</text>
-			<text class="price">
+			<!-- <text class="price">
 				￥1000.00
-			</text>
+			</text> -->
 		</view>
 		<view class="tabulation">
+			<radio-group @change="radioChange">
+				<scroll-view class="scroll-view" scroll-x="true" v-for="(item,index) in list" :key="index">
+					<view class="scroll-item">
+						<view class="goods-list" @click.stop="$navto.navto(url,{id:item.id})">
+							<view class="goods-flex">
+								<view class="black name">
+									<block v-if="tab == 1">{{item.prodName}} <text class="model"
+											v-if="item.prodModel">({{item.prodModel}})</text> </block>
+									<block v-if="tab == 2 || tab == 4">{{item.supplierName}}</block>
+									<block v-if="tab == 3">{{item.customerNo}}</block>
 
-			<view class="date gray" v-if="date">
-				2032-05-03
-			</view>
-
-			<scroll-view class="scroll-view" scroll-x="true" v-for="(item,index) in list" :key="index">
-				<view class="scroll-item">
-					<view class="goods-list" @click.stop="$navto.navto(url,{id:item.id})">
-						<view class="goods-flex">
-							<view class="black name">
-								<block v-if="tab == 1">{{item.prodName}}</block>
-								<block v-if="tab == 2">{{item.supplierName}}</block>
-								<block v-if="tab == 3">{{item.customerNo}}</block>
-								<!-- <block>李三</block>
+									<!-- <block>李三</block>
 								<text class="gray shift">调拨到</text>
 								<block>李三</block> -->
+								</view>
+								<view class="green" v-if="tab == 1">
+									<text>0 </text>
+									<text>{{item.unit}}</text>
+								</view>
+								<view class="green" v-if="tab == 4">
+									￥{{item.aggregateAmount}}
+								</view>
 							</view>
-							<view class="green" v-if="tab == 1">
-								<text>0 </text>
-								<text>{{item.unit}}</text>
+							<view class="goods-flex gray">
+								<view>
+									<view v-if="tab == 1">{{item.prodNo}}</view>
+									<block v-if="tab == 2 || tab == 3">
+										<view class="">
+											<text>联系人：</text>
+											<text v-if="tab == 2">{{item.contacterName}}</text>
+											<text v-if="tab == 3">{{item.customerName}}</text>
+										</view>
+										<view class="">
+											<text>联系人电话：</text>
+											<text>{{item.mobile}}</text>
+										</view>
+									</block>
+									<block v-if="tab == 4">
+										<view class="" >
+											{{item.purchaseNo}}
+										</view>
+										<view class="">
+											{{item.prodNos}}
+										</view>
+									</block>
+									<!-- <view class="part">大佳品等1项</view> -->
+								</view>
+								<view class="supply-img" v-if="tab == 2 && !radio"
+									@click.stop="$api.dialPhone(item.mobile)">
+									<image src="../../static/image/adapter_supplier_search_result_item_phone_call.png"
+										mode="aspectFit"></image>
+								</view>
+
+								<view class="supply-img" v-if="tab == 3 && !radio">
+									<image src="../../static/image/home_main_btn_tab_product2.png" mode="aspectFit">
+									</image>
+								</view>
+								<view class="storage" v-if="tab == 4">
+									{{item.purchaseStatus}}
+								</view>
+								<label class="radio" v-if="radio">
+									<radio :value="JSON.stringify(item)" />
+								</label>
 							</view>
 						</view>
-						<view class="goods-flex gray">
-							<view>
-								<view v-if="tab == 1">{{item.prodNo}}</view>
-								<block v-if="tab == 2 || tab == 3">
-									<view class="">
-										<text>联系人：</text>
-										<text v-if="tab == 2">{{item.contacterName}}</text>
-										<text v-if="tab == 3">{{item.customerName}}</text>
-									</view>
-									<view class="">
-										<text>联系人电话：</text>
-										<text>{{item.mobile}}</text>
-									</view>
-								</block>
-								<!-- <view class="part">大佳品等1项</view> -->
-							</view>
-							<view class="supply-img" v-if="tab == 2" @click.stop="$api.dialPhone(item.mobile)">
-								<image src="../../static/image/adapter_supplier_search_result_item_phone_call.png"
-									mode="aspectFit"></image>
-							</view>
-
-							<view class="supply-img" v-if="tab == 3">
-								<image src="../../static/image/home_main_btn_tab_product2.png" mode="aspectFit"></image>
-							</view>
-							<!-- <view class="storage">
-								未完成出库
-							</view> -->
+						<view class="goods-btn" v-if="hide">
+							<button class="pinless" style="background-color: #ffb535;" @click.stop="amend(item.id)">
+								修改
+							</button>
+							<button class="pinless" style="background-color: #ff4622;"
+								@click.stop="drop(item.id,index)">
+								删除
+							</button>
 						</view>
 					</view>
-					<view class="goods-btn" v-if="hide">
-						<button class="pinless" style="background-color: #ffb535;" @click.stop="amend(item.id)">
-							修改
-						</button>
-						<button class="pinless" style="background-color: #ff4622;" @click.stop="drop(item.id,index)">
-							删除
-						</button>
-					</view>
-				</view>
-			</scroll-view>
-
+				</scroll-view>
+			</radio-group>
 		</view>
 	</view>
 </template>
@@ -81,30 +96,37 @@
 		props: {
 			tab: {
 				type: String,
-				default: '0' //1 物品  2 供应商 3 客户
+				default: '0' //1物品  2供应商  3客户 4采购
 			},
-			list: Array,
-			url: {
+			list: { //数据
+				type: Array,
+				default: []
+			},
+			url: { //跳转地址
 				type: String,
 				default: ''
 			},
-			icon: {
-				type: Number,
-				default: 0
-			},
-			date: {
+			hide: { //关闭总数和更改
 				type: Boolean,
 				default: true,
 			},
-			hide: {
+			radio: { //是否开启选择
 				type: Boolean,
-				default: true,
+				default: false,
 			}
 		},
 		data() {
 			return {
 				touch: false,
+				content: [],
+				current: 0,
+
 			};
+		},
+		watch: {
+			list(item) {
+				this.list = item;
+			}
 		},
 		created() {
 
@@ -121,6 +143,9 @@
 			},
 			drop(id) {
 				this.$emit("drop", id);
+			},
+			radioChange(e) {
+				this.$emit("radioChange", e);
 			}
 		}
 	}
@@ -149,12 +174,6 @@
 		}
 
 		.tabulation {
-
-			.date {
-				margin-left: 20rpx;
-				padding: 16rpx 0;
-			}
-
 			.scroll-view {
 				width: 750rpx;
 				border-bottom: 1rpx solid #eee;
@@ -184,6 +203,12 @@
 
 						.shift {
 							margin: 0 6rpx;
+						}
+
+						.model {
+							margin: 0 6rpx;
+							font-size: 24rpx;
+							color: #777;
 						}
 					}
 

@@ -24,8 +24,8 @@
 				</swiper-item>
 				<swiper-item>
 					<view class="swiper-item">
-						<view class="table record" v-for="(item,index) in contactList" :key="index" 
-						@click="$navto.navto('pages/details/contactRecord',{id: item.id})">
+						<view class="table record" v-for="(item,index) in contactList" :key="index"
+							@click="$navto.navto('pages/details/contactRecord',{id: item.id})">
 							<view class="goods-flex ">
 								<view>
 									<text class="gray date">联系日期：</text>

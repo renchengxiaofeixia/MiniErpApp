@@ -2,35 +2,38 @@
 	<view class="">
 		<headerTab :scrollTab="scrollTab" @tabKey="change" :tab="first.id"></headerTab>
 		<searchbox @filter="openFilter()"></searchbox>
-		<view class="slide">
-			<swiper class="swiper" :current="first.id" @change="slidingBlock">
-				<swiper-item>
-					<scroll-view class="swiper-item scroll" scroll-y="true">
-						<dataGrid url="pages/details/commodity" :list="productList" :date="false" tab="1"
-							@drop="dropProduct" @amend="amendProduct" :hide="false">
-						</dataGrid>
-					</scroll-view>
-				</swiper-item>
-				<swiper-item>
-					<view class="swiper-item">
-						<dataGrid url="pages/details/supplier" :list="supplierList" :date="false" tab="2"
-							@drop="dropSupplier" @amend="amendSupplier">
 
-						</dataGrid>
-					</view>
-				</swiper-item>
-				<swiper-item>
-					<view class="swiper-item">
-						<dataGrid url="pages/details/client" :list="clientlist" :date="false" tab="3" @drop="dropClient"
-							@amend="amendClient">
-						</dataGrid>
-					</view>
-				</swiper-item>
-			</swiper>
+		<view class="slide">
+			<block v-if="first.id == 0">
+				<scroll-view class="scroll-roll" scroll-y @scrolltolower="productTolower">
+					<dataGrid url="pages/details/commodity" :list="productList" :date="false" tab="1"
+						@drop="dropProduct" @amend="amendProduct">
+					</dataGrid>
+					<uni-load-more :status="productStatus" IconType="auto" :content-text="contentText" />
+				</scroll-view>
+			</block>
+			<block v-if="first.id == 1">
+				<scroll-view class="scroll-roll" @scrolltolower="supplierTolower">
+					<dataGrid url="pages/details/supplier" :list="supplierList" :date="false" tab="2"
+						@drop="dropSupplier" @amend="amendSupplier">
+					</dataGrid>
+					<uni-load-more :status="supplierStatus" IconType="auto" :content-text="contentText" />
+				</scroll-view>
+			</block>
+			<block v-if="first.id == 2">
+				<scroll-view class="scroll-roll" @scrolltolower="clientTolower">
+					<dataGrid url="pages/details/client" :list="clientList" :date="false" tab="3" @drop="dropClient"
+						@amend="amendClient">
+					</dataGrid>
+					<uni-load-more :status="clientStatus" IconType="auto" :content-text="contentText" />
+				</scroll-view>
+			</block>
 		</view>
+
+
 		<filtratePopup @close="openFilter()" :show="filterShow">
 			<view>
-				<block v-if="first.id==1">
+				<block v-if="first.id == 1">
 					<view class="table" style="padding: 0;">
 						<pulldown headline="类目" title="所有类目">
 						</pulldown>
@@ -103,9 +106,27 @@
 				},
 				filterShow: 'none',
 				productList: [], //物品
+				productPage: 1, //物品页数
+				productSize: 14, //物品页数量
+				productNext: true, //物品是否也下页
 				supplierList: [], //供应商
-				clientlist: [], //客户
-		
+				supplierPage: 1, //供应商页数
+				supplierSize: 10, //供应商页数量
+				supplierNext: true, //供应商是否也下页
+				clientList: [], //客户
+				clientPage: 1, //客户页数
+				clientSize: 10, //客户页数量
+				clientNext: true, //客户是否也下页
+				// 加载状态
+				productStatus: 'more',
+				supplierStatus: 'more',
+				clientStatus: 'more',
+				contentText: {
+					contentdown: '下拉加载',
+					contentrefresh: '加载中',
+					contentnomore: '没有更多'
+				}
+
 
 			}
 		},
@@ -114,10 +135,10 @@
 			this.supplierData();
 			this.clientData();
 		},
-		mounted() {
-		
+		onShow() {
+
 		},
-		computed: {
+		mounted() {
 
 		},
 		methods: {
@@ -125,22 +146,30 @@
 			productData() {
 				let _this = this;
 				_this.$request.get('prods', {
-					page: 1,
-					size: 10,
+					page: _this.productPage,
+					size: _this.productSize,
 				}).then(res => {
-					let data = res.data
-					_this.productList = data.data;
+					let data = res.data;
+					if (!res.data.hasNextPage) {
+						_this.productNext = false;
+						_this.productStatus = 'noMore';
+					}
+					_this.productList.push(...data.data);
 				})
 			},
 			// 供应商数据
 			supplierData() {
 				let _this = this;
 				_this.$request.get('suppliers', {
-					page: 1,
-					size: 10,
+					page: _this.supplierPage,
+					size: _this.supplierSize,
 				}).then(res => {
-					let data = res.data
-					_this.supplierList = data.data;
+					let data = res.data;
+					if (!res.data.hasNextPage) {
+						_this.supplierNext = false;
+						_this.supplierStatus = 'noMore';
+					}
+					_this.supplierList.push(...data.data);
 
 				})
 			},
@@ -148,11 +177,15 @@
 			clientData() {
 				let _this = this;
 				_this.$request.get('customers', {
-					page: 1,
-					size: 10,
+					page: _this.clientPage,
+					size: _this.clientSize,
 				}).then(res => {
-					let data = res.data
-					_this.clientlist = data.data;
+					let data = res.data;
+					if (!res.data.hasNextPage) {
+						_this.clientNext = false;
+						_this.clientStatus = 'noMore';
+					}
+					_this.clientList.push(...data.data);
 
 				})
 			},
@@ -217,7 +250,7 @@
 					success: function(res) {
 						if (res.confirm) {
 							_this.$request.del('customer/' + id).then(res => {
-								_this.clientlist.splice(index, 1)
+								_this.clientList.splice(index, 1)
 							});
 							_this.$api.msg('删除成功')
 						} else if (res.cancel) {}
@@ -232,6 +265,7 @@
 					type: 1
 				})
 			},
+			// 打开筛选
 			openFilter() {
 				if (this.filterShow == 'none') {
 					this.filterShow = 'show';
@@ -242,18 +276,56 @@
 					}, 500);
 				}
 			},
+			// tab切换
 			change(item) {
 				this.first = item;
 			},
-			slidingBlock(e) {
-				this.first = this.scrollTab[e.detail.current];
+			// 物品下拉加载数据
+			productTolower(e) {
+				let _this = this;
+				if (_this.productNext) {
+					_this.productStatus = 'loading';
+					_this.productPage = 2;
+					_this.productData();
+				} else {
+					setTimeout(function() {
+						_this.productStatus = 'noMore';
+					}, 1000)
+				}
 			},
+			// 供应商下拉加载
+			supplierTolower() {
+				let _this = this;
+				if (_this.supplierNext) {
+					_this.supplierStatus = 'loading';
+					_this.supplierPage = 2;
+					_this.supplierData();
+				} else {
+					setTimeout(function() {
+						_this.supplierStatus = 'noMore';
+					}, 1000)
+				}
+			},
+			// 客户下拉加载
+			clientTolower() {
+				let _this = this;
+				if (_this.clientNext) {
+					_this.clientStatus = 'loading';
+					_this.clientPage = 2;
+					_this.clientData();
+				} else {
+					setTimeout(function() {
+						_this.clientStatus = 'noMore';
+					}, 1000)
+				}
+			}
 		}
 	}
 </script>
 
 <style lang="scss">
-	.scroll {
-		height: 1000rpx;
+	.slide {
+		height: 100%;
+		width: 100%;
 	}
 </style>

@@ -49,10 +49,20 @@ const prePage = ()=>{
 	return prePage.$vm;
 }
 
+
+const currentTime = ()=>{
+	// 获取当前时间
+	var datetime = new Date();
+	var year = datetime.getFullYear();
+	var month = datetime.getMonth() + 1 < 10 ? "0" + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
+	var date = datetime.getDate() < 10 ? "0" + datetime.getDate() : datetime.getDate();
+	return year + '-' + month + '-' + date;
+}
 export {
 	isLogin,
 	token,
 	msg,
 	dialPhone,
-	prePage
+	prePage,
+	currentTime
 }

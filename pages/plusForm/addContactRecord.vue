@@ -14,7 +14,8 @@
 			<view class="from from-new">
 				<text class="title">下次联系</text>
 				<view class="fill">
-					<uni-datetime-picker v-model="nextContactTime" type="date" @change="selectNextTime">{{nextContactTime}} 
+					<uni-datetime-picker v-model="nextContactTime" type="date" @change="selectNextTime">
+						{{nextContactTime}}
 					</uni-datetime-picker>
 				</view>
 				<text class="iconfont icon-right-1-copy"></text>
@@ -62,13 +63,9 @@
 		},
 		onLoad(e) {
 			this.customerNo = decodeURIComponent(e.name);
-			// 获取当前时间
-			var datetime = new Date();
-			var year = datetime.getFullYear();
-			var month = datetime.getMonth() + 1 < 10 ? "0" + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
-			var date = datetime.getDate() < 10 ? "0" + datetime.getDate() : datetime.getDate();
-			this.nextContactTime = year + '-' + month + '-' + date;
-			this.contactTime = year + '-' + month + '-' + date;
+			this.nextContactTime = this.$api.currentTime();
+			this.contactTime = this.$api.currentTime();
+			
 
 		},
 		methods: {
@@ -80,8 +77,8 @@
 					_this.$api.msg('下次联系时间不得早于当前联系日期', 2000);
 					return
 				}
-				
-				if (_this.contactContent =="") {
+
+				if (_this.contactContent == "") {
 					_this.$api.msg('联系内容不能为空');
 					return
 				}
@@ -111,7 +108,7 @@
 			// 下次联系
 			selectNextTime(date) {
 				this.nextContactTime = date;
-				
+
 			},
 			//*选择图片*//
 			addImg: async function() {

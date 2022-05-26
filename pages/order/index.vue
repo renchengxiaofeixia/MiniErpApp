@@ -8,25 +8,13 @@
 			<swiper class="swiper" :current="order.id" @change="slidingBlock">
 				<swiper-item>
 					<view class="swiper-item">
-						<dataGrid url="pages/details/purchase" >
-							<button class="pinless" style="background-color: #ffb535;">
-								修改
-							</button>
-							<button class="pinless" style="background-color: #ff4622;">
-								删除
-							</button>
+						<dataGrid url="pages/details/purchase" :list="purchaseList" tab="4">
 						</dataGrid>
 					</view>
 				</swiper-item>
 				<swiper-item>
 					<view class="swiper-item">
 						<dataGrid url="pages/details/sell">
-							<button class="pinless" style="background-color: #ffb535;">
-								修改
-							</button>
-							<button class="pinless" style="background-color: #ff4622;">
-								删除
-							</button>
 						</dataGrid>
 					</view>
 				</swiper-item>
@@ -78,7 +66,7 @@
 					<uni-datetime-picker v-model="range" type="daterange" @maskClick="maskClick" />
 				</view>
 			</view>
-			
+
 		</filtratePopup>
 		<addOrder :url="order.url"></addOrder>
 	</view>
@@ -118,13 +106,22 @@
 					url: "pages/plusForm/addPurchase",
 					id: 0
 				},
-				filterShow: 'none'
+				filterShow: 'none',
+				purchaseList: [], //采购数据
 			}
 		},
 		onLoad() {
-
+			this.purchaseData();
 		},
 		methods: {
+			purchaseData() {
+				let _this = this;
+				_this.$request.get('purchases').then(res => {
+					let data = res.data;
+					_this.purchaseList.push(...data.data);
+					
+				})
+			},
 			openFilter() {
 				if (this.filterShow == 'none') {
 					this.filterShow = 'show';
@@ -146,5 +143,5 @@
 </script>
 
 <style lang="scss">
-	
+
 </style>

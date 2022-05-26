@@ -287,6 +287,18 @@
 					// #endif
 				}
 			}
+		}, {
+			"path": "choiceCargo",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
 		}]
 	}, {
 		"root": "pages/print",
