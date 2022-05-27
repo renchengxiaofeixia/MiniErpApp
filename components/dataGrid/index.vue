@@ -3,7 +3,7 @@
 
 		<view class="amount" v-if="hide">
 			<text class="sum">
-				一共1条数据
+				一共{{list.length}}条数据
 			</text>
 			<!-- <text class="price">
 				￥1000.00
@@ -18,9 +18,8 @@
 								<view class="black name">
 									<block v-if="tab == 1">{{item.prodName}} <text class="model"
 											v-if="item.prodModel">({{item.prodModel}})</text> </block>
-									<block v-if="tab == 2 || tab == 4">{{item.supplierName}}</block>
+									<block v-if="tab == 2 || tab == 4 || tab==6">{{item.supplierName}}</block>
 									<block v-if="tab == 3">{{item.customerNo}}</block>
-
 									<!-- <block>李三</block>
 								<text class="gray shift">调拨到</text>
 								<block>李三</block> -->
@@ -29,7 +28,7 @@
 									<text>0 </text>
 									<text>{{item.unit}}</text>
 								</view>
-								<view class="green" v-if="tab == 4">
+								<view class="green" v-if="tab == 4 || tab == 6">
 									￥{{item.aggregateAmount}}
 								</view>
 							</view>
@@ -47,15 +46,15 @@
 											<text>{{item.mobile}}</text>
 										</view>
 									</block>
-									<block v-if="tab == 4">
-										<view class="" >
-											{{item.purchaseNo}}
-										</view>
-										<view class="">
-											{{item.prodNos}}
-										</view>
-									</block>
-									<!-- <view class="part">大佳品等1项</view> -->
+									<view class="" v-if="tab == 4">
+										{{item.purchaseNo}}
+									</view>
+									<view class="" v-if="" v-if="tab == 6">
+										{{item.enterWarehouseNo}}
+									</view>
+									<view class="" v-if="" v-if="tab == 4 || tab == 6">
+										{{item.prodNos}}
+									</view>
 								</view>
 								<view class="supply-img" v-if="tab == 2 && !radio"
 									@click.stop="$api.dialPhone(item.mobile)">
@@ -96,7 +95,7 @@
 		props: {
 			tab: {
 				type: String,
-				default: '0' //1物品  2供应商  3客户 4采购
+				default: '0' //1物品  2供应商  3客户 4采购 5销售 6入库
 			},
 			list: { //数据
 				type: Array,
@@ -228,11 +227,6 @@
 					display: flex;
 					align-items: center;
 				}
-			}
-
-			.part {
-				padding-bottom: 8rpx;
-				padding-top: 6rpx;
 			}
 		}
 	}

@@ -12,7 +12,7 @@
 						<text class="black">{{list.phone}}</text>
 					</view>
 				</view>
-				<view class="phone">
+				<view class="phone" @click.stop="$api.dialPhone(list.phone)">
 					<text class="icon-huchudianhuatianchong iconfont"></text>
 					<view>呼叫</view>
 				</view>

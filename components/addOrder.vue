@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<block v-if="type == 1">
-			<view class="add bg-green" @click="navto() ">
+			<view class="add bg-green" @click="navto()" :style="{top: top}">
 				<text class="iconfont icon-tianjia"></text>
 			</view>
 		</block>
@@ -35,6 +35,10 @@
 			type: {
 				type: Number,
 				default: 1
+			},
+			top: {
+				type: String,
+				default: "90%"
 			}
 		},
 		data() {
@@ -70,7 +74,6 @@
 	.add {
 		position: fixed;
 		right: 30rpx;
-		top: 72%;
 		bottom: 0;
 		margin: auto;
 		width: 90rpx;

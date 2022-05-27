@@ -5,20 +5,19 @@
 
 
 		<view class="slide">
-			<swiper class="swiper" :current="order.id" @change="slidingBlock">
-				<swiper-item>
-					<view class="swiper-item">
-						<dataGrid url="pages/details/purchase" :list="purchaseList" tab="4">
-						</dataGrid>
-					</view>
-				</swiper-item>
-				<swiper-item>
-					<view class="swiper-item">
-						<dataGrid url="pages/details/sell">
-						</dataGrid>
-					</view>
-				</swiper-item>
-			</swiper>
+			<block v-if="order.id == 0">
+				<scroll-view class="scroll-roll" scroll-y>
+					<dataGrid url="pages/details/purchase" :list="purchaseList" tab="4" @drop="dropPurchase"
+						@amend="amendPurchase">
+					</dataGrid>
+				</scroll-view>
+			</block>
+			<block v-if="order.id == 1">
+				<scroll-view class="scroll-roll" scroll-y>
+					<dataGrid url="pages/details/sell">
+					</dataGrid>
+				</scroll-view>
+			</block>
 		</view>
 
 		<filtratePopup @close="openFilter()" :show="filterShow">
@@ -119,7 +118,26 @@
 				_this.$request.get('purchases').then(res => {
 					let data = res.data;
 					_this.purchaseList.push(...data.data);
-					
+
+				})
+			},
+			// 删除采购
+			dropPurchase(id, index) {
+				let _this = this;
+				_this.$api.showModal('你要确定要删除采购订单吗?').then(() => {
+					_this.$request.del('purchase/' + id).then(res => {
+						_this.purchaseList.splice(index, 1)
+						_this.$api.msg('删除成功！');
+
+					})
+				});
+			},
+			// 修改采购
+			amendPurchase(id) {
+				this.$navto.navto('pages/plusForm/addPurchase', {
+					id: id,
+					type: 1,
+					header: '修改采购订单'
 				})
 			},
 			openFilter() {
@@ -134,14 +152,13 @@
 			},
 			change(item) {
 				this.order = item;
-			},
-			slidingBlock(e) {
-				this.order = this.scrollTab[e.detail.current];
-			},
+			}
 		}
 	}
 </script>
 
 <style lang="scss">
-
+	page {
+		overflow: hidden;
+	}
 </style>

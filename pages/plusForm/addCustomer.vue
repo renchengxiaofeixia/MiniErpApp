@@ -80,16 +80,19 @@
 		methods: {
 			clientBtn() {
 				let _this = this;
-				if (_this.customerNo) {
+				if (!_this.customerNo) {
 					_this.$api.msg('客户名称不能为空！')
+					return
 				}
 
-				if (_this.customerName) {
+				if (!_this.customerName) {
 					_this.$api.msg('联系人不能为空！')
+					return
 				}
 
-				if (_this.mobile) {
+				if (!_this.mobile) {
 					_this.$api.msg('手机号不能为空！')
+					return
 				}
 
 				let data = {
@@ -102,7 +105,9 @@
 				if (_this.type == 0) {
 					_this.$request.post('customer', data).then(res => {
 						setTimeout(() => {
-							_this.$navto.navBack();
+							_this.$navto.navClose('pages/details/client', {
+								id: res.data.id
+							});
 						}, 1000)
 						_this.$api.msg('新建成功')
 					}).catch(error => {
@@ -111,7 +116,9 @@
 				} else {
 					_this.$request.put('customer/' + _this.id, data).then(res => {
 						setTimeout(() => {
-							_this.$navto.navBack();
+							_this.$navto.navClose('pages/details/client', {
+								id: res.data.id
+							});
 						}, 1000)
 						_this.$api.msg('修改成功')
 					}).catch(error => {

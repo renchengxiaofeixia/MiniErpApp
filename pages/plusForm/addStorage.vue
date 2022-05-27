@@ -1,24 +1,37 @@
 <template>
 	<view class="">
-		<headerTab title="新建入库单"></headerTab>
+		<headerTab :title="header"></headerTab>
 
-		<pulldown headline="入库日期" title="2022-5-11"></pulldown>
-		<pulldown headline="仓库" title="本地"></pulldown>
+		<view class="table">
+			<view class="from from-new" style="margin: 0 40upx;">
+				<text class="title">采购日期</text>
+				<view class="fill">
+					<uni-datetime-picker v-model="storageDate" type="date" @change="selectStorage">
+						{{storageDate}}
+					</uni-datetime-picker>
+				</view>
+				<text class="iconfont icon-right-1-copy"></text>
+			</view>
+			<pulldown headline="仓库" :title="warehouseName"></pulldown>
+			<pulldown headline="库存状况">
+				<stateBar
+					:list="[{monicker: '采购入库',id: 0}, {monicker: '销售退货',id: 1}, {monicker: '生产入库',id: 2}, {monicker: '其他入库',id: 3}]"
+					breadth='20%' @switch="switchover">
+				</stateBar>
+			</pulldown>
+		</view>
 
-		<pulldown headline="库存状况">
-			<stateBar
-				:list="[{monicker: '采购入库',id: 1}, {monicker: '销售退货',id: 2}, {monicker: '生产入库',id: 3}, {monicker: '其他入库',id: 4}]"
-				breadth='20%' @switch="switchover">
-			</stateBar>
-		</pulldown>
-		<view class="table" v-if="indexes == 1">
-			<view class="from from-new">
+		<view class="table" v-if="inventoryState == 0">
+			<view class="from from-new" @click="$navto.navto('pages/address/choiceCargo',{id:2,headline:'选择供应商'})">
 				<text class="title">供应商</text>
-				<text class="fill gray">选择供应商(必填)</text>
+				<text class="fill">
+					<text v-if="supplier.supplierName">{{supplier.supplierName}}</text>
+					<text class="gray" v-else>选择供应商(必填)</text>
+				</text>
 				<text class="iconfont icon-right-1-copy"></text>
 			</view>
 		</view>
-		<view class="table" v-if="indexes == 2">
+		<view class="table" v-if="inventoryState == 1">
 			<view class="from from-new">
 				<text class="title">客户</text>
 				<text class="fill gray">选择客户</text>
@@ -26,32 +39,47 @@
 			</view>
 		</view>
 
-		<view class="table" v-if="indexes == 3">
-			<view class="from from-new" @click="$navto.navto('pages/address/storage',{title:'选择生产部门',id:1})">
+		<view class="table" v-if="inventoryState == 2">
+			<view class="from from-new">
 				<text class="title">生产部门</text>
-					<text class="fill gray">选择生产部门</text>
-					<text class="iconfont icon-right-1-copy"></text>
+				<text class="fill gray">选择生产部门</text>
+				<text class="iconfont icon-right-1-copy"></text>
 			</view>
 
-			<view class="from from-new" @click="$navto.navto('pages/address/storage',{title:'选择生产人',id:1})">
+			<view class="from from-new">
 				<text class="title">生产人</text>
 				<text class="fill gray">选择生产人</text>
 				<text class="iconfont icon-right-1-copy"></text>
 			</view>
 		</view>
 
-		<view class="table" v-if="indexes == 4">
+		<view class="table" v-if="inventoryState == 3">
 			<view class="from from-new">
 				<text class="title">入库方</text>
 				<input type="text" placeholder="填写入库方" class="fill">
 			</view>
 		</view>
 
-		<selectGoods></selectGoods>
+		<selectGoods :list="productList" @shape="accept"></selectGoods>
 
-		<view class="newBtn">
-			<button>确定</button>
-		</view>
+		<block v-if="productList.length !=0">
+			<view class="headline">
+				相关信息
+			</view>
+			<view class="table product">
+				<view class="from from-new">
+					<text class="title">经办人</text>
+					<input type="text" placeholder="填写经办人" class="fill" v-model="correlation.transactor">
+					<text class="iconfont icon-right-1-copy"></text>
+				</view>
+				<view class="from from-new">
+					<text class="title">备注</text>
+					<input type="text" placeholder="填写备注" class="fill" v-model="correlation.remarks">
+					<text class="iconfont icon-right-1-copy"></text>
+				</view>
+			</view>
+		</block>
+		<footerBtn @confirm="productBnt()"></footerBtn>
 	</view>
 </template>
 
@@ -60,30 +88,166 @@
 	import pulldown from "@/components/pulldown.vue"
 	import stateBar from "@/components/stateBar.vue"
 	import selectGoods from "@/components/selectGoods.vue"
-
+	import footerBtn from '@/components/footerBtn.vue';
 	export default {
 		components: {
 			headerTab,
 			pulldown,
 			stateBar,
-			selectGoods
+			selectGoods,
+			footerBtn
 
 		},
 		data() {
 			return {
-				indexes: 1,
+				id: '',
+				type: 0,
+				header: '新建入库单',
+
+				inventoryState: 0,
+				storageDate: this.$api.dateTime("yyyy-MM-dd"), //入库日期
+				warehouseName: "本地",
+				productList: [], //接收物品数据
+				goods: [], //
+
+				enterType: "采购入库", //库存状态
+				supplier: {}, //采购入库  供应商
+				client: {}, //销售入库   客户
+				production: {}, //生产部门
+				restsMode: "", //其他入库
+				correlation: { //相关信息
+					transactor: '',
+					remarks: ""
+				},
 			}
 		},
-		onLoad(e) {
-
+		onLoad(option) {
+			let _this = this;
+			_this.id = option.id ? option.id : '';
+			_this.type = option.type ? option.type : 0;
+			_this.header = option.header ? decodeURIComponent(option.header) : '新建采购订单';
+			if (_this.type == 1) {
+				_this.goodsData();
+				//物品
+				_this.$request.get('enterwarehouse/prodinfos/' + _this.id).then(res => {
+					_this.productList = res.data;
+					_this.productList.forEach(item => {
+						let price = Number(item.unitPrice) * item.quantity;
+						item.num = item.quantity;
+						item.purchasePrice = item.unitPrice;
+						item.newRemarks = item.remarks;
+						item.totalPrice = price.toFixed(2);
+					})
+				})
+			}
 		},
 		methods: {
-			switchover(index) {
-				this.indexes = index + 1
-			}
+
+			goodsData() {
+				let _this = this;
+				_this.$request.get('enterwarehouse/' + _this.id).then(res => {
+					let data = res.data;
+					_this.storageDate = data.storageDate;
+					_this.warehouseName = data.warehouseName;
+
+					if (data.enterType == '采购入库') {
+						_this.supplier.mobile = data.supplierTelNo;
+						_this.supplier.supplierNo = data.supplierNo;
+						_this.supplier.supplierName = data.supplierName;
+						_this.supplier.supplierContacterName = data.supplierContacterName;
+					}
+
+
+					// 相关信息
+					_this.correlation.transactor = data.transactor;
+					_this.correlation.remarks = data.remarks;
+
+
+				})
+			},
+			// 确定
+			productBnt() {
+				let _this = this;
+
+				if (!_this.supplier.supplierNo && _this.inventoryState == 0) {
+					_this.$api.msg('请选择供应商！');
+					return
+				}
+
+				if (_this.goods.length == 0) {
+					_this.$api.msg('请选择物品！');
+					return
+				}
+
+				let data = {};
+				data.enterDate = _this.storageDate;
+				data.warehouseName = _this.warehouseName;
+				data.enterType = _this.enterType;
+				data.mobile = _this.supplier.mobile;
+				data.supplierNo = _this.supplier.supplierNo;
+				data.supplierName = _this.supplier.supplierName;
+				data.supplierContacterName = _this.supplier.supplierContacterName;
+				data.remarks = _this.correlation.remarks;
+				data.transactor = _this.correlation.transactore;
+				data.prodInfoDtos = _this.goods;
+
+				if (_this.type == 1) {
+					_this.$request.put('enterwarehouse/' + _this.id, data).then(res => {
+						_this.$api.msg('修改成功！');
+						setTimeout(function() {
+							_this.$navto.navClose('pages/details/storage', {
+								id: res.data.id,
+							})
+						}, 500)
+
+					})
+				} else {
+					_this.$request.post('enterwarehouse', data).then(res => {
+						_this.$api.msg('创建成功！');
+						setTimeout(function() {
+							_this.$navto.navClose('pages/details/storage', {
+								id: res.data.id,
+							})
+						}, 500)
+					})
+				}
+
+			},
+			switchover(item) {
+				this.enterType = item.monicker;
+				this.inventoryState = item.id;
+
+			},
+			// 入库日期选择
+			selectStorage(date) {
+				this.purchaseDate = date;
+			},
+			accept(item) {
+				let goods = [];
+				item.forEach(e => {
+					goods.push({
+						// purchaseNo: "",
+						prodNo: e.prodNo,
+						prodCustomNo: e.prodCustomNo,
+						prodName: e.prodName,
+						prodModel: e.prodModel,
+						unit: e.unit,
+						unitPrice: e.purchasePrice,
+						quantity: e.quantity,
+						remarks: e.newRemarks
+					})
+				});
+				this.goods = goods;
+			},
+
 		}
 	}
 </script>
 
 <style lang="scss">
+	.headline {
+		padding-top: 16rpx;
+		margin: 0 20rpx;
+		font-size: 30rpx;
+	}
 </style>

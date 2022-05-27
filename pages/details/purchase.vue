@@ -1,6 +1,6 @@
 <template>
 	<view class="paddingBottom">
-		<headerTab title="采购订单详情"></headerTab>
+		<headerTab title="采购订单详情" :record="true"></headerTab>
 
 		<view class="goods-list gray">
 			<view class="goods-flex">
@@ -54,8 +54,6 @@
 			</pulldown>
 		</view>
 
-
-
 		<!-- 	<view class="table">
 			<pulldown headline="往来日记" size="32rpx" detail="详细" :switch="false">
 				<view class="goods-flex shove" style="margin: 0;">
@@ -69,17 +67,19 @@
 			</pulldown>
 		</view> -->
 
-		<productMessage title="采购物品" :coord="4"></productMessage>
+		<productMessage title="采购物品" :list="goodsList"></productMessage>
+
+
+
 		<operator :list="operation"></operator>
+
 		<copyreader :show="compileShow" @close="handleClose()">
-			<view class="operation" hover-class="checkActive" @click="share()">
-				分享
-			</view>
 			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/print/index')">
 				打印
 			</view>
 			<view class="operation" hover-class="checkActive"
-				@click="$navto.navto('pages/plusForm/addPurchase',{id:id,header:'修改采购订单',type: 1})">
+				@click="$navto.navto('pages/plusForm/addPurchase',{id:id,header:'修改采购订单',type: 1})"
+				v-if="!purchase.isAudit">
 				修改
 			</view>
 			<view class="operation red" hover-class="checkActive" @click="purchaseDel">
@@ -91,8 +91,11 @@
 			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/addend/payment')">
 				付款
 			</view>
-			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/addend/payment')">
+			<view class="operation" hover-class="checkActive" @click="checkPurchase" v-if="!purchase.isAudit">
 				审核
+			</view>
+			<view class="operation" hover-class="checkActive" @click="anewPurchase" v-else>
+				反审核
 			</view>
 		</copyreader>
 		<addOrder type="2" @click="handleClose()"></addOrder>
@@ -125,6 +128,8 @@
 				compileShow: "none",
 				supplierContact: {}, //供应商联系
 				operation: {}, //操作日记
+				goodsList:[],//物品数据
+
 			}
 		},
 		onLoad(e) {
@@ -132,6 +137,7 @@
 		},
 		onShow() {
 			this.getData();
+			this.goodsData()
 		},
 		methods: {
 			getData() {
@@ -140,8 +146,8 @@
 					let data = res.data;
 					_this.purchase = data;
 					// 供应商联系
-					_this.supplierContact.name = data.contacterName;
-					_this.supplierContact.linkman = data.supplierName;
+					_this.supplierContact.name = data.supplierName;
+					_this.supplierContact.linkman = data.supplierNo;
 					_this.supplierContact.phone = data.mobile;
 					// 操作日记
 					_this.operation.createTime = data.createTime;
@@ -151,19 +157,47 @@
 
 				})
 			},
+			goodsData() {
+				let _this = this;
+				_this.$request.get('purchase/prodinfos/' + _this.id).then(res => {
+					_this.goodsList = res.data;
+					_this.goodsList.forEach(e => {
+						e.money = e.unitPrice * e.quantity;
+						_this.totalPrice += e.money;
+					})
+				})
+			},
 			// 删除
 			purchaseDel() {
 				let _this = this;
-				uni.showModal({
-					title: '提示',
-					content: '你要确定要删除该采购订单吗?',
-					success: function(res) {
-						if (res.confirm) {
-							_this.$request.del('purchase/' + _this.id).then(res => {
-								_this.$api.msg('删除成功！');
-							})
-						} else if (res.cancel) {}
-					}
+				_this.$api.showModal('你要确定要删除该采购订单吗?').then(() => {
+					_this.$request.del('purchase/' + _this.id).then(res => {
+						_this.$api.msg('删除成功！');
+						setTimeout(function() {
+							_this.$navto.navtab('pages/order/index')
+						}, 500)
+					})
+				});
+
+			},
+			// 审核
+			checkPurchase() {
+				let _this = this;
+				_this.$api.showModal('确定完成采购订单审核？').then(() => {
+					_this.$request.put('purchase/audit/' + _this.id).then(res => {
+						_this.$api.msg('审核通过！');
+						_this.getData();
+					})
+				});
+			},
+			// 重审
+			anewPurchase() {
+				let _this = this;
+				_this.$api.showModal('确定反审核采购订单？').then(() => {
+					_this.$request.put('purchase/unaudit/' + _this.id).then(res => {
+						_this.$api.msg('反审核！');
+						_this.getData();
+					})
 				});
 			},
 			handleClose() {
@@ -176,10 +210,7 @@
 					}, 200);
 				}
 			},
-			// 分享
-			share() {
-				console.log(3);
-			}
+
 		}
 	}
 </script>

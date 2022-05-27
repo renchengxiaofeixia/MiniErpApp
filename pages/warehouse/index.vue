@@ -2,42 +2,30 @@
 	<view class="">
 		<headerTab :scrollTab="scrollTab" @tabKey="change" :tab="warehouse.id"></headerTab>
 		<searchbox @filter="openFilter()"></searchbox>
+
 		<view class="slide">
-			<swiper class="swiper" :current="warehouse.id" @change="slidingBlock">
-				<swiper-item>
-					<view class="swiper-item">
-						<dataGrid url="pages/details/storage">
-							<button class="pinless" style="background-color: #ffb535;">
-								修改
-							</button>
-							<button class="pinless" style="background-color: #ff4622;">
-								删除
-							</button>
-						</dataGrid>
-					</view>
-				</swiper-item>
-				<swiper-item>
-					<view class="swiper-item">
-						<dataGrid url="pages/details/delivery">
-							<button class="pinless" style="background-color: #ffb535;">
-								修改
-							</button>
-							<button class="pinless" style="background-color: #ff4622;">
-								删除
-							</button>
-						</dataGrid>
-					</view>
-				</swiper-item>
-				<swiper-item>
-					<view class="swiper-item">
-					</view>
-				</swiper-item>
-				<swiper-item>
-					<view class="swiper-item">
-						<dataGrid url="pages/details/allocate"></dataGrid>
-					</view>
-				</swiper-item>
-			</swiper>
+			<block v-if="warehouse.id == 0">
+				<scroll-view class="scroll-roll" scroll-y>
+					<dataGrid url="pages/details/storage" :list="storageList" tab="6">
+					</dataGrid>
+				</scroll-view>
+			</block>
+			<block v-if="warehouse.id == 1">
+				<scroll-view class="scroll-roll" scroll-y>
+					<dataGrid url="pages/details/delivery">
+
+					</dataGrid>
+				</scroll-view>
+			</block>
+			<block v-if="warehouse.id == 2">
+				<scroll-view class="scroll-roll" scroll-y>
+				</scroll-view>
+			</block>
+			<block v-if="warehouse.id == 3">
+				<scroll-view class="scroll-roll" scroll-y>
+					<dataGrid url="pages/details/allocate"></dataGrid>
+				</scroll-view>
+			</block>
 		</view>
 
 		<filtratePopup @close="openFilter()" :show="filterShow">
@@ -112,14 +100,24 @@
 					id: 0
 
 				},
-				filterShow: 'none'
+				filterShow: 'none',
+				storageList: [], //入库
 
 			}
 		},
 		onLoad() {
-
+			this.storageData();
 		},
 		methods: {
+			// 入库数据
+			storageData() {
+				let _this = this;
+				_this.$request.get('enterwarehouses').then(res => {
+					let data = res.data;
+					console.log(data.data);
+					_this.storageList.push(...data.data);
+				})
+			},
 			change(item) {
 				this.warehouse = item;
 			},
@@ -133,9 +131,7 @@
 					}, 500);
 				}
 			},
-			slidingBlock(e) {
-				this.warehouse = this.scrollTab[e.detail.current];
-			},
+
 		}
 	}
 </script>

@@ -55,18 +55,14 @@
 		data() {
 			return {
 				customerNo: "",
-				nextContactTime: "",
-				contactTime: "",
+				nextContactTime: this.$api.dateTime("yyyy-MM-dd"),
+				contactTime: this.$api.dateTime("yyyy-MM-dd"),
 				contactContent: "",
 				contactImages: []
 			}
 		},
 		onLoad(e) {
 			this.customerNo = decodeURIComponent(e.name);
-			this.nextContactTime = this.$api.currentTime();
-			this.contactTime = this.$api.currentTime();
-			
-
 		},
 		methods: {
 			linkmanBnt() {

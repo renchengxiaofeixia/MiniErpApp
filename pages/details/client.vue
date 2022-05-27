@@ -1,6 +1,6 @@
 <template>
 	<view class="">
-		<headerTab title="客户详情"></headerTab>
+		<headerTab title="客户详情" :record="true"></headerTab>
 
 		<liaisons :list="contact"></liaisons>
 		<slidingBlock :toggle="toggle" :tabIndex="current" @slideshow="slideshow"></slidingBlock>
@@ -159,19 +159,15 @@
 			// 删除
 			clientDel() {
 				let _this = this;
-				uni.showModal({
-					title: '提示',
-					content: '确定要删除供应商',
-					success: function(res) {
-						if (res.confirm) {
-							_this.$request.del('customer/' + _this.id);
-							setTimeout(() => {
-								_this.$navto.navtab('pages/message/index')
-							}, 1000)
-							_this.$api.msg('删除成功')
-						} else if (res.cancel) {}
-					}
+				
+				_this.$api.showModal('确定要删除供应商?').then(() => {
+					_this.$request.del('customer/' + _this.id);
+					setTimeout(() => {
+						_this.$navto.navtab('pages/message/index')
+					}, 1000)
+					_this.$api.msg('删除成功')
 				});
+				
 			},
 			handleClose() {
 				if (this.compileShow == 'none') {

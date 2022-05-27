@@ -31,7 +31,7 @@
 				<textarea placeholder="填写备注" v-model="remarks"></textarea>
 			</view>
 		</view>
-		
+
 		<footerBtn @confirm="supplierBnt()"></footerBtn>
 	</view>
 </template>
@@ -76,19 +76,23 @@
 		methods: {
 			supplierBnt() {
 				let _this = this;
-				if (_this.supplierNo) {
+				if (!_this.supplierNo) {
 					_this.$api.msg('供应商编号不能为空！')
+					return
 				}
 
-				if (_this.supplierName) {
+				if (!_this.supplierName) {
 					_this.$api.msg('供应商名称不能为空！')
+					return
 				}
 
-				if (_this.contacterName) {
+				if (!_this.contacterName) {
 					_this.$api.msg('联系人不能为空！')
+					return
 				}
-				if (_this.mobile) {
+				if (!_this.mobile) {
 					_this.$api.msg('手机不能为空！')
+					return
 				}
 
 				let data = {
@@ -101,7 +105,9 @@
 				if (_this.type == 0) {
 					_this.$request.post('supplier', data).then(res => {
 						setTimeout(() => {
-							_this.$navto.navBack();
+							_this.$navto.navClose('pages/details/supplier', {
+								id: res.data.id
+							});
 						}, 1000)
 						_this.$api.msg('新建成功')
 					}).catch(error => {
@@ -110,7 +116,9 @@
 				} else {
 					_this.$request.put('supplier/' + _this.id, data).then(res => {
 						setTimeout(() => {
-							_this.$navto.navBack();
+							_this.$navto.navClose('pages/details/supplier', {
+								id: res.data.id
+							});
 						}, 1000)
 						_this.$api.msg('修改成功')
 					}).catch(error => {

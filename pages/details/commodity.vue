@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<headerTab title="物品详情"></headerTab>
+		<headerTab title="物品详情" :record="true"></headerTab>
 		<view class="commodity">
 			<view class="goods-list gray">
 				<view class="goods-flex gauge">
@@ -222,21 +222,14 @@
 			},
 			cutproduct() {
 				let _this = this;
-				uni.showModal({
-					title: '提示',
-					content: '确定要删除物品',
-					success: function(res) {
-						if (res.confirm) {
-							_this.$request.del('prod/' + _this.id);
-							setTimeout(() => {
-								_this.$navto.navtab('pages/message/index')
-							}, 1000)
-							_this.$api.msg('删除成功')
-						} else if (res.cancel) {
-							// console.log('用户点击取消');
-						}
-					}
+				_this.$api.showModal('确定要删除物品').then(() => {
+					_this.$request.del('prod/' + _this.id);
+					setTimeout(() => {
+						_this.$navto.navtab('pages/message/index')
+					}, 1000)
+					_this.$api.msg('删除成功')
 				});
+
 			},
 			handleClose() {
 				if (this.compileShow == 'none') {

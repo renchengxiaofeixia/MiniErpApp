@@ -139,11 +139,11 @@
 		methods: {
 			addProducts() {
 				let _this = this;
-				if (_this.productSeries == "") {
+				if (!_this.productSeries) {
 					_this.$api.msg('物品编号不能为空');
 					return
 				}
-				if (_this.productName == "") {
+				if (!_this.productName) {
 					_this.$api.msg('物品名称不能为空');
 					return
 				}
@@ -166,7 +166,9 @@
 				if (_this.type == 1) {
 					_this.$request.put('prod/' + _this.id, data).then(res => {
 						setTimeout(() => {
-							_this.$navto.navBack();
+							_this.$navto.navClose('pages/details/commodity', {
+								id: res.data.id
+							});
 						}, 1000)
 						_this.$api.msg('修改成功');
 					}).catch(error => {
@@ -175,7 +177,9 @@
 				} else {
 					_this.$request.post('prod', data).then(res => {
 						setTimeout(() => {
-							_this.$navto.navBack();
+							_this.$navto.navClose('pages/details/commodity', {
+								id: res.data.id
+							});
 						}, 1000)
 						_this.$api.msg('添加成功');
 					}).catch(error => {

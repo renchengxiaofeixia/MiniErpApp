@@ -21,12 +21,11 @@
 				<view class="gray">
 					￥{{item.unitPrice}} x {{item.quantity}}件
 				</view>
-				<view class="gray">
+				<view class="gray" v-if="item.receiverStatus">
 					{{item.receiverStatus}}
 				</view>
 			</view>
 		</block>
-
 
 		<view class="money">
 			<text class="total">合计：</text>
@@ -43,9 +42,9 @@
 				type: String,
 				default: ''
 			},
-			coord: {
-				type: Number,
-				default: -1
+			list: {
+				type: Object,
+				default: []
 			},
 
 		},
@@ -56,19 +55,15 @@
 				totalPrice: 0,
 			}
 		},
+		created() {
+
+		},
 		mounted() {
 			this.getData();
 		},
 		methods: {
 			getData() {
-				let _this = this;
-				_this.$request.get('purchase/prodinfos/' + _this.coord).then(res => {
-					_this.list = res.data;
-					_this.list.forEach(e => {
-						e.money = e.unitPrice * e.quantity;
-						_this.totalPrice += e.money;
-					})
-				})
+
 			}
 
 		}

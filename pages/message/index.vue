@@ -6,23 +6,23 @@
 		<view class="slide">
 			<block v-if="first.id == 0">
 				<scroll-view class="scroll-roll" scroll-y @scrolltolower="productTolower">
-					<dataGrid url="pages/details/commodity" :list="productList" :date="false" tab="1"
-						@drop="dropProduct" @amend="amendProduct">
+					<dataGrid url="pages/details/commodity" :list="productList" tab="1" @drop="dropProduct"
+						@amend="amendProduct">
 					</dataGrid>
 					<uni-load-more :status="productStatus" IconType="auto" :content-text="contentText" />
 				</scroll-view>
 			</block>
 			<block v-if="first.id == 1">
-				<scroll-view class="scroll-roll" @scrolltolower="supplierTolower">
-					<dataGrid url="pages/details/supplier" :list="supplierList" :date="false" tab="2"
-						@drop="dropSupplier" @amend="amendSupplier">
+				<scroll-view class="scroll-roll" scroll-y @scrolltolower="supplierTolower">
+					<dataGrid url="pages/details/supplier" :list="supplierList" tab="2" @drop="dropSupplier"
+						@amend="amendSupplier">
 					</dataGrid>
 					<uni-load-more :status="supplierStatus" IconType="auto" :content-text="contentText" />
 				</scroll-view>
 			</block>
 			<block v-if="first.id == 2">
-				<scroll-view class="scroll-roll" @scrolltolower="clientTolower">
-					<dataGrid url="pages/details/client" :list="clientList" :date="false" tab="3" @drop="dropClient"
+				<scroll-view class="scroll-roll" scroll-y @scrolltolower="clientTolower">
+					<dataGrid url="pages/details/client" :list="clientList" tab="3" @drop="dropClient"
 						@amend="amendClient">
 					</dataGrid>
 					<uni-load-more :status="clientStatus" IconType="auto" :content-text="contentText" />
@@ -192,19 +192,13 @@
 			// 删除物品
 			dropProduct(id, index) {
 				let _this = this;
-				uni.showModal({
-					title: '提示',
-					content: '确定要删除物品',
-					success: function(res) {
-						if (res.confirm) {
-							_this.$request.del('prod/' + id).then(res => {
-								_this.productList.splice(index, 1)
-							});
-							_this.$api.msg('删除成功')
-						} else if (res.cancel) {
-							// console.log('用户点击取消');
-						}
-					}
+				_this.$api.showModal('确定要删除物品！').then(() => {
+
+					_this.$request.del('prod/' + id).then(res => {
+						_this.productList.splice(index, 1)
+					});
+					_this.$api.msg('删除成功')
+
 				});
 			},
 			// 修改物品
@@ -218,20 +212,14 @@
 			// 删除供应商
 			dropSupplier(id, index) {
 				let _this = this;
-				uni.showModal({
-					title: '提示',
-					content: '确定要删除供应商',
-					success: function(res) {
-						if (res.confirm) {
-							_this.$request.del('supplier/' + id).then(res => {
-								_this.supplierList.splice(index, 1)
-							});
-							_this.$api.msg('删除成功')
-						} else if (res.cancel) {
-							// console.log('用户点击取消');
-						}
-					}
+
+				_this.$api.showModal('确定要删除供应商！').then(() => {
+					_this.$request.del('supplier/' + id).then(res => {
+						_this.supplierList.splice(index, 1)
+					});
+					_this.$api.msg('删除成功')
 				});
+
 			},
 			// 修改供应商
 			amendSupplier(id) {
@@ -244,17 +232,11 @@
 			// 删除客户
 			dropClient(id, index) {
 				let _this = this;
-				uni.showModal({
-					title: '提示',
-					content: '确定要删除供应商',
-					success: function(res) {
-						if (res.confirm) {
-							_this.$request.del('customer/' + id).then(res => {
-								_this.clientList.splice(index, 1)
-							});
-							_this.$api.msg('删除成功')
-						} else if (res.cancel) {}
-					}
+				_this.$api.showModal('确定要删除客户！').then(() => {
+					_this.$request.del('customer/' + id).then(res => {
+						_this.clientList.splice(index, 1)
+					});
+					_this.$api.msg('删除成功')
 				});
 			},
 			// 修改客户
@@ -327,5 +309,9 @@
 	.slide {
 		height: 100%;
 		width: 100%;
+	}
+
+	page {
+		overflow: hidden;
 	}
 </style>

@@ -10,7 +10,7 @@
 				</view>
 			</view>
 			<view class="header-fixed" :style="{'margin-top': marginTop}" v-if="title != ''">
-				<text class="iconfont icon-fanhui" @click="$navto.navBack"></text>
+				<text class="iconfont icon-fanhui" @click="$navto.navBack(back)"></text>
 				<text class="header-tilte">{{title}}</text>
 			</view>
 		</view>
@@ -25,10 +25,26 @@
 			tab: {
 				type: Number,
 				default: 0
+			},
+			record: {
+				type: Boolean,
+				default: false
 			}
 		},
 		data() {
-			return {};
+			return {
+				back: ''
+			};
+		},
+		created() {
+			// 记录进入多少次该页面
+			if (this.record) {
+				let _back = uni.getStorageSync('_back') || 1;
+				_back += 1;
+				uni.setStorageSync('_back', _back);
+				this.back = _back;
+			}
+
 		},
 		computed: {
 			height() {

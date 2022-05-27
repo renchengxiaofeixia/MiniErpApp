@@ -1,65 +1,61 @@
 <template>
 	<view class="paddingBottom">
-		<headerTab title="入库单详情"></headerTab>
+		<headerTab title="入库单详情" :record="true"></headerTab>
 
 		<view class="goods-list gray">
 			<view class="goods-flex">
 				<view>
 					<view class="track">
 						<text>入库单号：</text>
-						<text class="black"> wp002151</text>
+						<text class="black"> {{storage.enterWarehouseNo}}</text>
 					</view>
 					<view class="track">
 						<text>入库日期：</text>
-						<text class="black"> wp002151</text>
+						<text class="black"> {{storage.enterDate}}</text>
 					</view>
 					<view class="track">
 						<text>仓库：</text>
-						<text class="black"> wp002151</text>
+						<text class="black"> {{storage.warehouseName}}</text>
 					</view>
 					<view class="track">
 						<text>入库类型：</text>
-						<text class="black"> wp002151</text>
+						<text class="black"> {{storage.enterType}}</text>
 					</view>
 				</view>
 			</view>
 		</view>
 
-		<linkman></linkman>
+		<linkman :list="supplierContact"></linkman>
 
-		<productMessage></productMessage>
+		<productMessage title="入库物品" :list="storageGoods"></productMessage>
 
 		<view class="table">
 			<pulldown headline="相关信息">
 				<view class="shove">
 					<view class="track">
-						<text class="gray">项目：</text>
-						<text class="black"> 阿三</text>
-					</view>
-					<view class="track">
 						<text class="gray">经办人：</text>
-						<text class="black"> 110</text>
+						<text class="black"> {{storage.transactor}}</text>
 					</view>
 					<view class="track">
 						<text class="gray">备注：</text>
-						<text class="black"> 110</text>
+						<text class="black"> {{storage.remarks}}</text>
 					</view>
 				</view>
 			</pulldown>
 		</view>
-		<operator></operator>
+
+		<operator :list="operation"></operator>
+
 		<copyreader :show="compileShow" @close="handleClose()">
 			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/print/index')">
 				打印
 			</view>
-			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/plusForm/addStorage')">
+			<view class="operation" hover-class="checkActive"
+				@click="$navto.navto('pages/plusForm/addStorage',{id:id,type:1,header: '修改入库单'})">
 				修改
 			</view>
-			<view class="operation red" hover-class="checkActive">
+			<view class="operation red" hover-class="checkActive" @click="storageDel">
 				删除
-			</view>
-			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/plusForm/addStorage')">
-				复制
 			</view>
 			<view class="operation" hover-class="checkActive">
 				一键出库
@@ -90,13 +86,60 @@
 		},
 		data() {
 			return {
+				id: 0,
 				compileShow: "none",
+				storage: {}, //入库数据
+				operation: {}, //操作人
+				supplierContact: {}, //供应商
+				storageGoods: [] //入库物品
 			}
 		},
-		onLoad() {
-
+		onLoad(e) {
+			this.id = e.id
+			this.getData();
+			this.goodsData();
 		},
 		methods: {
+			getData() {
+				let _this = this;
+				_this.$request.get('enterwarehouse/' + _this.id).then(res => {
+					let data = res.data;
+					_this.storage = data;
+					// 供应商联系
+					_this.supplierContact.name = data.supplierName;
+					_this.supplierContact.linkman = data.supplierNo;
+					_this.supplierContact.phone = data.supplierTelNo;
+
+					// 操作日记
+					_this.operation.createTime = data.createTime;
+					_this.operation.creator = data.creator;
+					_this.operation.updatedTime = data.updatedTime;
+					_this.operation.updator = data.updator;
+
+				})
+			},
+			goodsData() {
+				let _this = this;
+				_this.$request.get('enterwarehouse/prodinfos/' + _this.id).then(res => {
+					_this.storageGoods = res.data;
+					_this.storageGoods.forEach(e => {
+						e.money = e.unitPrice * e.quantity;
+						_this.totalPrice += e.money;
+					})
+				})
+			},
+			// 删除
+			storageDel() {
+				let _this = this;
+				_this.$api.showModal('你要确定要删除入库单吗?').then(() => {
+					_this.$request.del('enterwarehouse/' + _this.id).then(res => {
+						_this.$api.msg('删除成功！');
+						setTimeout(function() {
+							_this.$navto.navtab('pages/warehouse/index')
+						}, 500)
+					})
+				});
+			},
 			handleClose() {
 				if (this.compileShow == 'none') {
 					this.compileShow = 'show';

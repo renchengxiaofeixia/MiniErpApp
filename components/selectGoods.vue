@@ -40,7 +40,7 @@
 						数量
 					</view>
 					<view class="product-sum">
-						<uni-number-box :min="1" v-model="item.num" @change="changeValue(item)" />
+						<uni-number-box :min="1" v-model="item.quantity" @change="changeValue(item)" />
 					</view>
 				</view>
 				<view class="goods-flex product-back product-show">
@@ -53,26 +53,6 @@
 				</view>
 			</view>
 		</block>
-
-		<block v-if="productList.length !=0">
-			<view class="headline">
-				相关约定
-			</view>
-			<view class="table product">
-				<view class="from from-new">
-					<text class="title">结算方式</text>
-					<input type="text" placeholder="结算方式" class="fill" v-model="appoint.settle">
-					<text class="iconfont icon-right-1-copy"></text>
-				</view>
-				<view class="from from-new">
-					<text class="title">备注</text>
-					<input type="text" placeholder="填写备注" class="fill" v-model="appoint.remarks">
-					<text class="iconfont icon-right-1-copy"></text>
-				</view>
-			</view>
-		</block>
-
-
 	</view>
 </template>
 
@@ -82,17 +62,13 @@
 			list: {
 				type: Array,
 				default: []
-			},
-			meetion: {
-				type: Object,
-				default: {}
 			}
 		},
 		data() {
 			return {
 				productList: [],
 				appoint: {
-					settle: '',
+					settlementMode: '',
 					remarks: ""
 				}
 			};
@@ -106,15 +82,6 @@
 					this.circulation(); //监听到数据变化执行方法
 				},
 				deep: true // 深度监听父组件传过来对象变化
-			},
-			appoint: {
-				handler(item, index) {
-					this.appointData(); //监听到数据变化执行方法
-				},
-				deep: true // 深度监听父组件传过来对象变化
-			},
-			meetion(e) {
-				this.appoint = e;
 			}
 		},
 		methods: {
@@ -122,10 +89,9 @@
 			changeValue(e) {
 				let _this = this;
 				setTimeout(() => {
-					let price = Number(e.purchasePrice) * e.num;
+					let price = Number(e.purchasePrice) * e.quantity;
 					_this.$set(e, 'totalPrice', price.toFixed(2));
 				}, 100)
-
 			},
 			numberFixedDigit(e) { // 只能输入整数
 				this.$nextTick(() => {
@@ -136,45 +102,23 @@
 					val = val.match(/^0+[1-9]+/) ? val = val.replace(/^0+/g, '') : val;
 					val = (val.match(/^\d*(\.?\d{0,2})/g)[0]) || '';
 					this.$set(e, 'purchasePrice', val);
-					let price = Number(e.purchasePrice) * e.num;
+					let price = Number(e.purchasePrice) * e.quantity;
 					this.$set(e, 'totalPrice', price.toFixed(2));
 				});
 			},
 			// 删除
 			disposeOf(index) {
 				let _this = this;
-				uni.showModal({
-					title: '提示',
-					content: '你要确定要删除该物品吗?',
-					success: function(res) {
-						if (res.confirm) {
-							_this.productList.splice(index, 1);
-						} else if (res.cancel) {}
-					}
+				_this.$api.showModal('你要确定要删除该物品吗?').then(() => {
+					_this.productList.splice(index, 1);
 				});
 			},
 			// 物品数据的传递
 			circulation() {
-				let goods = [];
-				this.productList.forEach(e => {
-					goods.push({
-						// purchaseNo: "",
-						prodNo: e.prodNo,
-						prodCustomNo: e.prodCustomNo,
-						prodName: e.prodName,
-						prodModel: e.prodModel,
-						unit: e.unit,
-						unitPrice: e.purchasePrice,
-						quantity: e.num,
-						remarks: e.newRemarks
-					})
-
-				})
-				this.$emit("shape", goods);
+				console.log(this.productList);
+				this.$emit("shape", this.productList);
 			},
-			appointData() {
-				this.$emit("appoint", this.appoint);
-			}
+	
 		}
 	}
 </script>

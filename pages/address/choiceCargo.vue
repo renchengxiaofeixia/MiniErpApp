@@ -13,7 +13,7 @@
 				</scroll-view>
 			</block>
 			<block v-if="id == 2">
-				<scroll-view class="scroll-roll" @scrolltolower="supplierTolower">
+				<scroll-view class="scroll-roll" scroll-y @scrolltolower="supplierTolower">
 					<dataGrid :list="supplierList" :date="false" tab="2" :hide="false" :radio="true"
 						@radioChange="radioChange">
 					</dataGrid>
@@ -22,7 +22,7 @@
 			</block>
 		</view>
 
-		<addOrder :url="location"></addOrder>
+		<addOrder :url="location" top="70%"></addOrder>
 		<footerBtn @confirm="confirmBnt()"></footerBtn>
 	</view>
 </template>
@@ -159,6 +159,7 @@
 			confirmBnt() {
 				let _this = this;
 				if (_this.id == 1) {
+					_this.productPitch.quantity=1;
 					_this.$api.prePage().$data.productList.push(_this.productPitch);
 				} else if (_this.id == 2) {
 					_this.$api.prePage().$data.supplier = _this.supplierPitch
@@ -173,8 +174,17 @@
 </script>
 
 <style lang="scss">
+	page {
+		overflow: hidden;
+	}
+
 	.slide {
 		height: 100%;
 		width: 100%;
+	}
+
+	.scroll-roll {
+		height: 75vh;
+
 	}
 </style>

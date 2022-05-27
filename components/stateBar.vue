@@ -2,7 +2,7 @@
 	<view class="fold-flex">
 		<block v-for="(item,index) in list" :key="index">
 			<text class="fold-text" :class="{'fold-selected': index == option }" :style="{width: breadth}"
-				@click="switchover(index)">{{item.monicker}}</text>
+				@click="switchover(item)">{{item.monicker}}</text>
 		</block>
 	</view>
 </template>
@@ -25,9 +25,9 @@
 			};
 		},
 		methods: {
-			switchover(index) {
-				this.option = index;
-				this.$emit("switch", index);
+			switchover(item) {
+				this.option =item.id;
+				this.$emit("switch", item);
 			}
 		}
 	}
