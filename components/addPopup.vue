@@ -5,7 +5,7 @@
 			<view class="popup-title">
 				{{title}}
 			</view>
-			<input type="text" placeholder="填写单位名称" v-model="content">
+			<input type="text" placeholder="填写单位名称" :value="value" @input="$emit('input', $event.target.value)">
 			<view class="popup-bnt">
 				<button class="blue" @click="close">取消</button>
 				<button class="blue" @click="confirm">确定</button>
@@ -17,6 +17,7 @@
 <script>
 	export default {
 		props: {
+			value: "",
 			title: {
 				type: String,
 				default: ''
@@ -25,14 +26,9 @@
 				type: Boolean,
 				default: false
 			},
-			content:{
-				type: String,
-				default: ''
-			}
 		},
 		data() {
-			return {
-			};
+			return {};
 		},
 		created() {
 
@@ -42,11 +38,11 @@
 				this.$emit("close");
 			},
 			confirm() {
-				if (this.content == "") {
+				if (this.value == "") {
 					this.$api.msg('不能为空！');
 					return
 				}
-				this.$emit("confirm",this.content);
+				this.$emit("confirm", this.value);
 			},
 		}
 	}

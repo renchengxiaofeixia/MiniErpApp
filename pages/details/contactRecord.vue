@@ -32,6 +32,9 @@
 </template>
 
 <script>
+	let {
+		$getCustomercontact
+	} = require('@/api/contactrecords.js'); //客户
 	import headerTab from '@/components/headerTab/index.vue';
 	export default {
 		components: {
@@ -43,12 +46,11 @@
 				list: []
 			}
 		},
-		onLoad(e) {
+		async onLoad(e) {
 			let _this = this;
-			_this.$request.get('customercontact/' + e.id).then(res => {
-				res.data.contactImages = JSON.parse(res.data.contactImages);
-				_this.list = res.data
-			})
+			let res = await $getCustomercontact(e.id);
+			res.data.contactImages = JSON.parse(res.data.contactImages);
+			_this.list = res.data
 		},
 		methods: {
 

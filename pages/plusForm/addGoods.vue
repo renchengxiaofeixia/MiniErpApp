@@ -4,7 +4,8 @@
 		<view class="table">
 			<view class="from from-new">
 				<text class="title">物品编号</text>
-				<input type="text" placeholder="填写编号,保存后不能修改 (必填)" class="fill" v-model="productSeries">
+				<input type="text" placeholder="填写编号,保存后不能修改 (必填)" class="fill" v-model="productSeries"
+					:disabled="type == 1">
 			</view>
 			<view class="from from-new">
 				<text class="title">物品名称</text>
@@ -83,6 +84,12 @@
 </template>
 
 <script>
+	let {
+		$postProduct,
+		$getProductId,
+		$putProduct
+	} = require('@/api/product.js'); //物品
+
 	import headerTab from '@/components/headerTab/index.vue';
 	import footerBtn from '@/components/footerBtn.vue';
 	export default {
@@ -108,36 +115,37 @@
 				catCode: '其他', //类目
 				prodImage: [], //上传图片
 
+				updatedTime: '', //记录
 
 			}
 		},
-		onLoad(option) {
+		async onLoad(option) {
 			let _this = this;
 			_this.id = option.id ? option.id : '';
 			_this.type = option.type ? option.type : 0;
 			_this.header = option.header ? decodeURIComponent(option.header) : '新建物品';
 
-			if (_this.id != '') {
-				_this.$request.get('prod/' + _this.id).then(res => {
-					let data = res.data;
-					_this.productSeries = data.prodNo;
-					_this.productName = data.prodCustomNo;
-					_this.productName = data.prodName;
-					_this.unit = data.unit;
-					_this.productType = data.prodModel;
-					_this.purchasePrice = data.purchasePrice;
-					_this.salePrice = data.salePrice;
-					_this.remarks = data.remarks;
-					_this.catCode = data.catCode;
-					_this.prodImage = data.prodImage;
-					_this.productBrand = data.prodBrand;
-					_this.inventoryFloor = data.upperQuantity;
-					_this.inventoryUpper = data.lowerQuantity;
-				})
+			if (_this.type == 1) {
+				let res = await $getProductId(_this.id);
+				let data = res.data;
+				_this.productSeries = data.prodNo;
+				_this.productName = data.prodCustomNo;
+				_this.productName = data.prodName;
+				_this.unit = data.unit;
+				_this.productType = data.prodModel;
+				_this.purchasePrice = data.purchasePrice;
+				_this.salePrice = data.salePrice;
+				_this.remarks = data.remarks;
+				_this.catCode = data.catCode;
+				_this.prodImage = data.prodImage;
+				_this.productBrand = data.prodBrand;
+				_this.inventoryFloor = data.upperQuantity;
+				_this.inventoryUpper = data.lowerQuantity;
+				_this.updatedTime = new Date(data.updatedTime).valueOf();
 			}
 		},
 		methods: {
-			addProducts() {
+			async addProducts() {
 				let _this = this;
 				if (!_this.productSeries) {
 					_this.$api.msg('物品编号不能为空');
@@ -147,7 +155,7 @@
 					_this.$api.msg('物品名称不能为空');
 					return
 				}
-				
+
 				let data = {
 					prodNo: _this.productSeries,
 					prodCustomNo: _this.productName,
@@ -164,31 +172,38 @@
 					lowerQuantity: _this.inventoryUpper
 				}
 				if (_this.type == 1) {
-					_this.$request.put('prod/' + _this.id, data).then(res => {
+					let time = await $getProductId(_this.id)
+					let updatedTime = new Date(time.data.updatedTime).valueOf();
+
+					if (_this.updatedTime != updatedTime) {
+						_this.$api.showModal('修改已经过期请重新进入！').then(() => {
+							_this.$navto.navtab('pages/order/index')
+						});
+						return;
+					};
+					$putProduct(_this.id, data).then(res => {
 						setTimeout(() => {
-							_this.$navto.navClose('pages/details/commodity', {
+							_this.$navto.navClose('pages/details/product', {
 								id: res.data.id
 							});
-						}, 1000)
+						}, 500)
 						_this.$api.msg('修改成功');
 					}).catch(error => {
 						_this.$api.msg(error.data);
 					})
+
 				} else {
-					_this.$request.post('prod', data).then(res => {
+					$postProduct(data).then((res) => {
 						setTimeout(() => {
-							_this.$navto.navClose('pages/details/commodity', {
+							_this.$navto.navClose('pages/details/product', {
 								id: res.data.id
 							});
-						}, 1000)
+						}, 500)
 						_this.$api.msg('添加成功');
 					}).catch(error => {
 						_this.$api.msg(error.data);
 					})
 				}
-				
-				// this.$api.prePage().onLoad();
-				console.log(_this.$api.prePage().$vm);
 			},
 			//*选择图片*//
 			addImg: async function() {

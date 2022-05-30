@@ -148,16 +148,21 @@
 			<view class="operation red" hover-class="checkActive" @click="cutproduct()">
 				删除
 			</view>
-			<view class="operation" hover-class="checkActive"
-				@click="$navto.navto('pages/plusForm/addGoods',{id:id,type:2})">
-				复制
-			</view>
 		</copyreader>
 		<addOrder type="2" @click="handleClose()"></addOrder>
 	</view>
 </template>
 
 <script>
+	let {
+		$getProductId,
+		$delProduct
+	} = require('@/api/product.js'); //物品
+
+	let {
+		$goodsSupplier
+	} = require('@/api/supplier.js'); //供应商
+
 	import headerTab from '@/components/headerTab/index.vue';
 	import slidingBlock from './components/slidingBlock.vue';
 	import operator from './components/operator.vue';
@@ -204,30 +209,33 @@
 			this.getData();
 		},
 		methods: {
-			getData() {
+			async getData() {
 				let _this = this;
-				_this.$request.get('prod/' + _this.id).then(res => {
-					let data = res.data;
-					let operator = {};
-					_this.list = res.data;
-					operator.createTime = data.createTime;
-					operator.creator = data.creator;
-					operator.updatedTime = data.updatedTime;
-					operator.updator = data.updator;
-					_this.operator = operator;
-				})
-				_this.$request.get('suppliers/' + _this.id).then(res => {
-					_this.supplierList = res.data;
-				})
+				let res = await $getProductId(_this.id);
+				let data = res.data;
+
+				let operator = {};
+				_this.list = res.data;
+				operator.createTime = data.createTime;
+				operator.creator = data.creator;
+				operator.updatedTime = data.updatedTime;
+				operator.updator = data.updator;
+				_this.operator = operator;
+
+				let supplier = await $goodsSupplier(_this.id);
+				_this.supplierList = supplier.data;
+
 			},
 			cutproduct() {
 				let _this = this;
+
 				_this.$api.showModal('确定要删除物品').then(() => {
-					_this.$request.del('prod/' + _this.id);
+					$delProduct(_this.id);
 					setTimeout(() => {
 						_this.$navto.navtab('pages/message/index')
-					}, 1000)
+					}, 500)
 					_this.$api.msg('删除成功')
+					
 				});
 
 			},

@@ -18,7 +18,7 @@
 				立即注册
 			</view>
 		</view>
-		<view class="login-btn" @click="login()">
+		<view class="login-btn" @click="isLogin()">
 			<button class="bg-green white">登录</button>
 		</view>
 
@@ -26,7 +26,12 @@
 </template>
 
 <script>
+	let {
+		$login
+	} = require('@/api/user.js');
+
 	import headerTab from '@/components/headerTab/index.vue';
+
 	export default {
 		components: {
 			headerTab,
@@ -39,11 +44,9 @@
 
 			}
 		},
-		onLoad(e) {
-
-		},
+		onLoad(e) {},
 		methods: {
-			login() {
+			isLogin() {
 				let _this = this;
 				let userName = _this.userName;
 				let password = _this.password;
@@ -55,10 +58,11 @@
 					_this.$api.msg('密码不能为空');
 					return;
 				}
-				_this.$request.post('signin', {
-					userName: userName,
-					password: password,
-				}).then(res => {
+				let data = {
+					userName,
+					password
+				}
+				$login(data).then((res) => {
 					let token = res.data.token;
 					uni.setStorage({
 						key: "token",
@@ -70,10 +74,10 @@
 						}
 					})
 					_this.$api.msg('成功登录！');
-
 				}).catch(error => {
-					_this.$api.msg('登录失败！');
-				})
+					_this.$api.msg(error.data);
+				});
+				
 			}
 		}
 	}

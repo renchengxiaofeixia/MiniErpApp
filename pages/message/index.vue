@@ -6,7 +6,7 @@
 		<view class="slide">
 			<block v-if="first.id == 0">
 				<scroll-view class="scroll-roll" scroll-y @scrolltolower="productTolower">
-					<dataGrid url="pages/details/commodity" :list="productList" tab="1" @drop="dropProduct"
+					<dataGrid url="pages/details/product" :list="productList" tab="1" @drop="dropProduct"
 						@amend="amendProduct">
 					</dataGrid>
 					<uni-load-more :status="productStatus" IconType="auto" :content-text="contentText" />
@@ -65,6 +65,22 @@
 </template>
 
 <script>
+	let {
+		$getProduct,
+		$delProduct
+	} = require('@/api/product.js'); //物品
+
+	let {
+		$getSupplier,
+		$delSupplier
+	} = require('@/api/supplier.js'); //供应商
+
+	let {
+		$getClient,
+		$delClient
+	} = require('@/api/client.js'); //客户
+
+
 	import headerTab from '@/components/headerTab/index.vue';
 	import searchbox from '@/components/searchbox/index.vue';
 	import filtratePopup from '@/components/filtratePopup/index.vue';
@@ -143,61 +159,59 @@
 		},
 		methods: {
 			// 物品数据
-			productData() {
+			async productData() {
 				let _this = this;
-				_this.$request.get('prods', {
+				let data = {
 					page: _this.productPage,
 					size: _this.productSize,
-				}).then(res => {
-					let data = res.data;
-					if (!res.data.hasNextPage) {
-						_this.productNext = false;
-						_this.productStatus = 'noMore';
-					}
-					_this.productList.push(...data.data);
-				})
+				};
+				let res = await $getProduct(data);
+				if (!res.data.hasNextPage) {
+					_this.productNext = false;
+					_this.productStatus = 'noMore';
+				}
+				_this.productList.push(...res.data.data);
+
 			},
 			// 供应商数据
-			supplierData() {
+			async supplierData() {
 				let _this = this;
-				_this.$request.get('suppliers', {
+				let data = {
 					page: _this.supplierPage,
 					size: _this.supplierSize,
-				}).then(res => {
-					let data = res.data;
-					if (!res.data.hasNextPage) {
-						_this.supplierNext = false;
-						_this.supplierStatus = 'noMore';
-					}
-					_this.supplierList.push(...data.data);
+				}
 
-				})
+				let res = await $getSupplier(data);
+				if (!res.data.hasNextPage) {
+					_this.supplierNext = false;
+					_this.supplierStatus = 'noMore';
+				}
+				_this.supplierList.push(...res.data.data);
+
 			},
 			// 客户数据
-			clientData() {
+			async clientData() {
 				let _this = this;
-				_this.$request.get('customers', {
+				let data = {
 					page: _this.clientPage,
 					size: _this.clientSize,
-				}).then(res => {
-					let data = res.data;
-					if (!res.data.hasNextPage) {
-						_this.clientNext = false;
-						_this.clientStatus = 'noMore';
-					}
-					_this.clientList.push(...data.data);
+				}
+				let res = await $getClient(data)
+				if (!res.data.hasNextPage) {
+					_this.clientNext = false;
+					_this.clientStatus = 'noMore';
+				}
+				_this.clientList.push(...res.data.data);
 
-				})
 			},
 			// 删除物品
 			dropProduct(id, index) {
 				let _this = this;
 				_this.$api.showModal('确定要删除物品！').then(() => {
-
-					_this.$request.del('prod/' + id).then(res => {
-						_this.productList.splice(index, 1)
+					$delProduct(id).then(res => {
+						_this.productList.splice(index, 1);
+						_this.$api.msg('删除成功')
 					});
-					_this.$api.msg('删除成功')
 
 				});
 			},
@@ -212,12 +226,12 @@
 			// 删除供应商
 			dropSupplier(id, index) {
 				let _this = this;
-
 				_this.$api.showModal('确定要删除供应商！').then(() => {
-					_this.$request.del('supplier/' + id).then(res => {
+					$delSupplier(id).then(res => {
 						_this.supplierList.splice(index, 1)
+						_this.$api.msg('删除成功')
 					});
-					_this.$api.msg('删除成功')
+
 				});
 
 			},
@@ -233,10 +247,11 @@
 			dropClient(id, index) {
 				let _this = this;
 				_this.$api.showModal('确定要删除客户！').then(() => {
-					_this.$request.del('customer/' + id).then(res => {
+					$delClient(id).then(res => {
 						_this.clientList.splice(index, 1)
+						_this.$api.msg('删除成功')
 					});
-					_this.$api.msg('删除成功')
+
 				});
 			},
 			// 修改客户

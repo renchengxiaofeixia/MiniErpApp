@@ -85,7 +85,7 @@
 			<view class="operation red" hover-class="checkActive" @click="purchaseDel">
 				删除
 			</view>
-			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/plusForm/addStorage')">
+			<view class="operation" hover-class="checkActive" @click="navStorage()">
 				入库
 			</view>
 			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/addend/payment')">
@@ -103,6 +103,13 @@
 </template>
 
 <script>
+	let {
+		$getPurchasesId,
+		$getProdinfos,
+		$delPurchases,
+		$auditPurchases,
+		$unauditPurchases
+	} = require('@/api/purchase.js'); //采购
 	import headerTab from '@/components/headerTab/index.vue';
 	import pulldown from '@/components/pulldown.vue';
 	import productMessage from './components/productMessage.vue';
@@ -128,7 +135,8 @@
 				compileShow: "none",
 				supplierContact: {}, //供应商联系
 				operation: {}, //操作日记
-				goodsList:[],//物品数据
+				goodsList: [], //物品数据
+
 
 			}
 		},
@@ -140,43 +148,41 @@
 			this.goodsData()
 		},
 		methods: {
-			getData() {
+			async getData() {
 				let _this = this;
-				_this.$request.get('purchase/' + _this.id).then(res => {
-					let data = res.data;
-					_this.purchase = data;
-					// 供应商联系
-					_this.supplierContact.name = data.supplierName;
-					_this.supplierContact.linkman = data.supplierNo;
-					_this.supplierContact.phone = data.mobile;
-					// 操作日记
-					_this.operation.createTime = data.createTime;
-					_this.operation.creator = data.creator;
-					_this.operation.updatedTime = data.updatedTime;
-					_this.operation.updator = data.updator;
+				let res = await $getPurchasesId(_this.id);
+				let data = res.data;
+				_this.purchase = data;
+				// 供应商联系
+				_this.supplierContact.name = data.supplierName;
+				_this.supplierContact.linkman = data.supplierNo;
+				_this.supplierContact.phone = data.mobile;
+				_this.supplierContact.supplierContacterName = data.supplierContacterName;
+				// 操作日记
+				_this.operation.createTime = data.createTime;
+				_this.operation.creator = data.creator;
+				_this.operation.updatedTime = data.updatedTime;
+				_this.operation.updator = data.updator;
 
-				})
 			},
-			goodsData() {
+			async goodsData() {
 				let _this = this;
-				_this.$request.get('purchase/prodinfos/' + _this.id).then(res => {
-					_this.goodsList = res.data;
-					_this.goodsList.forEach(e => {
-						e.money = e.unitPrice * e.quantity;
-						_this.totalPrice += e.money;
-					})
+				let res = await $getProdinfos(_this.id);
+				_this.goodsList = res.data;
+				_this.goodsList.forEach(e => {
+					e.money = e.unitPrice * e.quantity;
+					_this.totalPrice += e.money;
 				})
 			},
 			// 删除
 			purchaseDel() {
 				let _this = this;
 				_this.$api.showModal('你要确定要删除该采购订单吗?').then(() => {
-					_this.$request.del('purchase/' + _this.id).then(res => {
-						_this.$api.msg('删除成功！');
-						setTimeout(function() {
-							_this.$navto.navtab('pages/order/index')
-						}, 500)
-					})
+					$delPurchases(_this.id);
+					_this.$api.msg('删除成功！');
+					setTimeout(function() {
+						_this.$navto.navtab('pages/order/index')
+					}, 500)
 				});
 
 			},
@@ -184,20 +190,35 @@
 			checkPurchase() {
 				let _this = this;
 				_this.$api.showModal('确定完成采购订单审核？').then(() => {
-					_this.$request.put('purchase/audit/' + _this.id).then(res => {
+					$auditPurchases(_this.id).then(res => {
 						_this.$api.msg('审核通过！');
 						_this.getData();
 					})
 				});
 			},
-			// 重审
+			// 反审核审
 			anewPurchase() {
 				let _this = this;
 				_this.$api.showModal('确定反审核采购订单？').then(() => {
-					_this.$request.put('purchase/unaudit/' + _this.id).then(res => {
+					$unauditPurchasess(_this.id).then(res => {
 						_this.$api.msg('反审核！');
 						_this.getData();
 					})
+				});
+			},
+			// 入库
+			navStorage() {
+				let _this = this;
+				let list = {
+					purchase: _this.purchase,
+					supplierContact: _this.supplierContact,
+					operation: _this.operation,
+					goodsList: _this.goodsList,
+				}
+				_this.$navto.navto('pages/plusForm/addStorage', {
+					list: JSON.stringify(list),
+					id: _this.id,
+					type: 2
 				});
 			},
 			handleClose() {

@@ -72,6 +72,10 @@
 </template>
 
 <script>
+	let {
+		$getPurchases,
+		$delPurchases
+	} = require('@/api/purchase.js'); //采购
 	import headerTab from '@/components/headerTab/index.vue';
 	import searchbox from '@/components/searchbox/index.vue';
 	import dataGrid from '@/components/dataGrid/index.vue';
@@ -113,23 +117,23 @@
 			this.purchaseData();
 		},
 		methods: {
-			purchaseData() {
+			async purchaseData() {
 				let _this = this;
-				_this.$request.get('purchases').then(res => {
-					let data = res.data;
-					_this.purchaseList.push(...data.data);
+				let res = await $getPurchases();
+				_this.purchaseList.push(...res.data.data);
 
-				})
+
 			},
 			// 删除采购
 			dropPurchase(id, index) {
 				let _this = this;
 				_this.$api.showModal('你要确定要删除采购订单吗?').then(() => {
-					_this.$request.del('purchase/' + id).then(res => {
+					$delPurchases(id).then(res => {
 						_this.purchaseList.splice(index, 1)
 						_this.$api.msg('删除成功！');
+					});
 
-					})
+
 				});
 			},
 			// 修改采购

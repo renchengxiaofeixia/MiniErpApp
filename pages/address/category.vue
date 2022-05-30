@@ -17,15 +17,20 @@
 			</view>
 		</copyreader>
 
-
 		<addOrder type="3" @click="append(1)"></addOrder>
-
-		<addPopup @close="append(1)" @confirm="addCat" :show="isShow" :content="content" :title="addCategory">
+		<addPopup @close="append(1)" @confirm="addCat" :show="isShow" v-model="content" :title="addCategory">
 		</addPopup>
 	</view>
 </template>
 
 <script>
+	let {
+		$getCategory,
+		$postCategory,
+		$putCategory,
+		$delCategory
+	} = require('@/api/category.js'); //类目
+
 	import headerTab from '@/components/headerTab/index.vue';
 	import addOrder from '@/components/addOrder.vue';
 	import addPopup from '@/components/addPopup.vue';
@@ -58,12 +63,11 @@
 			this.getData();
 		},
 		methods: {
-			getData() {
+			async getData() {
 				let _this = this;
-				_this.$request.get('prodcats').then(res => {
-					let data = res.data;
-					_this.categoryList = res.data;
-				})
+				let res = await $getCategory();
+				_this.categoryList = res.data;
+
 			},
 			// 添加
 			addCat(item) {
@@ -75,14 +79,17 @@
 					categoryName: item,
 					parentCatCode,
 				}
+
 				if (!_this.revamp) {
-					_this.$request.post('prodcat', data).then(res => {
+					$postCategory(data).then(res => {
 						_this.getData();
-					})
+					});
+
 				} else {
-					_this.$request.put('prodcat/' + _this.sonCategory.id, data).then(res => {
+					$putCategory(_this.sonCategory.id, data).then(res => {
 						_this.getData();
-					})
+					});
+
 				}
 			},
 			// 打开弹窗
@@ -100,19 +107,12 @@
 			},
 			delcategory() {
 				let _this = this;
-				uni.showModal({
-					title: '提示',
-					content: '确定要删除该类目',
-					success: function(res) {
-						if (res.confirm) {
-							_this.$request.del('prodvat/' + _this.sonCategory.id).then(res => {
-								_this.getData();
-							})
-							_this.$api.msg('删除成功')
-						} else if (res.cancel) {}
-					}
+				_this.$api.showModal('确定要删除该类目！').then(() => {
+					$delCategory(_this.sonCategory.id).then(res => {
+						_this.getData();
+					});
+					_this.$api.msg('删除成功')
 				});
-
 			},
 			// 弹出添加框
 			append(top) {

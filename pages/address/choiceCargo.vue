@@ -28,6 +28,17 @@
 </template>
 
 <script>
+	let {
+		$getProduct,
+	} = require('@/api/product.js'); //物品
+
+	let {
+		$getSupplier,
+	} = require('@/api/supplier.js'); //供应商
+
+	let {
+		$getClient,
+	} = require('@/api/client.js'); //客户
 	import headerTab from '@/components/headerTab/index.vue';
 	import searchbox from '@/components/searchbox/index.vue';
 	import dataGrid from '@/components/dataGrid/index.vue';
@@ -87,35 +98,33 @@
 		},
 		methods: {
 			// 物品数据
-			productData() {
+			async productData() {
 				let _this = this;
-				_this.$request.get('prods', {
+				let data = {
 					page: _this.productPage,
 					size: _this.productSize,
-				}).then(res => {
-					let data = res.data;
-					if (!res.data.hasNextPage) {
-						_this.productNext = false;
-						_this.productStatus = 'noMore';
-					}
-					_this.productList.push(...data.data);
-				})
+				};
+				let res = await $getProduct(data);
+				if (!res.data.hasNextPage) {
+					_this.productNext = false;
+					_this.productStatus = 'noMore';
+				}
+				_this.productList.push(...res.data.data);
 			},
 			// 供应商数据
-			supplierData() {
+			async supplierData() {
 				let _this = this;
-				_this.$request.get('suppliers', {
+				let data = {
 					page: _this.supplierPage,
 					size: _this.supplierSize,
-				}).then(res => {
-					let data = res.data;
-					if (!res.data.hasNextPage) {
-						_this.supplierNext = false;
-						_this.supplierStatus = 'noMore';
-					}
-					_this.supplierList.push(...data.data);
+				}
+				let res = await $getSupplier(data);
+				if (!res.data.hasNextPage) {
+					_this.supplierNext = false;
+					_this.supplierStatus = 'noMore';
+				}
+				_this.supplierList.push(...res.data.data);
 
-				})
 			},
 			// 物品下拉加载数据
 			productTolower(e) {
@@ -159,7 +168,7 @@
 			confirmBnt() {
 				let _this = this;
 				if (_this.id == 1) {
-					_this.productPitch.quantity=1;
+					_this.productPitch.quantity = 1;
 					_this.$api.prePage().$data.productList.push(_this.productPitch);
 				} else if (_this.id == 2) {
 					_this.$api.prePage().$data.supplier = _this.supplierPitch

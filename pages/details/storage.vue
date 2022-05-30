@@ -57,15 +57,24 @@
 			<view class="operation red" hover-class="checkActive" @click="storageDel">
 				删除
 			</view>
-			<view class="operation" hover-class="checkActive">
-				一键出库
+			<view class="operation" hover-class="checkActive" @click="checkStorage" v-if="!storage.isAudit">
+				审核
 			</view>
+			<!--<view class="operation" hover-class="checkActive" @click="anewStorage">
+				反审核
+			</view> -->
 		</copyreader>
 		<addOrder type="2" @click="handleClose()"></addOrder>
 	</view>
 </template>
 
 <script>
+	let {
+		$getStorageId,
+		$goodsStorage,
+		$delStorage,
+		$auditStorage
+	} = require('@/api/storage.js'); //入库
 	import headerTab from '@/components/headerTab/index.vue';
 	import pulldown from '@/components/pulldown.vue';
 	import productMessage from './components/productMessage.vue';
@@ -100,46 +109,61 @@
 			this.goodsData();
 		},
 		methods: {
-			getData() {
+			async getData() {
 				let _this = this;
-				_this.$request.get('enterwarehouse/' + _this.id).then(res => {
-					let data = res.data;
-					_this.storage = data;
-					// 供应商联系
-					_this.supplierContact.name = data.supplierName;
-					_this.supplierContact.linkman = data.supplierNo;
-					_this.supplierContact.phone = data.supplierTelNo;
+				let res = await $getStorageId(_this.id);
+				let data = res.data;
+				_this.storage = data;
+				// 供应商联系
+				_this.supplierContact.name = data.supplierName;
+				_this.supplierContact.linkman = data.supplierNo;
+				_this.supplierContact.phone = data.supplierTelNo;
 
-					// 操作日记
-					_this.operation.createTime = data.createTime;
-					_this.operation.creator = data.creator;
-					_this.operation.updatedTime = data.updatedTime;
-					_this.operation.updator = data.updator;
+				// 操作日记
+				_this.operation.createTime = data.createTime;
+				_this.operation.creator = data.creator;
+				_this.operation.updatedTime = data.updatedTime;
+				_this.operation.updator = data.updator;
 
-				})
 			},
-			goodsData() {
+			async goodsData() {
 				let _this = this;
-				_this.$request.get('enterwarehouse/prodinfos/' + _this.id).then(res => {
-					_this.storageGoods = res.data;
-					_this.storageGoods.forEach(e => {
-						e.money = e.unitPrice * e.quantity;
-						_this.totalPrice += e.money;
-					})
+
+				let res = await $goodsStorage(_this.id);
+				_this.storageGoods = res.data;
+				_this.storageGoods.forEach(e => {
+					e.money = e.unitPrice * e.quantity;
+					_this.totalPrice += e.money;
 				})
+
 			},
 			// 删除
 			storageDel() {
 				let _this = this;
 				_this.$api.showModal('你要确定要删除入库单吗?').then(() => {
-					_this.$request.del('enterwarehouse/' + _this.id).then(res => {
+					$delStorage(_this.id).then(res => {
 						_this.$api.msg('删除成功！');
-						setTimeout(function() {
+						setTimeout(() => {
 							_this.$navto.navtab('pages/warehouse/index')
 						}, 500)
-					})
+					});
+
 				});
 			},
+			// 审核
+			checkStorage() {
+				let _this = this;
+				_this.$api.showModal('确定完成入库单审核？').then(() => {
+					$auditStorage(_this.id).then(res => {
+						_this.$api.msg('审核通过！');
+						_this.getData();
+					});
+				});
+			},
+			// 反审核
+			// anewStorage() {
+
+			// },
 			handleClose() {
 				if (this.compileShow == 'none') {
 					this.compileShow = 'show';

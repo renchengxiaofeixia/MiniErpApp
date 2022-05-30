@@ -43,7 +43,7 @@
 				default: ''
 			},
 			list: {
-				type: Object,
+				type: Array,
 				default: []
 			},
 
@@ -51,7 +51,6 @@
 		watch: {},
 		data() {
 			return {
-				list: [],
 				totalPrice: 0,
 			}
 		},

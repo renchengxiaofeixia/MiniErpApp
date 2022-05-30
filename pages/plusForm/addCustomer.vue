@@ -41,6 +41,11 @@
 </template>
 
 <script>
+	let {
+		$getClientId,
+		$postClient,
+		$putClient
+	} = require('@/api/client.js'); //客户
 	import headerTab from '@/components/headerTab/index.vue';
 	import footerBtn from '@/components/footerBtn.vue';
 	export default {
@@ -57,28 +62,32 @@
 				customerName: "", //联系人
 				mobile: "", //电话
 				remarks: "", //备注
-				contactStatus: "" //跟进状态
+				contactStatus: "", //跟进状态
+				updatedTime: ""
 			}
 		},
-		onLoad(option) {
+		async onLoad(option) {
 			let _this = this;
 			_this.id = option.id ? option.id : '';
 			_this.type = option.type ? option.type : 0;
 			_this.header = option.header ? decodeURIComponent(option.header) : '新建客户';
 
 			if (_this.type == 1) {
-				_this.$request.get('customer/' + _this.id).then(res => {
-					let data = res.data;
-					_this.customerNo = data.customerNo;
-					_this.customerName = data.customerName;
-					_this.mobile = data.mobile;
-					_this.remarks = data.remarks;
-					_this.contactStatus = data.contactStatus;
-				})
+				let res = await $getClientId(_this.id)
+				let data = res.data;
+				_this.customerNo = data.customerNo;
+				_this.customerName = data.customerName;
+				_this.mobile = data.mobile;
+				_this.remarks = data.remarks;
+				_this.contactStatus = data.contactStatus;
+
+				_this.updatedTime = new Date(data.updatedTime).valueOf()
+
 			}
 		},
 		methods: {
-			clientBtn() {
+
+			async clientBtn() {
 				let _this = this;
 				if (!_this.customerNo) {
 					_this.$api.msg('客户名称不能为空！')
@@ -102,25 +111,35 @@
 					remarks: _this.remarks,
 					contactStatus: _this.contactStatus
 				}
-				if (_this.type == 0) {
-					_this.$request.post('customer', data).then(res => {
+				if (_this.type == 1) {
+					let time = await $getClientId(_this.id);
+					let updatedTime = new Date(time.data.updatedTime).valueOf();
+
+					if (_this.updatedTime != updatedTime) {
+						_this.$api.showModal('修改已经过期请重新进入！').then(() => {
+							_this.$navto.navtab('pages/order/index')
+						});
+						return;
+					};
+					$putClient(_this.id, data).then(res => {
 						setTimeout(() => {
 							_this.$navto.navClose('pages/details/client', {
 								id: res.data.id
 							});
-						}, 1000)
-						_this.$api.msg('新建成功')
+						}, 500)
+						_this.$api.msg('修改成功')
 					}).catch(error => {
 						_this.$api.msg(error.data);
 					})
+
 				} else {
-					_this.$request.put('customer/' + _this.id, data).then(res => {
+					$postClient(data).then(res => {
 						setTimeout(() => {
 							_this.$navto.navClose('pages/details/client', {
 								id: res.data.id
 							});
-						}, 1000)
-						_this.$api.msg('修改成功')
+						}, 500)
+						_this.$api.msg('新建成功')
 					}).catch(error => {
 						_this.$api.msg(error.data);
 					})

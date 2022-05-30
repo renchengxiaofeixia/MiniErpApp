@@ -140,8 +140,8 @@
 			amend(id) {
 				this.$emit("amend", id);
 			},
-			drop(id) {
-				this.$emit("drop", id);
+			drop(id, index) {
+				this.$emit("drop", id, index);
 			},
 			radioChange(e) {
 				this.$emit("radioChange", e);

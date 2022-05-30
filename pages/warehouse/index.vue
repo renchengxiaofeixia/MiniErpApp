@@ -57,6 +57,9 @@
 </template>
 
 <script>
+	let {
+		$getStorage
+	} = require('@/api/storage.js'); //采购
 	import headerTab from '@/components/headerTab/index.vue';
 	import searchbox from '@/components/searchbox/index.vue';
 	import dataGrid from '@/components/dataGrid/index.vue';
@@ -110,13 +113,11 @@
 		},
 		methods: {
 			// 入库数据
-			storageData() {
+			async storageData() {
 				let _this = this;
-				_this.$request.get('enterwarehouses').then(res => {
-					let data = res.data;
-					console.log(data.data);
-					_this.storageList.push(...data.data);
-				})
+				let res = await $getStorage();
+				_this.storageList.push(...res.data.data);
+
 			},
 			change(item) {
 				this.warehouse = item;

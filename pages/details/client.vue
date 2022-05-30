@@ -83,6 +83,15 @@
 </template>
 
 <script>
+	let {
+		$getClientId,
+		$delClient
+	} = require('@/api/client.js'); //客户
+
+	let {
+		$getContactrecords
+	} = require('@/api/contactrecords.js'); //联系
+
 	import headerTab from '@/components/headerTab/index.vue';
 	import slidingBlock from './components/slidingBlock.vue';
 	import operator from './components/operator.vue';
@@ -128,46 +137,46 @@
 			this.contactData()
 		},
 		methods: {
-			getData() {
+			async getData() {
 				let _this = this;
-				_this.$request.get('customer/' + _this.id).then(res => {
-					let operator = {};
-					let contact = {};
-					_this.list = res.data;
+				let res = await $getClientId(_this.id)
+				let operator = {};
+				let contact = {};
+				_this.list = res.data;
+				contact.contacterName = res.data.customerName;
+				contact.mobile = res.data.mobile;
+				contact.supplierName = res.data.customerNo;
 
-					contact.contacterName = res.data.customerName;
-					contact.mobile = res.data.mobile;
-					contact.supplierName = res.data.customerNo;
+				operator.createTime = res.data.createTime;
+				operator.creator = res.data.creator;
+				operator.updatedTime = res.data.updatedTime;
+				operator.updator = res.data.updator;
+				_this.contact = contact;
+				_this.operator = operator;
 
-					operator.createTime = res.data.createTime;
-					operator.creator = res.data.creator;
-					operator.updatedTime = res.data.updatedTime;
-					operator.updator = res.data.updator;
-					_this.contact = contact;
-					_this.operator = operator;
 
-				})
 			},
 			// 联系记录
-			contactData() {
+			async contactData() {
 				let _this = this;
+				let res = await $getContactrecords(_this.id);
+				_this.contactList = res.data
 
-				_this.$request.get('contactrecords/' + _this.id).then(res => {
-					_this.contactList = res.data
-				})
 			},
 			// 删除
 			clientDel() {
 				let _this = this;
-				
+
 				_this.$api.showModal('确定要删除供应商?').then(() => {
-					_this.$request.del('customer/' + _this.id);
-					setTimeout(() => {
-						_this.$navto.navtab('pages/message/index')
-					}, 1000)
-					_this.$api.msg('删除成功')
+					$delClient(_this.id).then(res => {
+						setTimeout(() => {
+							_this.$navto.navtab('pages/message/index')
+						}, 500)
+						_this.$api.msg('删除成功')
+					});;
+
 				});
-				
+
 			},
 			handleClose() {
 				if (this.compileShow == 'none') {

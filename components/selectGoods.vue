@@ -2,9 +2,10 @@
 	<view>
 		<view class="headline option-gooods">
 			<text>选择物品</text>
-			<view class="icon bg-green">
+			<view class="icon bg-green" v-if="hide"
+				@click="$navto.navto('pages/address/choiceCargo',{id:1,headline:'选择物品'})">
 				<text class="icon-tianjia iconfont"></text>
-				<text class="" @click="$navto.navto('pages/address/choiceCargo',{id:1,headline:'选择物品'})">添加</text>
+				<text class="">添加</text>
 			</view>
 		</view>
 
@@ -40,7 +41,17 @@
 						数量
 					</view>
 					<view class="product-sum">
-						<uni-number-box :min="1" v-model="item.quantity" @change="changeValue(item)" />
+						<block v-if="hide">
+							<uni-number-box :min="1" v-model="item.quantity" @change="changeValue(item)" :max="1000" />
+						</block>
+
+						<block v-else>
+							<uni-number-box :min="1" v-model="item.quantity" @change="changeValue(item)"
+								:max="item.notReceiverQuantity" />
+							<text v-if="item.notReceiverQuantity == item.quantity"
+								style="margin-left: 10upx; font-size: 24upx;"
+								class="red">还剩{{item.notReceiverQuantity}}可入库</text>
+						</block>
 					</view>
 				</view>
 				<view class="goods-flex product-back product-show">
@@ -62,6 +73,10 @@
 			list: {
 				type: Array,
 				default: []
+			},
+			hide: {
+				type: Boolean,
+				default: true
 			}
 		},
 		data() {
@@ -70,7 +85,8 @@
 				appoint: {
 					settlementMode: '',
 					remarks: ""
-				}
+				},
+
 			};
 		},
 		watch: {
@@ -91,6 +107,7 @@
 				setTimeout(() => {
 					let price = Number(e.purchasePrice) * e.quantity;
 					_this.$set(e, 'totalPrice', price.toFixed(2));
+
 				}, 100)
 			},
 			numberFixedDigit(e) { // 只能输入整数
@@ -118,7 +135,7 @@
 				console.log(this.productList);
 				this.$emit("shape", this.productList);
 			},
-	
+
 		}
 	}
 </script>
@@ -186,6 +203,8 @@
 			.product-sum {
 				text-align: left;
 				flex: 1;
+				display: flex;
+				align-items: center;
 
 			}
 

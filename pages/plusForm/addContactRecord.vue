@@ -45,6 +45,10 @@
 </template>
 
 <script>
+	let {
+		$postContactrecords
+	} = require('@/api/contactrecords.js'); //联系
+
 	import headerTab from '@/components/headerTab/index.vue';
 	import footerBtn from '@/components/footerBtn.vue';
 	export default {
@@ -85,16 +89,14 @@
 					contactContent: _this.contactContent,
 					contactImages: _this.contactImages
 				}
-
-				_this.$request.post('customercontact', data).then(res => {
+				$postContactrecords(data).then(res => {
 					setTimeout(() => {
 						_this.$navto.navBack();
-					}, 1000)
+					}, 500)
 					_this.$api.msg('添加成功');
 				}).catch(error => {
 					_this.$api.msg(error.data);
 				})
-
 			},
 			// 联系日期
 			selectTime(date) {

@@ -152,7 +152,7 @@
 		"root": "pages/details",
 		"name": "details",
 		"pages": [{
-			"path": "commodity",
+			"path": "product",
 			"style": {
 				"navigationStyle": "custom",
 				"app-plus": {

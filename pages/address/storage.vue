@@ -16,11 +16,19 @@
 			</view>
 		</copyreader>
 		<addOrder type="3" @click="append(1)"></addOrder>
-		<addPopup @close="append(1)" :show="isShow" @confirm="addCat" :title="unitTitle" :content="content"></addPopup>
+		<addPopup @close="append(1)" :show="isShow" @confirm="addCat" :title="unitTitle" v-model="content"></addPopup>
 	</view>
 </template>
 
 <script>
+	let {
+		$getUnit,
+		$getFollowStatus,
+		$postCustomprop,
+		$putCustomprop,
+		$delCustomprop
+	} = require('@/api/preserve.js'); //
+
 	import headerTab from '@/components/headerTab/index.vue';
 	import addOrder from '@/components/addOrder.vue';
 	import addPopup from '@/components/addPopup.vue';
@@ -51,20 +59,17 @@
 			this.getData()
 		},
 		methods: {
-			getData() {
+			async getData() {
 				let _this = this;
 				if (_this.id == 1) {
-					_this.$request.get('customprop/ProdInfo/Unit').then(res => {
-						let data = res.data;
-						_this.unitList = res.data;
-					})
-				} else {
-					_this.$request.get('customprop/Customer/FollowStatus').then(res => {
-						let data = res.data;
-						_this.unitList = res.data;
-					})
-				}
+					let unit = await $getUnit();
+					_this.unitList = unit.data;
 
+				} else {
+					let status = await $getFollowStatus();
+					_this.unitList = status.data;
+
+				}
 			},
 			// 添加
 			addCat(item) {
@@ -85,30 +90,28 @@
 				}
 
 				if (!_this.revamp) {
-					_this.$request.post('customprop', data).then(res => {
+					$postCustomprop(data).then(res => {
 						_this.getData();
-					})
+					});
+
+
 				} else {
-					_this.$request.put('customprop/' + _this.simple.id, data).then(res => {
+					$putCustomprop(_this.simple.id, data).then(res => {
 						_this.getData();
-					})
+					});
+
+
 				}
 
 			},
 			// 删除
 			delUnit() {
 				let _this = this;
-				uni.showModal({
-					title: '提示',
-					content: '确定要删除该类目',
-					success: function(res) {
-						if (res.confirm) {
-							_this.$request.del('customprop/' + _this.simple.id).then(res => {
-								_this.getData();
-							})
-							_this.$api.msg('删除成功')
-						} else if (res.cancel) {}
-					}
+				_this.$api.showModal('确定要删除！').then(() => {
+					$delCustomprop(_this.simple.id).then(res => {
+						_this.getData();
+					});
+					_this.$api.msg('删除成功')
 				});
 			},
 			// 选中
