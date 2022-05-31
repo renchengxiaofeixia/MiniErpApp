@@ -7,7 +7,7 @@ function $getClient(data) {
 
 // 删除客户
 function $delClient(id) {
-	return request.del('customer/' + id);
+	return request.delete('customer/' + id);
 }
 
 // 客户详情

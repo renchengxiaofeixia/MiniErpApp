@@ -147,6 +147,18 @@
 					// #endif
 				}
 			}
+		}, {
+			"path": "addPayment",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
 		}]
 	}, {
 		"root": "pages/details",
@@ -259,10 +271,22 @@
 					// #endif
 				}
 			}
+		}, {
+			"path": "payment",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
 		}]
 	}, {
-		"root": "pages/address",
-		"name": "address",
+		"root": "pages/conserve",
+		"name": "conserve",
 		"pages": [{
 			"path": "storage",
 			"style": {
@@ -299,28 +323,8 @@
 					// #endif
 				}
 			}
-		}]
-	}, {
-		"root": "pages/print",
-		"name": "print",
-		"pages": [{
-			"path": "index",
-			"style": {
-				"navigationStyle": "custom",
-				"app-plus": {
-					// #ifdef APP-PLUS
-					"titleNView": {
-						"type": "default"
-					}
-					// #endif
-				}
-			}
-		}]
-	}, {
-		"root": "pages/addend",
-		"name": "addend",
-		"pages": [{
-			"path": "payment",
+		}, {
+			"path": "warehouse",
 			"style": {
 				"navigationStyle": "custom",
 				"app-plus": {
@@ -332,7 +336,23 @@
 				}
 			}
 		}, {
-			"path": "tickets",
+			"path": "address",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}]
+	}, {
+		"root": "pages/print",
+		"name": "print",
+		"pages": [{
+			"path": "index",
 			"style": {
 				"navigationStyle": "custom",
 				"app-plus": {

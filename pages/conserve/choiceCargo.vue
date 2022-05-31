@@ -20,6 +20,14 @@
 					<uni-load-more :status="supplierStatus" IconType="auto" :content-text="contentText" />
 				</scroll-view>
 			</block>
+			<block v-if="id == 3">
+				<scroll-view class="scroll-roll" scroll-y @scrolltolower="clientTolower">
+					<dataGrid :list="clientList" tab="3" :date="false" :hide="false" :radio="true"
+						@radioChange="radioChange">
+					</dataGrid>
+					<uni-load-more :status="clientStatus" IconType="auto" :content-text="contentText" />
+				</scroll-view>
+			</block>
 		</view>
 
 		<addOrder :url="location" top="70%"></addOrder>
@@ -68,9 +76,15 @@
 				supplierSize: 10, //供应商页数量
 				supplierNext: true, //供应商是否也下页
 				supplierPitch: {}, //供应商选中
+				clientList: [], //客户
+				clientPage: 1, //客户页数
+				clientSize: 10, //客户页数量
+				clientNext: true, //客户是否也下页
+				clientPitch: {}, //客户选中
 				// 加载状态
 				productStatus: 'more',
 				supplierStatus: 'more',
+				clientStatus: 'more',
 				contentText: {
 					contentdown: '下拉加载',
 					contentrefresh: '加载中',
@@ -86,6 +100,8 @@
 				this.location = "pages/plusForm/addGoods";
 			} else if (this.id == 2) {
 				this.location = "pages/plusForm/addSupplier";
+			} else if (this.id == 3) {
+				this.location = "pages/plusForm/addCustomer";
 			}
 		},
 		onShow() {
@@ -93,6 +109,8 @@
 				this.productData();
 			} else if (this.id == 2) {
 				this.supplierData();
+			} else if (this.id == 3) {
+				this.clientData();
 			}
 
 		},
@@ -126,6 +144,21 @@
 				_this.supplierList.push(...res.data.data);
 
 			},
+			// 客户数据
+			async clientData() {
+				let _this = this;
+				let data = {
+					page: _this.clientPage,
+					size: _this.clientSize,
+				}
+				let res = await $getClient(data)
+				if (!res.data.hasNextPage) {
+					_this.clientNext = false;
+					_this.clientStatus = 'noMore';
+				}
+				_this.clientList.push(...res.data.data);
+
+			},
 			// 物品下拉加载数据
 			productTolower(e) {
 				let _this = this;
@@ -152,6 +185,19 @@
 					}, 1000)
 				}
 			},
+			// 客户下拉加载
+			clientTolower() {
+				let _this = this;
+				if (_this.clientNext) {
+					_this.clientStatus = 'loading';
+					_this.clientPage = 2;
+					_this.clientData();
+				} else {
+					setTimeout(function() {
+						_this.clientStatus = 'noMore';
+					}, 1000)
+				}
+			},
 			// 选择数据
 			radioChange(e) {
 				let val = JSON.parse(e.detail.value);
@@ -162,6 +208,8 @@
 					this.productPitch = val;
 				} else if (this.id == 2) {
 					this.supplierPitch = val;
+				} else if (this.id == 3) {
+					this.clientPitch = val;
 				}
 			},
 			// 确定
@@ -171,7 +219,10 @@
 					_this.productPitch.quantity = 1;
 					_this.$api.prePage().$data.productList.push(_this.productPitch);
 				} else if (_this.id == 2) {
-					_this.$api.prePage().$data.supplier = _this.supplierPitch
+					_this.$api.prePage().$data.supplier = _this.supplierPitch;
+
+				} else if (_this.id == 3) {
+					_this.$api.prePage().$data.client = _this.clientPitch;
 
 				}
 				setTimeout(function() {

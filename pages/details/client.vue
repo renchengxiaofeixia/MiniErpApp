@@ -47,7 +47,6 @@
 						<view class="header gray">
 							2022-05-05
 						</view>
-
 						<view class="table">
 							<view class="from diary goods-flex">
 								<text class="title black">供应商</text>
@@ -73,7 +72,7 @@
 				删除
 			</view>
 			<view class="operation" hover-class="checkActive"
-				@click="$navto.navto('pages/plusForm/addContactRecord',{name: contact.supplierName})">
+				@click="$navto.navto('pages/plusForm/addContactRecord',{name: contact.supplierName,id: id})">
 				新建联系记录
 			</view>
 		</copyreader>

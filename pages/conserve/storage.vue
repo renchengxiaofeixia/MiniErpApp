@@ -2,7 +2,7 @@
 	<view class="storage">
 		<headerTab :title="header"></headerTab>
 
-		<view class="storage-piece" v-for="(item,index) in unitList" :key="index" @click.stop="checked(item.propValue)">
+		<view class="storage-piece" v-for="(item,index) in list" :key="index" @click.stop="checked(item.propValue)">
 			<text>{{item.propValue}}</text>
 			<text class="icon-shenglvehao iconfont" @click.stop="handleClose(item)"></text>
 		</view>
@@ -26,8 +26,11 @@
 		$getFollowStatus,
 		$postCustomprop,
 		$putCustomprop,
-		$delCustomprop
-	} = require('@/api/preserve.js'); //
+		$delCustomprop,
+		$getPayType,
+		$getFinanceAccount,
+		$getSettlementType
+	} = require('@/api/preserve.js');
 
 	import headerTab from '@/components/headerTab/index.vue';
 	import addOrder from '@/components/addOrder.vue';
@@ -42,11 +45,11 @@
 		},
 		data() {
 			return {
-				id: 1,
+				id: 1, //1单位 2跟进状态 3支出类型 4资金账户 5结算方式 6仓库
 				header: "选择单位",
 				isShow: false,
 				compileShow: "none",
-				unitList: [], //单位列表
+				list: [], //单位列表
 				simple: {},
 				unitTitle: '添加单位',
 				content: '',
@@ -61,15 +64,20 @@
 		methods: {
 			async getData() {
 				let _this = this;
+				let list
 				if (_this.id == 1) {
-					let unit = await $getUnit();
-					_this.unitList = unit.data;
-
-				} else {
-					let status = await $getFollowStatus();
-					_this.unitList = status.data;
-
+					list = await $getUnit();
+				} else if (_this.id == 2) {
+					list = await $getFollowStatus();
+				} else if (_this.id == 3) {
+					list = await $getPayType();
+				} else if (_this.id == 4) {
+					list = await $getFinanceAccount();
+				} else if (_this.id == 5) {
+					list = await $getSettlementType();
 				}
+				_this.list = list.data;
+
 			},
 			// 添加
 			addCat(item) {
@@ -79,30 +87,38 @@
 					data = {
 						module: "ProdInfo",
 						propName: "Unit",
-						propValue: item,
 					}
-				} else {
+				} else if (_this.id == 2) {
 					data = {
 						module: "Customer",
 						propName: "FollowStatus",
-						propValue: item,
+					}
+				} else if (_this.id == 3) {
+					data = {
+						module: "Purchase",
+						propName: "PayType"
+					}
+				} else if (_this.id == 4) {
+					data = {
+						module: "Purchase",
+						propName: "FinanceAccount"
+					}
+				} else if (_this.id == 5) {
+					data = {
+						module: "Purchase",
+						propName: "SettlementType"
 					}
 				}
-
+				data.propValue = item;
 				if (!_this.revamp) {
 					$postCustomprop(data).then(res => {
 						_this.getData();
 					});
-
-
 				} else {
 					$putCustomprop(_this.simple.id, data).then(res => {
 						_this.getData();
 					});
-
-
 				}
-
 			},
 			// 删除
 			delUnit() {
@@ -118,10 +134,15 @@
 			checked(val) {
 				if (this.id == 1) {
 					this.$api.prePage().$data.unit = val;
-				} else {
+				} else if (this.id == 2) {
 					this.$api.prePage().$data.contactStatus = val;
+				} else if (this.id == 3) {
+					this.$api.prePage().$data.payType = val;
+				} else if (this.id == 4) {
+					this.$api.prePage().$data.account = val;
+				} else if (this.id == 5) {
+					this.$api.prePage().$data.appoint.settlementMode = val;
 				}
-
 				setTimeout(() => {
 					this.$navto.navBack();
 				}, 500)
@@ -129,11 +150,11 @@
 			// 弹窗
 			append(top) {
 				if (top == 1) {
-					this.unitTitle = "添加单位"
+					this.unitTitle = "添加"
 				} else {
 					this.content = this.simple.propValue;
 					this.revamp = true
-					this.unitTitle = "修改单位"
+					this.unitTitle = "修改"
 				}
 				if (this.isShow) {
 					this.simple = {};

@@ -17,7 +17,7 @@ function $putCategory(id,data) {
 
 // 类目删除
 function $delCategory(id) {
-	return request.del("prodvat/" + id);
+	return request.delete("prodvat/" + id);
 }
 
 

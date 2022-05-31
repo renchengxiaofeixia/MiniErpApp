@@ -5,24 +5,26 @@
 		</view>
 
 		<block v-for="(item,index) in list" :key="index">
-			<view class="goods-flex back">
-				<view class="">
-					<text>{{item.prodName}}</text>
-					<text class="gray">({{item.prodModel}})</text>
+			<view class="" @click="$navto.navto('pages/details/product',{id:item.id})" hover-class="checkActive">
+				<view class="goods-flex back">
+					<view class="">
+						<text>{{item.prodName}}</text>
+						<text class="gray">({{item.prodModel}})</text>
+					</view>
+					<view class="">
+						￥{{item.money}}
+					</view>
 				</view>
-				<view class="">
-					￥{{item.money}}
+				<view class="come gray back">
+					{{item.prodNo}}
 				</view>
-			</view>
-			<view class="come gray back">
-				{{item.prodNo}}
-			</view>
-			<view class="goods-flex" style="padding-bottom: 14rpx; border-bottom: 1rpx solid #ccc;">
-				<view class="gray">
-					￥{{item.unitPrice}} x {{item.quantity}}件
-				</view>
-				<view class="gray" v-if="item.receiverStatus">
-					{{item.receiverStatus}}
+				<view class="goods-flex" style="padding-bottom: 14rpx; border-bottom: 1rpx solid #ccc;">
+					<view class="gray">
+						￥{{item.unitPrice}} x {{item.quantity}}件
+					</view>
+					<view class="gray" v-if="item.receiverStatus">
+						{{item.receiverStatus}}
+					</view>
 				</view>
 			</view>
 		</block>

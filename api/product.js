@@ -7,7 +7,7 @@ function $getProduct(data) {
 
 // 删除物品
 function $delProduct(id) {
-	return request.del('prod/' + id);
+	return request.delete('prod/' + id);
 }
 
 // 添加物品

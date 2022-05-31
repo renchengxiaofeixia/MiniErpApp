@@ -25,7 +25,7 @@ function $postStorage(data) {
 
 // 入库删除
 function $delStorage(id) {
-	return request.del('enterwarehouse/' + id);
+	return request.delete('enterwarehouse/' + id);
 }
 
 // 入库审核

@@ -26,16 +26,37 @@
 
 		<linkman :list="supplierContact"></linkman>
 
-		<!-- <view class="table">
+
+		<productMessage title="采购物品" :list="goodsList"></productMessage>
+
+		<view class="table">
 			<view class="goods-flex shove figure">
 				<view class="">
 					付款
 				</view>
 				<view class="green">
-					￥100
+					￥{{paymentTotalPrice}}
 				</view>
 			</view>
-		</view> -->
+
+			<block v-for="(item,index) in paymentList" :key="index">
+				<view class="goods-flex payment" @click="$navto.navto('pages/details/payment',{id:item.id})">
+					<view class="gray">
+						<view class="">
+							{{item.paymentDate}}
+						</view>
+						<view class="">
+							{{item.remarks}}
+						</view>
+					</view>
+					<view class="">
+						<view class="">
+							￥{{item.amount}}
+						</view>
+					</view>
+				</view>
+			</block>
+		</view>
 
 		<view class="table">
 			<pulldown headline="相关约定" size="32rpx" detail="详细" :switch="false">
@@ -67,10 +88,6 @@
 			</pulldown>
 		</view> -->
 
-		<productMessage title="采购物品" :list="goodsList"></productMessage>
-
-
-
 		<operator :list="operation"></operator>
 
 		<copyreader :show="compileShow" @close="handleClose()">
@@ -88,7 +105,8 @@
 			<view class="operation" hover-class="checkActive" @click="navStorage()">
 				入库
 			</view>
-			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/addend/payment')">
+			<view class="operation" hover-class="checkActive"
+				@click="$navto.navto('pages/plusForm/addPayment',{num:purchase.purchaseNo,name:supplierContact.name })">
 				付款
 			</view>
 			<view class="operation" hover-class="checkActive" @click="checkPurchase" v-if="!purchase.isAudit">
@@ -108,7 +126,8 @@
 		$getProdinfos,
 		$delPurchases,
 		$auditPurchases,
-		$unauditPurchases
+		$unauditPurchases,
+		$getPayment
 	} = require('@/api/purchase.js'); //采购
 	import headerTab from '@/components/headerTab/index.vue';
 	import pulldown from '@/components/pulldown.vue';
@@ -136,6 +155,8 @@
 				supplierContact: {}, //供应商联系
 				operation: {}, //操作日记
 				goodsList: [], //物品数据
+				paymentList: [], //付款列表
+				paymentTotalPrice: 0, //付款总价 
 
 
 			}
@@ -146,6 +167,7 @@
 		onShow() {
 			this.getData();
 			this.goodsData()
+			this.paymentData();
 		},
 		methods: {
 			async getData() {
@@ -174,15 +196,24 @@
 					_this.totalPrice += e.money;
 				})
 			},
+			async paymentData() {
+				let _this = this;
+				let res = await $getPayment(_this.id);
+				_this.paymentList = res.data;
+				_this.paymentList.forEach(e => {
+					_this.paymentTotalPrice += e.amount;
+				})
+			},
 			// 删除
 			purchaseDel() {
 				let _this = this;
 				_this.$api.showModal('你要确定要删除该采购订单吗?').then(() => {
-					$delPurchases(_this.id);
-					_this.$api.msg('删除成功！');
-					setTimeout(function() {
-						_this.$navto.navtab('pages/order/index')
-					}, 500)
+					$delPurchases(_this.id).then(res => {
+						_this.$api.msg('删除成功！');
+						setTimeout(function() {
+							_this.$navto.navtab('pages/order/index')
+						}, 500)
+					})
 				});
 
 			},
@@ -252,6 +283,17 @@
 
 	.figure {
 		font-size: 32rpx;
+		border-bottom: 1rpx solid #ccc;
+	}
+
+	.payment {
+		padding: 20rpx 30rpx;
+		border-bottom: 1rpx solid #ccc;
+		font-size: 28rpx;
+
+		&:last-child {
+			border-bottom: none;
+		}
 	}
 
 	.phone {

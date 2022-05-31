@@ -39,7 +39,7 @@ const showModal = (content = "", title = '提示') => {
 				if (res.confirm) {
 					resolve();
 				} else if (res.cancel) {
-					reject()
+				
 				}
 			}
 		});

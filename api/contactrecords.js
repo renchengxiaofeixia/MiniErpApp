@@ -7,7 +7,7 @@ function $getContactrecords(id) {
 
 //添加联系
 function $postContactrecords(data) {
-	return request.post('contactrecords/',data);
+	return request.post('contactrecords',data);
 }
 
 

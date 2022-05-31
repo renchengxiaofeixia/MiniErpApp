@@ -58,6 +58,7 @@
 		},
 		data() {
 			return {
+				id: "",
 				customerNo: "",
 				nextContactTime: this.$api.dateTime("yyyy-MM-dd"),
 				contactTime: this.$api.dateTime("yyyy-MM-dd"),
@@ -67,6 +68,7 @@
 		},
 		onLoad(e) {
 			this.customerNo = decodeURIComponent(e.name);
+			this.id = e.id;
 		},
 		methods: {
 			linkmanBnt() {

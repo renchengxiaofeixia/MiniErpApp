@@ -22,7 +22,7 @@
 		</view>
 
 		<view class="table">
-			<view class="from from-new" @click="$navto.navto('pages/address/storage',{header:'跟进状态',id:2})">
+			<view class="from from-new" @click="$navto.navto('pages/conserve/storage',{header:'跟进状态',id:2})">
 				<text class="title">跟进状态</text>
 				<text class="fill gray" v-if="contactStatus == ''">选择跟进状态</text>
 				<text class="fill" v-else>{{contactStatus}}</text>

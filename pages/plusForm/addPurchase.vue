@@ -22,7 +22,7 @@
 				<text class="iconfont icon-right-1-copy"></text>
 			</view>
 
-			<view class="from from-new" @click="$navto.navto('pages/address/choiceCargo',{id:2,headline:'选择供应商'})">
+			<view class="from from-new" @click="$navto.navto('pages/conserve/choiceCargo',{id:2,headline:'选择供应商'})">
 				<text class="title">供应商</text>
 				<text class="fill">
 					<text v-if="supplier.supplierName">{{supplier.supplierName}}</text>
@@ -39,9 +39,12 @@
 				相关约定
 			</view>
 			<view class="table product">
-				<view class="from from-new">
+				<view class="from from-new" @click="$navto.navto('pages/conserve/storage',{header:'选择结算方式',id:5})">
 					<text class="title">结算方式</text>
-					<input type="text" placeholder="结算方式" class="fill" v-model="appoint.settlementMode">
+					<view class="fill">
+						<text v-if="appoint.settlementMode">{{appoint.settlementMode}}</text>
+						<text v-else class="gray">结算方式</text>
+					</view>
 					<text class="iconfont icon-right-1-copy"></text>
 				</view>
 				<view class="from from-new">
@@ -184,7 +187,7 @@
 						...item
 					})
 				});
-				data.prodInfoDtos = _this.goods;
+				data.prodInfoDtos = goods;
 
 				if (_this.type == 1) {
 					let time = await $getPurchasesId(_this.id);

@@ -7,7 +7,7 @@ function $getSupplier(data) {
 
 // 删除供应商
 function $delSupplier(id) {
-	return request.del('supplier/' + id);
+	return request.delete('supplier/' + id);
 }
 
 // 供应商详情

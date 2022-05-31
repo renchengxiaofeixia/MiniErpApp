@@ -13,13 +13,13 @@
 		</pulldown>
 
 		<view class="table" v-if="indexes == 1">
-			<view class="from from-new" @click="$navto.navto('pages/address/storage',{title:'选择领用部门',id:1})">
+			<view class="from from-new" @click="$navto.navto('pages/conserve/storage',{title:'选择领用部门',id:1})">
 				<text class="title">领用部门</text>
 				<text class="fill gray">选择领用部门</text>
 				<text class="iconfont icon-right-1-copy"></text>
 			</view>
 
-			<view class="from from-new" @click="$navto.navto('pages/address/storage',{title:'选择领用人',id:1})">
+			<view class="from from-new" @click="$navto.navto('pages/conserve/storage',{title:'选择领用人',id:1})">
 				<text class="title">领用人</text>
 				<text class="fill gray">选择领用人</text>
 				<text class="iconfont icon-right-1-copy"></text>

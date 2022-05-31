@@ -21,12 +21,12 @@
 				<text class="title">品牌</text>
 				<input type="text" placeholder="填写品牌" class="fill" v-model="productBrand">
 			</view>
-			<view class="from from-new" @click="$navto.navto('pages/address/storage',{id:1,header:'选择单位'})">
+			<view class="from from-new" @click="$navto.navto('pages/conserve/storage',{id:1,header:'选择单位'})">
 				<text class="title">单位</text>
 				<text class="fill">{{unit}}</text>
 				<text class="iconfont icon-right-1-copy"></text>
 			</view>
-			<view class="from from-new" @click="$navto.navto('pages/address/category')">
+			<view class="from from-new" @click="$navto.navto('pages/conserve/category')">
 				<text class="title">类目</text>
 				<text class="fill">{{catCode}}</text>
 				<text class="iconfont icon-right-1-copy"></text>

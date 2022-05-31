@@ -1,14 +1,23 @@
 <template>
-	<view>
-		<headerTab title="新建到票"></headerTab>
+	<view class="storage">
+		<headerTab title="选择地址"></headerTab>
 	</view>
 </template>
 
 <script>
+	let {
+		$postWarehouse,
+		$getWarehouse,
+		$putWarehouse,
+		$delWarehouse
+	} = require('@/api/warehouse.js');
+
 	import headerTab from '@/components/headerTab/index.vue';
+
 	export default {
 		components: {
-			headerTab
+			headerTab,
+
 		},
 		data() {
 			return {
@@ -19,7 +28,7 @@
 	
 		},
 		methods: {
-	
+
 		}
 	}
 </script>

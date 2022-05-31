@@ -3,7 +3,7 @@
 		<view class="headline option-gooods">
 			<text>选择物品</text>
 			<view class="icon bg-green" v-if="hide"
-				@click="$navto.navto('pages/address/choiceCargo',{id:1,headline:'选择物品'})">
+				@click="$navto.navto('pages/conserve/choiceCargo',{id:1,headline:'选择物品'})">
 				<text class="icon-tianjia iconfont"></text>
 				<text class="">添加</text>
 			</view>

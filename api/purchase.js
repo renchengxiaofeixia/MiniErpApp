@@ -7,7 +7,7 @@ function $getPurchases() {
 
 //删除采购
 function $delPurchases(id) {
-	return request.del('purchase/' + id);
+	return request.delete('purchase/' + id);
 }
 
 //采购详情
@@ -40,6 +40,31 @@ function $unauditPurchases(id) {
 	return request.put('purchase/unaudit/' + id);
 }
 
+// 添加付款
+function $postPayment(data) {
+	return request.post('purchase/pay', data);
+}
+
+// 付款列表
+function $getPayment(id) {
+	return request.get('purchase/pays/' + id);
+}
+
+// 付款详情
+function $getPaymentId(id) {
+	return request.get('purchase/pay/' + id);
+}
+
+// 付款修改
+function $putPayment(id,data) {
+	return request.put('purchase/pay/' + id,data);
+}
+
+// 付款删除
+function $delPayment(id) {
+	return request.delete('purchase/pay/' + id);
+}
+
 module.exports = {
 	$getPurchases,
 	$delPurchases,
@@ -48,5 +73,11 @@ module.exports = {
 	$putPurchases,
 	$postPurchases,
 	$auditPurchases,
-	$unauditPurchases
+	$unauditPurchases,
+	$postPayment,
+	$getPayment,
+	$getPaymentId,
+	$putPayment,
+	$delPayment
+
 }

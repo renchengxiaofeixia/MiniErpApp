@@ -285,7 +285,7 @@
 					this.$api.msg('禁止选择供应商！');
 					return
 				}
-				this.$navto.navto('pages/address/choiceCargo', {
+				this.$navto.navto('pages/conserve/choiceCargo', {
 					id: 2,
 					headline: '选择供应商'
 				})

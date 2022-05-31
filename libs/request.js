@@ -1,23 +1,21 @@
-
-
 const baseUrl = 'http://192.168.110.187:30008/';
 
-const request = (options = {}) => {
+export default function request(url, method, data, header) {
 	// options.header = {
 	// 	"Content-Type": "application/x-www-form-urlencoded",
 	// }
 	const token = uni.getStorageSync('token');
 	if (token) {
-		options.header = {
+		header = {
 			'Authorization': 'Bearer ' + token
 		}
 	}
 	return new Promise((resolve, reject) => {
 		uni.request({
-			url: baseUrl + options.url || '',
-			method: options.type || 'GET',
-			data: options.data || {},
-			header: options.header || {}
+			url: baseUrl + url || '',
+			method: method || 'GET',
+			data: data || {},
+			header: header || {}
 		}).then(data => {
 			let [err, res] = data;
 			// console.log(data)
@@ -34,40 +32,6 @@ const request = (options = {}) => {
 	});
 }
 
-const get = (url, data, options = {}) => {
-	options.type = 'GET';
-	options.data = data;
-	options.url = url;
-	return request(options)
-}
-
-const post = (url, data, options = {}) => {
-	options.type = 'POST';
-	options.data = data;
-	options.url = url;
-
-	return request(options)
-}
-
-const put = (url, data, options = {}) => {
-	options.type = 'PUT';
-	options.data = data;
-	options.url = url;
-
-	return request(options)
-}
-
-const del = (url, data, options = {}) => {
-	options.type = 'DELETE';
-	options.data = data;
-	options.url = url;
-
-	return request(options)
-}
-export default {
-	request,
-	get,
-	post,
-	put,
-	del
-}
+['get', 'post', 'put', 'delete'].forEach((method) => {
+	request[method] = (url, data, opt) => request(url, method, data, opt || {})
+});
