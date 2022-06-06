@@ -66,7 +66,10 @@
 		$putPurchases,
 		$postPurchases
 	} = require('@/api/purchase.js'); //采购
+	let {
+		$getOrderGoods
 
+	} = require('@/api/market.js'); //销售
 	import headerTab from '@/components/headerTab/index.vue';
 	import selectGoods from "@/components/selectGoods.vue"
 	import footerBtn from '@/components/footerBtn.vue';
@@ -116,9 +119,21 @@
 
 				_this.updatedTime = new Date(res.data.updatedTime).valueOf();
 
-				//物品
+				//采购物品
 				let prodinfos = await $getProdinfos(_this.id);
 				_this.productList = prodinfos.data;
+				_this.productList.forEach(item => {
+					let price = Number(item.unitPrice) * item.quantity;
+					item.num = item.quantity;
+					item.purchasePrice = item.unitPrice;
+					item.newRemarks = item.remarks;
+					item.totalPrice = price.toFixed(2);
+				})
+
+			} else if (_this.type == 3) {
+				// 销售物品
+				let order = await $getOrderGoods(_this.id);
+				_this.productList = order.data;
 				_this.productList.forEach(item => {
 					let price = Number(item.unitPrice) * item.quantity;
 					item.num = item.quantity;

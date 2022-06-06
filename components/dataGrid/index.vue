@@ -19,7 +19,8 @@
 									<block v-if="tab == 1">{{item.prodName}} <text class="model"
 											v-if="item.prodModel">({{item.prodModel}})</text> </block>
 									<block v-if="tab == 2 || tab == 4 || tab==6">{{item.supplierName}}</block>
-									<block v-if="tab == 3">{{item.customerNo}}</block>
+									<block v-if="tab == 3 || tab == 5">{{item.customerNo}}</block>
+
 									<!-- <block>李三</block>
 								<text class="gray shift">调拨到</text>
 								<block>李三</block> -->
@@ -28,9 +29,10 @@
 									<text>0 </text>
 									<text>{{item.unit}}</text>
 								</view>
-								<view class="green" v-if="tab == 4 || tab == 6">
+								<view class="green" v-if="tab == 4 || tab == 5 ||tab == 6">
 									￥{{item.aggregateAmount}}
 								</view>
+
 							</view>
 							<view class="goods-flex gray">
 								<view>
@@ -46,13 +48,16 @@
 											<text>{{item.mobile}}</text>
 										</view>
 									</block>
-									<view class="" v-if="tab == 4">
+									<view v-if="tab == 4">
 										{{item.purchaseNo}}
 									</view>
-									<view class="" v-if="" v-if="tab == 6">
+									<view v-if="tab == 5">
+										{{item.orderNo}}
+									</view>
+									<view v-if="tab == 6">
 										{{item.enterWarehouseNo}}
 									</view>
-									<view class="" v-if="" v-if="tab == 4 || tab == 6">
+									<view v-if="tab == 4 || tab == 5 || tab == 6">
 										{{item.prodNos}}
 									</view>
 								</view>
@@ -68,6 +73,9 @@
 								</view>
 								<view class="storage" v-if="tab == 4">
 									{{item.purchaseStatus}}
+								</view>
+								<view class="storage" v-if="tab == 5">
+									{{item.orderStatus}}
 								</view>
 								<label class="radio" v-if="radio">
 									<radio :value="JSON.stringify(item)" />
@@ -86,11 +94,17 @@
 					</view>
 				</scroll-view>
 			</radio-group>
+			<view class="empty-log" v-if="list.length == 0">
+				<image src="../../static/image/nodata.png" mode="aspectFill"></image>
+				<text v-if="userLoginFlag">无相关信息，请去新建！</text>
+				<text v-else @click="$navto.navto('pages/user/login')" class="isLog">去登录 ！</text>
+			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	let app = getApp();
 	export default {
 		props: {
 			tab: {
@@ -128,7 +142,7 @@
 			}
 		},
 		created() {
-
+			this.userLoginFlag = app.globalData.userLogin;
 		},
 		methods: {
 			logoTime() {

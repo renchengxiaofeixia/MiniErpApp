@@ -40,7 +40,8 @@
 			</view>
 
 			<block v-for="(item,index) in paymentList" :key="index">
-				<view class="goods-flex payment" @click="$navto.navto('pages/details/payment',{id:item.id})">
+				<view class="goods-flex payment" hover-class="checkActive"
+					@click="$navto.navto('pages/details/payment',{id:item.id})">
 					<view class="gray">
 						<view class="">
 							{{item.paymentDate}}

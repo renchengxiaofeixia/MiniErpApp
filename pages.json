@@ -40,6 +40,30 @@
 		"root": "pages/plusForm",
 		"name": "plusForm",
 		"pages": [{
+			"path": "addAddress",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		},{
+			"path": "addProceeds",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}, {
 			"path": "addGoods",
 			"style": {
 				"navigationStyle": "custom",
@@ -164,6 +188,18 @@
 		"root": "pages/details",
 		"name": "details",
 		"pages": [{
+			"path": "proceeds",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}, {
 			"path": "product",
 			"style": {
 				"navigationStyle": "custom",
@@ -336,7 +372,7 @@
 				}
 			}
 		}, {
-			"path": "address",
+			"path": "salesman",
 			"style": {
 				"navigationStyle": "custom",
 				"app-plus": {

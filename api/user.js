@@ -10,7 +10,25 @@ function $register(data) {
 	return request.post("signup", data)
 }
 
+// 获取销售员
+function $getUsers() {
+	return request.get("users")
+}
+
+// 添加销售员
+function $postUsers(data) {
+	return request.post("user", data)
+}
+
+// 地址​
+function $getAddress(id) {
+	return request.get("area/" + id)
+}
+
 module.exports = {
 	$login,
-	$register
+	$register,
+	$getUsers,
+	$postUsers,
+	$getAddress
 }

@@ -139,6 +139,25 @@
 
 }
 
+/* 没有数据 */
+.empty-log {
+	width: 500rpx;
+	height: 500rpx;
+	margin: auto;
+	text-align: center;
+}
+
+.empty-log text {
+	font-size: 32rpx;
+	margin-top: 20rpx;
+}
+
+.empty-log .isLog {
+	font-size: 30rpx;
+	color: #1ba8fe;
+	border-bottom: 1rpx solid #1ba8fe;
+}
+
 /* 颜色 */
 .black {
 	color: #000;

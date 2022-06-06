@@ -7,7 +7,7 @@ function $postOrder(data) {
 
 // 销售列表
 function $getOrder() {
-	return request.get("order");
+	return request.get("orders");
 }
 // 销售详情
 function $getOrderId(id) {
@@ -23,11 +23,47 @@ function $delOrder(id) {
 	return request.delete("order/" + id);
 }
 
+// 销售物品
+function $getOrderGoods(id) {
+	return request.get("order/prodinfos/" + id);
+}
+
+// 添加收款  
+function $postPay(data) {
+	return request.post("order/pay", data);
+}
+
+// 收款列表  
+function $getPay(id) {
+	return request.get("order/pays/" + id);
+}
+
+// 收款详情  
+function $getPayId(id) {
+	return request.get("order/pay/" + id);
+}
+
+// 收款修改 
+function $putPay(id, data) {
+	return request.put("order/pay/" + id, data);
+}
+
+// 收款删除
+function $delPay(id) {
+	return request.delete("order/pay/" + id);
+}
+
 module.exports = {
 	$postOrder,
 	$getOrder,
 	$getOrderId,
 	$putOrder,
-	$delOrder
+	$delOrder,
+	$getOrderGoods,
+	$postPay,
+	$getPay,
+	$getPayId,
+	$putPay,
+	$delPay
 
 }

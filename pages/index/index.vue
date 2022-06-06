@@ -5,7 +5,7 @@
 				<button @click="login()" class="login-btn" hover-class='none'>
 					<text class="iconfont icon-31wode"></text>
 				</button>
-				<text class="header-text">采购订单</text>
+				<text class="header-text">首页</text>
 			</view>
 		</view>
 

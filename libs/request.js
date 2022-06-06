@@ -4,7 +4,7 @@ export default function request(url, method, data, header) {
 	// options.header = {
 	// 	"Content-Type": "application/x-www-form-urlencoded",
 	// }
-	const token = uni.getStorageSync('token');
+	const token = getApp().globalData.token;
 	if (token) {
 		header = {
 			'Authorization': 'Bearer ' + token
