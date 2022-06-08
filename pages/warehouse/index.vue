@@ -6,7 +6,8 @@
 		<view class="slide">
 			<block v-if="warehouse.id == 0">
 				<scroll-view class="scroll-roll" scroll-y>
-					<dataGrid url="pages/details/storage" :list="storageList" tab="6">
+					<dataGrid url="pages/details/storage" :list="storageList" tab="6" @drop="dropStorage"
+						@amend="amendStorage">
 					</dataGrid>
 				</scroll-view>
 			</block>
@@ -19,6 +20,9 @@
 			</block>
 			<block v-if="warehouse.id == 2">
 				<scroll-view class="scroll-roll" scroll-y>
+					<dataGrid url="pages/details/inventory" :list="inventoryList" tab="8" @drop="dropInventory"
+						@amend="amendInventory">
+					</dataGrid>
 				</scroll-view>
 			</block>
 			<block v-if="warehouse.id == 3">
@@ -58,8 +62,14 @@
 
 <script>
 	let {
-		$getStorage
+		$getStorage,
+		$delStorage
 	} = require('@/api/storage.js'); //采购
+
+	let {
+		$getCheck,
+		$delCheck
+	} = require('@/api/inventory.js'); //盘点
 	import headerTab from '@/components/headerTab/index.vue';
 	import searchbox from '@/components/searchbox/index.vue';
 	import dataGrid from '@/components/dataGrid/index.vue';
@@ -91,6 +101,7 @@
 					id: 1
 				}, {
 					text: '盘点',
+					url: 'pages/plusForm/addInventory',
 					id: 2
 				}, {
 					text: '调拨',
@@ -105,11 +116,22 @@
 				},
 				filterShow: 'none',
 				storageList: [], //入库
+				deliveryList: [], //出库
+				inventoryList: [], //盘点
+				allotList: [], //调拨
 
 			}
 		},
 		onLoad() {
+
+		},
+		onShow() {
+			this.storageList = [];
+			this.deliveryList = [];
+			this.inventoryList = [];
+			this.allotList = [];
 			this.storageData();
+			this.inventoryData();
 		},
 		methods: {
 			// 入库数据
@@ -118,6 +140,54 @@
 				let res = await $getStorage();
 				_this.storageList.push(...res.data.data);
 
+			},
+			// 出库数据
+			async deliveryData() {
+
+
+			},
+			// 盘点数据
+			async inventoryData() {
+				let _this = this;
+				let res = await $getCheck();
+				_this.inventoryList.push(...res.data.data);
+
+			},
+			// 删除入库
+			dropStorage(id, index) {
+				let _this = this;
+				_this.$api.showModal('你要确定要删除该盘点吗?').then(() => {
+					$delStorage(id).then(res => {
+						_this.$api.msg('删除成功！');
+						_this.storageList.splice(index, 1)
+					})
+				});
+			},
+			// 新建入库
+			amendStorage(id) {
+				this.$navto.navto('pages/plusForm/addStorage', {
+					id: id,
+					header: '修改入库单',
+					type: 1
+				})
+			},
+			// 删除盘点
+			dropInventory(id, index) {
+				let _this = this;
+				_this.$api.showModal('你要确定要删除该盘点吗?').then(() => {
+					$delCheck(id).then(res => {
+						_this.$api.msg('删除成功！');
+						_this.inventoryList.splice(index, 1)
+					})
+				});
+			},
+			// 新建盘点
+			amendInventory(id) {
+				this.$navto.navto('pages/plusForm/addInventory', {
+					id: id,
+					header: '修改盘点单',
+					type: 1
+				})
 			},
 			change(item) {
 				this.warehouse = item;

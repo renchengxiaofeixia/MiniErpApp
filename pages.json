@@ -40,6 +40,18 @@
 		"root": "pages/plusForm",
 		"name": "plusForm",
 		"pages": [{
+			"path": "addInventory",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}, {
 			"path": "addAddress",
 			"style": {
 				"navigationStyle": "custom",
@@ -51,7 +63,7 @@
 					// #endif
 				}
 			}
-		},{
+		}, {
 			"path": "addProceeds",
 			"style": {
 				"navigationStyle": "custom",
@@ -188,6 +200,18 @@
 		"root": "pages/details",
 		"name": "details",
 		"pages": [{
+			"path": "inventory",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}, {
 			"path": "proceeds",
 			"style": {
 				"navigationStyle": "custom",

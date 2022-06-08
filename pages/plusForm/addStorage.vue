@@ -297,7 +297,7 @@
 			},
 			// 入库日期选择
 			selectStorage(date) {
-				this.purchaseDate = date;
+				this.storageDate = date;
 			},
 			accept(item) {
 				let goods = [];

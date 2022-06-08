@@ -29,6 +29,7 @@
 </template>
 
 <script>
+	let  app = getApp();
 	export default {
 		props: {
 			url: String,
@@ -60,7 +61,8 @@
 			},
 			navto() {
 				this.$api.isLogin();
-				if (this.$api.token) {
+				console.log(app);
+				if (app.globalData.userLogin) {
 					this.$navto.navto(this.url);
 				}
 

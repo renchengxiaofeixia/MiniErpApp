@@ -20,7 +20,7 @@
 											v-if="item.prodModel">({{item.prodModel}})</text> </block>
 									<block v-if="tab == 2 || tab == 4 || tab==6">{{item.supplierName}}</block>
 									<block v-if="tab == 3 || tab == 5">{{item.customerNo}}</block>
-
+									<block v-if="tab == 8">{{item.ourContacterName}}</block>
 									<!-- <block>李三</block>
 								<text class="gray shift">调拨到</text>
 								<block>李三</block> -->
@@ -60,6 +60,14 @@
 									<view v-if="tab == 4 || tab == 5 || tab == 6">
 										{{item.prodNos}}
 									</view>
+									<block v-if="tab == 8">
+										<view>
+											{{item.checkNo}}
+										</view>
+										<view>
+											{{item.prodNos}}
+										</view>
+									</block>
 								</view>
 								<view class="supply-img" v-if="tab == 2 && !radio"
 									@click.stop="$api.dialPhone(item.mobile)">
@@ -94,6 +102,10 @@
 					</view>
 				</scroll-view>
 			</radio-group>
+			<block v-if="list.length !=0">
+				<uni-load-more :status="status" IconType="auto" :content-text="contentText" />
+			</block>
+
 			<view class="empty-log" v-if="list.length == 0">
 				<image src="../../static/image/nodata.png" mode="aspectFill"></image>
 				<text v-if="userLoginFlag">无相关信息，请去新建！</text>
@@ -126,6 +138,10 @@
 			radio: { //是否开启选择
 				type: Boolean,
 				default: false,
+			},
+			status: { //下拉加载
+				type: String,
+				default: ''
 			}
 		},
 		data() {
@@ -133,6 +149,12 @@
 				touch: false,
 				content: [],
 				current: 0,
+				userLoginFlag: false,
+				contentText: {
+					contentdown: '下拉加载',
+					contentrefresh: '加载中',
+					contentnomore: '没有更多'
+				}
 
 			};
 		},

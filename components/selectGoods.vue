@@ -2,8 +2,7 @@
 	<view>
 		<view class="headline option-gooods">
 			<text>选择物品</text>
-			<view class="icon bg-green" v-if="hide"
-				@click="$navto.navto('pages/conserve/choiceCargo',{id:1,headline:'选择物品'})">
+			<view class="icon bg-green" @click="$navto.navto('pages/conserve/choiceCargo',{id:ids,headline:'选择物品'})">
 				<text class="icon-tianjia iconfont"></text>
 				<text class="">添加</text>
 			</view>
@@ -19,7 +18,7 @@
 							<text class="gray">({{item.prodModel}})</text>
 						</view>
 
-						<view class="product-price green">
+						<view class="product-price green" v-if="item.totalPrice">
 							￥{{item.totalPrice}}
 						</view>
 					</view>
@@ -27,7 +26,7 @@
 						{{item.prodNo}}
 					</view>
 				</view>
-				<view class="goods-flex product-back product-show">
+				<view class="goods-flex product-back product-show" v-if="item.purchasePrice">
 					<view class="product-title">
 						单价
 					</view>
@@ -48,9 +47,14 @@
 						<block v-else>
 							<uni-number-box :min="1" v-model="item.quantity" @change="changeValue(item)"
 								:max="item.notReceiverQuantity" />
-							<text v-if="item.notReceiverQuantity == item.quantity"
-								style="margin-left: 10upx; font-size: 24upx;"
-								class="red">还剩{{item.notReceiverQuantity}}可入库</text>
+							<text style="margin-left: 10upx; font-size: 24upx;" class="red">
+								<block v-if="item.notReceiverQuantity == item.quantity">
+									还剩{{item.notReceiverQuantity}}可入库
+								</block>
+								<block v-if="item.nowQuantity == item.quantity">
+									库存：{{item.nowQuantity}}
+								</block>
+							</text>
 						</block>
 					</view>
 				</view>
@@ -70,6 +74,10 @@
 <script>
 	export default {
 		props: {
+			ids: {
+				type: Number,
+				default: 1
+			},
 			list: {
 				type: Array,
 				default: []
@@ -82,11 +90,6 @@
 		data() {
 			return {
 				productList: [],
-				appoint: {
-					settlementMode: '',
-					remarks: ""
-				},
-
 			};
 		},
 		watch: {

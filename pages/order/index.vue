@@ -122,6 +122,8 @@
 
 		},
 		onShow() {
+			this.purchaseList = [];
+			this.marketList = [];
 			this.purchaseData();
 			this.marketData();
 		},

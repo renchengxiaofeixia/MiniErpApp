@@ -1,9 +1,8 @@
-// 判断token是否存在
-const token = uni.getStorageSync('token') ? uni.getStorageSync('token') : ''
 
-// 判断用户是否登入或者登入是否过期
+// 判断用户是否登入
 const isLogin = () => {
-	if (token == '') {
+	const app = getApp();
+	if (!app.globalData.userLogin) {
 		uni.showToast({
 			title: '请登录',
 			icon: 'none',
@@ -39,7 +38,7 @@ const showModal = (content = "", title = '提示') => {
 				if (res.confirm) {
 					resolve();
 				} else if (res.cancel) {
-				
+
 				}
 			}
 		});
@@ -94,7 +93,6 @@ const dateTime = (time) => {
 
 export {
 	isLogin,
-	token,
 	msg,
 	dialPhone,
 	prePage,

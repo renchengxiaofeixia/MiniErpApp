@@ -7,29 +7,25 @@
 			<block v-if="first.id == 0">
 				<scroll-view class="scroll-roll" scroll-y @scrolltolower="productTolower">
 					<dataGrid url="pages/details/product" :list="productList" tab="1" @drop="dropProduct"
-						@amend="amendProduct">
+						@amend="amendProduct" :status="productStatus">
 					</dataGrid>
-					<uni-load-more :status="productStatus" IconType="auto" :content-text="contentText" />
 				</scroll-view>
 			</block>
 			<block v-if="first.id == 1">
 				<scroll-view class="scroll-roll" scroll-y @scrolltolower="supplierTolower">
 					<dataGrid url="pages/details/supplier" :list="supplierList" tab="2" @drop="dropSupplier"
-						@amend="amendSupplier">
+						@amend="amendSupplier" :status="supplierStatus">
 					</dataGrid>
-					<uni-load-more :status="supplierStatus" IconType="auto" :content-text="contentText" />
 				</scroll-view>
 			</block>
 			<block v-if="first.id == 2">
 				<scroll-view class="scroll-roll" scroll-y @scrolltolower="clientTolower">
 					<dataGrid url="pages/details/client" :list="clientList" tab="3" @drop="dropClient"
-						@amend="amendClient">
+						@amend="amendClient" :status="clientStatus">
 					</dataGrid>
-					<uni-load-more :status="clientStatus" IconType="auto" :content-text="contentText" />
 				</scroll-view>
 			</block>
 		</view>
-
 
 		<filtratePopup @close="openFilter()" :show="filterShow">
 			<view>
@@ -137,22 +133,19 @@
 				productStatus: 'more',
 				supplierStatus: 'more',
 				clientStatus: 'more',
-				contentText: {
-					contentdown: '下拉加载',
-					contentrefresh: '加载中',
-					contentnomore: '没有更多'
-				}
-
 
 			}
 		},
 		onLoad() {
+
+		},
+		onShow() {
+			this.productList = [];
+			this.supplierList = [];
+			this.clientList = [];
 			this.productData();
 			this.supplierData();
 			this.clientData();
-		},
-		onShow() {
-
 		},
 		mounted() {
 

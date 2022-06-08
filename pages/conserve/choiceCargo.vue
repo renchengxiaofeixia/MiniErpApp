@@ -7,30 +7,36 @@
 			<block v-if="id == 1">
 				<scroll-view class="scroll-roll" scroll-y @scrolltolower="productTolower">
 					<dataGrid :list="productList" :date="false" tab="1" :hide="false" :radio="true"
-						@radioChange="radioChange">
+						@radioChange="radioChange" :status="productStatus">
 					</dataGrid>
-					<uni-load-more :status="productStatus" IconType="auto" :content-text="contentText" />
 				</scroll-view>
 			</block>
 			<block v-if="id == 2">
 				<scroll-view class="scroll-roll" scroll-y @scrolltolower="supplierTolower">
 					<dataGrid :list="supplierList" :date="false" tab="2" :hide="false" :radio="true"
-						@radioChange="radioChange">
+						@radioChange="radioChange" :status="supplierStatus">
 					</dataGrid>
-					<uni-load-more :status="supplierStatus" IconType="auto" :content-text="contentText" />
 				</scroll-view>
 			</block>
 			<block v-if="id == 3">
 				<scroll-view class="scroll-roll" scroll-y @scrolltolower="clientTolower">
 					<dataGrid :list="clientList" tab="3" :date="false" :hide="false" :radio="true"
+						@radioChange="radioChange" :status="clientStatus">
+					</dataGrid>
+				</scroll-view>
+			</block>
+			<block v-if="id == 4">
+				<scroll-view class="scroll-roll" scroll-y>
+					<dataGrid :list="warehouseList" :date="false" tab="1" :hide="false" :radio="true"
 						@radioChange="radioChange">
 					</dataGrid>
-					<uni-load-more :status="clientStatus" IconType="auto" :content-text="contentText" />
 				</scroll-view>
 			</block>
 		</view>
+		<block v-if="id != 4">
+			<addOrder :url="location" top="70%"></addOrder>
+		</block>
 
-		<addOrder :url="location" top="70%"></addOrder>
 		<footerBtn @confirm="confirmBnt()"></footerBtn>
 	</view>
 </template>
@@ -47,6 +53,10 @@
 	let {
 		$getClient,
 	} = require('@/api/client.js'); //客户
+
+	let {
+		$getWarehouseList,
+	} = require('@/api/inventory.js'); //盘点库存
 	import headerTab from '@/components/headerTab/index.vue';
 	import searchbox from '@/components/searchbox/index.vue';
 	import dataGrid from '@/components/dataGrid/index.vue';
@@ -81,6 +91,8 @@
 				clientSize: 10, //客户页数量
 				clientNext: true, //客户是否也下页
 				clientPitch: {}, //客户选中
+				warehouseList: [], //库存数据
+				warehousePitch: {}, //库存选中
 				// 加载状态
 				productStatus: 'more',
 				supplierStatus: 'more',
@@ -106,11 +118,17 @@
 		},
 		onShow() {
 			if (this.id == 1) {
+				this.productList = [];
 				this.productData();
 			} else if (this.id == 2) {
+				this.supplierList = [];
 				this.supplierData();
 			} else if (this.id == 3) {
+				this.clientList = [];
 				this.clientData();
+			} else if (this.id == 4) {
+				this.warehouseList = [];
+				this.warehousetData();
 			}
 
 		},
@@ -158,6 +176,12 @@
 				}
 				_this.clientList.push(...res.data.data);
 
+			},
+			// 仓库数据
+			async warehousetData() {
+				let _this = this;
+				let res = await $getWarehouseList();
+				_this.warehouseList.push(...res.data);
 			},
 			// 物品下拉加载数据
 			productTolower(e) {
@@ -210,7 +234,12 @@
 					this.supplierPitch = val;
 				} else if (this.id == 3) {
 					this.clientPitch = val;
+				} else if (this.id == 4) {
+					val.quantity = 1;
+					val.newRemarks = "";
+					this.warehousePitch = val;
 				}
+
 			},
 			// 确定
 			confirmBnt() {
@@ -223,6 +252,9 @@
 
 				} else if (_this.id == 3) {
 					_this.$api.prePage().$data.client = _this.clientPitch;
+
+				} else if (_this.id == 4) {
+					_this.$api.prePage().$data.productList.push(_this.warehousePitch);
 
 				}
 				setTimeout(function() {

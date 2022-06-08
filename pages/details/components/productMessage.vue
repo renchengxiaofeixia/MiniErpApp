@@ -11,14 +11,17 @@
 						<text>{{item.prodName}}</text>
 						<text class="gray">({{item.prodModel}})</text>
 					</view>
-					<view class="">
+					<view class="" v-if="hide">
 						￥{{item.money}}
+					</view>
+					<view class="green" v-else>
+						库存: {{item.actualNum}}
 					</view>
 				</view>
 				<view class="come gray back">
 					{{item.prodNo}}
 				</view>
-				<view class="goods-flex" style="padding-bottom: 14rpx; border-bottom: 1rpx solid #ccc;">
+				<view class="goods-flex" style="padding-bottom: 14rpx; border-bottom: 1rpx solid #ccc;" v-if="hide">
 					<view class="gray">
 						￥{{item.unitPrice}} x {{item.quantity}}件
 					</view>
@@ -26,13 +29,17 @@
 						{{item.receiverStatus}}
 					</view>
 				</view>
+				<view class="goods-flex" v-else>
+					计件：{{item.systemNum}}
+				</view>
 			</view>
 		</block>
 
-		<view class="money">
+		<view class="money" v-if="hide">
 			<text class="total">合计：</text>
-			<text class="green">￥10000</text>
+			<text class="green">￥{{totalPrice}}</text>
 		</view>
+
 
 	</view>
 </template>
@@ -48,9 +55,22 @@
 				type: Array,
 				default: []
 			},
+			hide: {
+				type: Boolean,
+				default: true
+			}
 
 		},
-		watch: {},
+		watch: {
+			list: {
+				handler(item, index) {
+					item.forEach(e => {
+						this.totalPrice += e.totalPrice;
+					})
+				},
+				deep: true // 深度监听父组件传过来对象变化
+			}
+		},
 		data() {
 			return {
 				totalPrice: 0,

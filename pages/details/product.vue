@@ -45,10 +45,12 @@
 				<swiper-item>
 					<view class="swiper-item">
 						<view class="table">
-							<view class="from from-details">
-								<text class="title gray">物品图片</text>
-								<view class="fill">
-									选择图片
+							<view class="from">
+								<text class="title gray" style="padding: 10upx 0;">物品图片</text>
+								<view class="fill uploading">
+									<block v-for="(item,index) in list.prodImage" :key="index">
+										<image :src="item" mode="aspectFill"></image>
+									</block>
 								</view>
 							</view>
 							<view class="from from-details">
@@ -235,7 +237,7 @@
 						_this.$navto.navtab('pages/message/index')
 					}, 500)
 					_this.$api.msg('删除成功')
-					
+
 				});
 
 			},
