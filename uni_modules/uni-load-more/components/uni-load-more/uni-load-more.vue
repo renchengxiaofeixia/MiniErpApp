@@ -158,7 +158,8 @@
 		display: flex;
 		/* #endif */
 		flex-direction: row;
-		height: 40px;
+		height: 50px;
+		padding-bottom: 10px;
 		align-items: center;
 		justify-content: center;
 	}

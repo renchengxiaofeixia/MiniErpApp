@@ -3,34 +3,20 @@
 		<headerTab :scrollTab="scrollTab" @tabKey="change" :tab="order.id"></headerTab>
 		<searchbox @filter="openFilter()"></searchbox>
 
-
 		<view class="slide">
-			<swiper class="swiper" :current="order.id" @change="slidingBlock">
-				<swiper-item>
-					<view class="swiper-item">
-						<dataGrid url="pages/details/purchase" >
-							<button class="pinless" style="background-color: #ffb535;">
-								修改
-							</button>
-							<button class="pinless" style="background-color: #ff4622;">
-								删除
-							</button>
-						</dataGrid>
-					</view>
-				</swiper-item>
-				<swiper-item>
-					<view class="swiper-item">
-						<dataGrid url="pages/details/sell">
-							<button class="pinless" style="background-color: #ffb535;">
-								修改
-							</button>
-							<button class="pinless" style="background-color: #ff4622;">
-								删除
-							</button>
-						</dataGrid>
-					</view>
-				</swiper-item>
-			</swiper>
+			<block v-if="order.id == 0">
+				<scroll-view class="scroll-roll" scroll-y>
+					<dataGrid url="pages/details/purchase" :list="purchaseList" tab="4" @drop="dropPurchase"
+						@amend="amendPurchase">
+					</dataGrid>
+				</scroll-view>
+			</block>
+			<block v-if="order.id == 1">
+				<scroll-view class="scroll-roll" scroll-y>
+					<dataGrid url="pages/details/sell" :list="marketList" tab="5" @drop="dropSell" @amend="amendSell">
+					</dataGrid>
+				</scroll-view>
+			</block>
 		</view>
 
 		<filtratePopup @close="openFilter()" :show="filterShow">
@@ -78,13 +64,22 @@
 					<uni-datetime-picker v-model="range" type="daterange" @maskClick="maskClick" />
 				</view>
 			</view>
-			
+
 		</filtratePopup>
 		<addOrder :url="order.url"></addOrder>
 	</view>
 </template>
 
 <script>
+	let {
+		$getPurchases,
+		$delPurchases
+	} = require('@/api/purchase.js'); //采购
+
+	let {
+		$getOrder,
+		$delOrder
+	} = require('@/api/market.js'); //销售
 	import headerTab from '@/components/headerTab/index.vue';
 	import searchbox from '@/components/searchbox/index.vue';
 	import dataGrid from '@/components/dataGrid/index.vue';
@@ -118,13 +113,72 @@
 					url: "pages/plusForm/addPurchase",
 					id: 0
 				},
-				filterShow: 'none'
+				filterShow: 'none',
+				purchaseList: [], //采购数据
+				marketList: [], //销售数据
 			}
 		},
 		onLoad() {
 
 		},
+		onShow() {
+			this.purchaseList = [];
+			this.marketList = [];
+			this.purchaseData();
+			this.marketData();
+		},
 		methods: {
+			// 采购
+			async purchaseData() {
+				let _this = this;
+				let res = await $getPurchases();
+				_this.purchaseList.push(...res.data.data);
+
+			},
+			// 销售
+			async marketData() {
+				let _this = this;
+				let res = await $getOrder();
+				_this.marketList.push(...res.data.data);
+
+			},
+			// 删除采购
+			dropPurchase(id, index) {
+				let _this = this;
+				_this.$api.showModal('你要确定要删除采购订单吗?').then(() => {
+					$delPurchases(id).then(res => {
+						_this.purchaseList.splice(index, 1)
+						_this.$api.msg('删除成功！');
+					});
+
+				});
+			},
+			// 修改采购
+			amendPurchase(id) {
+				this.$navto.navto('pages/plusForm/addPurchase', {
+					id: id,
+					type: 1,
+					header: '修改采购订单'
+				})
+			},
+			// 删除销售
+			dropSell(id, index) {
+				let _this = this;
+				_this.$api.showModal('你要确定要删除销售订单吗?').then(() => {
+					$delOrder(id).then(res => {
+						_this.marketList.splice(index, 1)
+						_this.$api.msg('删除成功！');
+					});
+				});
+			},
+			// 修改销售
+			amendSell(id) {
+				this.$navto.navto('pages/plusForm/addMarket', {
+					id: id,
+					type: 1,
+					header: '修改销售订单'
+				})
+			},
 			openFilter() {
 				if (this.filterShow == 'none') {
 					this.filterShow = 'show';
@@ -137,14 +191,13 @@
 			},
 			change(item) {
 				this.order = item;
-			},
-			slidingBlock(e) {
-				this.order = this.scrollTab[e.detail.current];
-			},
+			}
 		}
 	}
 </script>
 
 <style lang="scss">
-	
+	page {
+		overflow: hidden;
+	}
 </style>

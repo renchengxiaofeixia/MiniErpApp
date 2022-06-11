@@ -1,10 +1,11 @@
 <template>
-	<view class="">
+	<view class="paddingBottom">
 		<headerTab :title="header"></headerTab>
 		<view class="table">
 			<view class="from from-new">
 				<text class="title">物品编号</text>
-				<input type="text" placeholder="填写编号,保存后不能修改 (必填)" class="fill" v-model="productSeries">
+				<input type="text" placeholder="填写编号,保存后不能修改 (必填)" class="fill" v-model="productSeries"
+					:disabled="type == 1">
 			</view>
 			<view class="from from-new">
 				<text class="title">物品名称</text>
@@ -14,18 +15,18 @@
 		<view class="table">
 			<view class="from from-new">
 				<text class="title">规格型号</text>
-				<input type="text" placeholder="填写品牌" class="fill" v-model="productType">
+				<input type="text" placeholder="填写型号" class="fill" v-model="productType">
 			</view>
 			<view class="from from-new">
 				<text class="title">品牌</text>
 				<input type="text" placeholder="填写品牌" class="fill" v-model="productBrand">
 			</view>
-			<view class="from from-new" @click="$navto.navto('pages/address/storage',{title:'选择单位',id:1})">
+			<view class="from from-new" @click="$navto.navto('pages/conserve/storage',{id:1,header:'选择单位'})">
 				<text class="title">单位</text>
 				<text class="fill">{{unit}}</text>
 				<text class="iconfont icon-right-1-copy"></text>
 			</view>
-			<view class="from from-new" @click="$navto.navto('pages/address/storage',{title:'选择类目',id:2})">
+			<view class="from from-new" @click="$navto.navto('pages/conserve/category')">
 				<text class="title">类目</text>
 				<text class="fill">{{catCode}}</text>
 				<text class="iconfont icon-right-1-copy"></text>
@@ -78,18 +79,23 @@
 			</view>
 		</view>
 
-		<view class="newBtn">
-			<button @click="addProducts()">确定</button>
-		</view>
-
+		<footerBtn @confirm="addProducts()"></footerBtn>
 	</view>
 </template>
 
 <script>
+	let {
+		$postProduct,
+		$getProductId,
+		$putProduct
+	} = require('@/api/product.js'); //物品
+
 	import headerTab from '@/components/headerTab/index.vue';
+	import footerBtn from '@/components/footerBtn.vue';
 	export default {
 		components: {
-			headerTab
+			headerTab,
+			footerBtn
 		},
 		data() {
 			return {
@@ -109,44 +115,47 @@
 				catCode: '其他', //类目
 				prodImage: [], //上传图片
 
+				updatedTime: '', //记录
+
 			}
 		},
-		onLoad(option) {
+		async onLoad(option) {
 			let _this = this;
 			_this.id = option.id ? option.id : '';
 			_this.type = option.type ? option.type : 0;
 			_this.header = option.header ? decodeURIComponent(option.header) : '新建物品';
 
-			if (_this.id != '') {
-				_this.$request.get('prod/' + _this.id).then(res => {
-					let data = res.data;
-					_this.productSeries = data.prodNo;
-					_this.productName = data.prodCustomNo;
-					_this.productName = data.prodName;
-					_this.unit = data.unit;
-					_this.productType = data.prodModel;
-					_this.purchasePrice = data.purchasePrice;
-					_this.salePrice = data.salePrice;
-					_this.remarks = data.remarks;
-					_this.catCode = data.catCode;
-					// _this.prodImage = data.prodImage;
-					_this.productBrand = data.prodBrand;
-					_this.inventoryFloor = data.upperQuantity;
-					_this.inventoryUpper = data.lowerQuantity;
-				})
+			if (_this.type == 1) {
+				let res = await $getProductId(_this.id);
+				let data = res.data;
+				_this.productSeries = data.prodNo;
+				_this.productName = data.prodCustomNo;
+				_this.productName = data.prodName;
+				_this.unit = data.unit;
+				_this.productType = data.prodModel;
+				_this.purchasePrice = data.purchasePrice;
+				_this.salePrice = data.salePrice;
+				_this.remarks = data.remarks;
+				_this.catCode = data.catCode;
+				_this.prodImage = data.prodImage;
+				_this.productBrand = data.prodBrand;
+				_this.inventoryFloor = data.upperQuantity;
+				_this.inventoryUpper = data.lowerQuantity;
+				_this.updatedTime = new Date(data.updatedTime).valueOf();
 			}
 		},
 		methods: {
-			addProducts() {
+			async addProducts() {
 				let _this = this;
-				if (_this.productSeries == "") {
+				if (!_this.productSeries) {
 					_this.$api.msg('物品编号不能为空');
 					return
 				}
-				if (_this.productName == "") {
+				if (!_this.productName) {
 					_this.$api.msg('物品名称不能为空');
 					return
 				}
+
 				let data = {
 					prodNo: _this.productSeries,
 					prodCustomNo: _this.productName,
@@ -157,25 +166,39 @@
 					salePrice: _this.salePrice,
 					remarks: _this.remarks,
 					catCode: _this.catCode,
-					// prodImage: _this.prodImage,
+					prodImage: _this.prodImage,
 					prodBrand: _this.productBrand,
 					upperQuantity: _this.inventoryFloor,
 					lowerQuantity: _this.inventoryUpper
 				}
 				if (_this.type == 1) {
-					_this.$request.put('prod/' + _this.id, data).then(res => {
+					let time = await $getProductId(_this.id)
+					let updatedTime = new Date(time.data.updatedTime).valueOf();
+
+					if (_this.updatedTime != updatedTime) {
+						_this.$api.showModal('修改已经过期请重新进入！').then(() => {
+							_this.$navto.navtab('pages/order/index')
+						});
+						return;
+					};
+					$putProduct(_this.id, data).then(res => {
 						setTimeout(() => {
-							_this.$navto.navBack();
-						}, 1000)
+							_this.$navto.navClose('pages/details/product', {
+								id: res.data.id
+							});
+						}, 500)
 						_this.$api.msg('修改成功');
 					}).catch(error => {
 						_this.$api.msg(error.data);
 					})
+
 				} else {
-					_this.$request.post('prod', data).then(res => {
+					$postProduct(data).then((res) => {
 						setTimeout(() => {
-							_this.$navto.navBack();
-						}, 1000)
+							_this.$navto.navClose('pages/details/product', {
+								id: res.data.id
+							});
+						}, 500)
 						_this.$api.msg('添加成功');
 					}).catch(error => {
 						_this.$api.msg(error.data);

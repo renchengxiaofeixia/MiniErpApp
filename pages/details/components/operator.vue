@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="headline">
+		<view class="headline-title">
 			操作日记
 		</view>
 
@@ -46,9 +46,9 @@
 </script>
 
 <style lang="scss">
-	.headline {
-		padding-left: 30rpx;
-		padding-top: 20rpx;
+	.headline-title {
+		padding: 20rpx 20rpx 0;
+		font-size: 28rpx;
 	}
 
 	.side {

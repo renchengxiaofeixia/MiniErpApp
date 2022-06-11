@@ -1,7 +1,0 @@
-{
-  "navigationStyle": "custom",
-  "usingComponents": {
-    "header-tab": "/components/headerTab/index",
-    "select-goods": "/components/selectGoods"
-  }
-}

@@ -3,111 +3,168 @@
 
 		<view class="amount" v-if="hide">
 			<text class="sum">
-				一共1条数据
+				一共{{list.length}}条数据
 			</text>
-			<text class="price">
+			<!-- <text class="price">
 				￥1000.00
-			</text>
+			</text> -->
 		</view>
 		<view class="tabulation">
-
-			<view class="date gray" v-if="date">
-				2032-05-03
-			</view>
-
-			<scroll-view class="scroll-view" scroll-x="true" v-for="(item,index) in list" :key="index">
-				<view class="scroll-item">
-					<view class="goods-list" @click="$navto.navto(url,{id:item.id})">
-						<view class="goods-flex">
-							<view class="black name">
-								<block v-if="tab == 1">{{item.prodName}}</block>
-								<block v-if="tab == 2">{{item.supplierName}}</block>
-								<block v-if="tab == 3">{{item.customerNo}}</block>
-								<!-- <block>李三</block>
+			<radio-group @change="radioChange">
+				<scroll-view class="scroll-view" scroll-x="true" v-for="(item,index) in list" :key="index">
+					<view class="scroll-item">
+						<view class="goods-list" @click.stop="$navto.navto(url,{id:item.id})">
+							<view class="goods-flex">
+								<view class="black name">
+									<block v-if="tab == 1">{{item.prodName}} <text class="model"
+											v-if="item.prodModel">({{item.prodModel}})</text> </block>
+									<block v-if="tab == 2 || tab == 4 || tab==6">{{item.supplierName}}</block>
+									<block v-if="tab == 3 || tab == 5">{{item.customerNo}}</block>
+									<block v-if="tab == 8">{{item.ourContacterName}}</block>
+									<!-- <block>李三</block>
 								<text class="gray shift">调拨到</text>
 								<block>李三</block> -->
+								</view>
+								<view class="green" v-if="tab == 1">
+									<text>0 </text>
+									<text>{{item.unit}}</text>
+								</view>
+								<view class="green" v-if="tab == 4 || tab == 5 ||tab == 6">
+									￥{{item.aggregateAmount}}
+								</view>
+
 							</view>
-							<view class="green" v-if="tab == 1">
-								<text>0 </text>
-								<text>{{item.unit}}</text>
+							<view class="goods-flex gray">
+								<view>
+									<view v-if="tab == 1">{{item.prodNo}}</view>
+									<block v-if="tab == 2 || tab == 3">
+										<view class="">
+											<text>联系人：</text>
+											<text v-if="tab == 2">{{item.contacterName}}</text>
+											<text v-if="tab == 3">{{item.customerName}}</text>
+										</view>
+										<view class="">
+											<text>联系人电话：</text>
+											<text>{{item.mobile}}</text>
+										</view>
+									</block>
+									<view v-if="tab == 4">
+										{{item.purchaseNo}}
+									</view>
+									<view v-if="tab == 5">
+										{{item.orderNo}}
+									</view>
+									<view v-if="tab == 6">
+										{{item.enterWarehouseNo}}
+									</view>
+									<view v-if="tab == 4 || tab == 5 || tab == 6">
+										{{item.prodNos}}
+									</view>
+									<block v-if="tab == 8">
+										<view>
+											{{item.checkNo}}
+										</view>
+										<view>
+											{{item.prodNos}}
+										</view>
+									</block>
+								</view>
+								<view class="supply-img" v-if="tab == 2 && !radio"
+									@click.stop="$api.dialPhone(item.mobile)">
+									<image src="../../static/image/adapter_supplier_search_result_item_phone_call.png"
+										mode="aspectFit"></image>
+								</view>
+
+								<view class="supply-img" v-if="tab == 3 && !radio">
+									<image src="../../static/image/home_main_btn_tab_product2.png" mode="aspectFit">
+									</image>
+								</view>
+								<view class="storage" v-if="tab == 4">
+									{{item.purchaseStatus}}
+								</view>
+								<view class="storage" v-if="tab == 5">
+									{{item.orderStatus}}
+								</view>
+								<label class="radio" v-if="radio">
+									<radio :value="JSON.stringify(item)" />
+								</label>
 							</view>
 						</view>
-						<view class="goods-flex gray">
-							<view>
-								<view v-if="tab == 1">{{item.prodNo}}</view>
-								<block v-if="tab == 2 || tab == 3">
-									<view class="">
-										<text>联系人：</text>
-										<text v-if="tab == 2">{{item.contacterName}}</text>
-										<text v-if="tab == 3">{{item.customerName}}</text>
-									</view>
-									<view class="">
-										<text>联系人电话：</text>
-										<text>{{item.mobile}}</text>
-									</view>
-								</block>
-								<!-- <view class="part">大佳品等1项</view> -->
-							</view>
-							<view class="supply-img" v-if="tab == 2">
-								<image src="../../static/image/adapter_supplier_search_result_item_phone_call.png"
-									mode="aspectFit"></image>
-							</view>
-
-							<view class="supply-img" v-if="tab == 3">
-								<image src="../../static/image/home_main_btn_tab_product2.png" mode="aspectFit"></image>
-							</view>
-							<!-- <view class="storage">
-								未完成出库
-							</view> -->
+						<view class="goods-btn" v-if="hide">
+							<button class="pinless" style="background-color: #ffb535;" @click.stop="amend(item.id)">
+								修改
+							</button>
+							<button class="pinless" style="background-color: #ff4622;"
+								@click.stop="drop(item.id,index)">
+								删除
+							</button>
 						</view>
 					</view>
-					<view class="goods-btn" v-if="hide">
-						<button class="pinless" style="background-color: #ffb535;" @click="amend(item.id)">
-							修改
-						</button>
-						<button class="pinless" style="background-color: #ff4622;" @click="drop(item.id,index)">
-							删除
-						</button>
-					</view>
-				</view>
-			</scroll-view>
+				</scroll-view>
+			</radio-group>
+			<block v-if="list.length !=0">
+				<uni-load-more :status="status" IconType="auto" :content-text="contentText" />
+			</block>
 
+			<view class="empty-log" v-if="list.length == 0">
+				<image src="../../static/image/nodata.png" mode="aspectFill"></image>
+				<text v-if="userLoginFlag">无相关信息，请去新建！</text>
+				<text v-else @click="$navto.navto('pages/user/login')" class="isLog">去登录 ！</text>
+			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	let app = getApp();
 	export default {
 		props: {
 			tab: {
 				type: String,
-				default: '0' //1 物品  2 供应商 3 客户
+				default: '0' //1物品  2供应商  3客户 4采购 5销售 6入库
 			},
-			list: Array,
-			url: {
+			list: { //数据
+				type: Array,
+				default: []
+			},
+			url: { //跳转地址
 				type: String,
 				default: ''
 			},
-			icon: {
-				type: Number,
-				default: 0
-			},
-			date: {
+			hide: { //关闭总数和更改
 				type: Boolean,
 				default: true,
 			},
-			hide:{
+			radio: { //是否开启选择
 				type: Boolean,
-				default: true,
+				default: false,
+			},
+			status: { //下拉加载
+				type: String,
+				default: ''
 			}
 		},
 		data() {
 			return {
 				touch: false,
+				content: [],
+				current: 0,
+				userLoginFlag: false,
+				contentText: {
+					contentdown: '下拉加载',
+					contentrefresh: '加载中',
+					contentnomore: '没有更多'
+				}
+
 			};
 		},
+		watch: {
+			list(item) {
+				this.list = item;
+			}
+		},
 		created() {
-
+			this.userLoginFlag = app.globalData.userLogin;
 		},
 		methods: {
 			logoTime() {
@@ -117,10 +174,13 @@
 				this.touch = false;
 			},
 			amend(id) {
-				this.$emit("amend",id);
+				this.$emit("amend", id);
 			},
-			drop(id) {
-				this.$emit("drop",id);
+			drop(id, index) {
+				this.$emit("drop", id, index);
+			},
+			radioChange(e) {
+				this.$emit("radioChange", e);
 			}
 		}
 	}
@@ -149,14 +209,9 @@
 		}
 
 		.tabulation {
-
-			.date {
-				margin-left: 20rpx;
-				padding: 16rpx 0;
-			}
-
 			.scroll-view {
 				width: 750rpx;
+				border-bottom: 1rpx solid #eee;
 
 				.scroll-item {
 					display: flex;
@@ -184,6 +239,12 @@
 						.shift {
 							margin: 0 6rpx;
 						}
+
+						.model {
+							margin: 0 6rpx;
+							font-size: 24rpx;
+							color: #777;
+						}
 					}
 
 					.storage {
@@ -202,11 +263,6 @@
 					display: flex;
 					align-items: center;
 				}
-			}
-
-			.part {
-				padding-bottom: 8rpx;
-				padding-top: 6rpx;
 			}
 		}
 	}

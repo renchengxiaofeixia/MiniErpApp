@@ -13,7 +13,7 @@
 			</view>
 		</form>
 
-		<view class="login-btn" @click="login()">
+		<view class="login-btn" @click="isRegister()">
 			<button class="bg-green white">注册</button>
 		</view>
 
@@ -21,6 +21,9 @@
 </template>
 
 <script>
+	let {
+		$register
+	} = require('@/api/user.js');
 	import headerTab from '@/components/headerTab/index.vue';
 	export default {
 		components: {
@@ -39,7 +42,7 @@
 
 		},
 		methods: {
-			login() {
+			isRegister() {
 				let _this = this;
 				let userName = _this.userName;
 				let password = _this.password;
@@ -60,15 +63,18 @@
 					_this.$api.msg('两次密码不一致，请重新输入');
 					return;
 				}
-				_this.$request.post('signup', {
+				let data = {
 					userName: userName,
 					password: password,
-				}).then(res => {
-					_this.$navto.navBack();
+				}
+				$register(data).then((res) => {
+					setTimeout(() => {
+						_this.$navto.navBack();
+					}, 1000)
 					_this.$api.msg('注册成功')
 				}).catch(error => {
-					_this.$api.msg('注册失败，已经该有账号');
-				})
+					_this.$api.msg(error.data);
+				});
 			}
 		}
 	}

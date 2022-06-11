@@ -2,36 +2,34 @@
 	<view class="">
 		<headerTab :scrollTab="scrollTab" @tabKey="change" :tab="first.id"></headerTab>
 		<searchbox @filter="openFilter()"></searchbox>
+
 		<view class="slide">
-			<swiper class="swiper" :current="first.id" @change="slidingBlock">
-				<swiper-item>
-					<scroll-view class="swiper-item" scroll-y="true">
-						<dataGrid url="pages/details/commodity" :list="productList" :date="false" tab="1"
-							@drop="dropProduct" @amend="amendProduct">
-
-						</dataGrid>
-					</scroll-view>
-				</swiper-item>
-				<swiper-item>
-					<view class="swiper-item">
-						<dataGrid url="pages/details/supplier" :list="supplierList" :date="false" tab="2"
-							@drop="dropSupplier" @amend="amendSupplier">
-
-						</dataGrid>
-					</view>
-				</swiper-item>
-				<swiper-item>
-					<view class="swiper-item">
-						<dataGrid url="pages/details/client" :list="clientlist" :date="false" tab="3" @drop="dropClient"
-							@amend="amendClient">
-						</dataGrid>
-					</view>
-				</swiper-item>
-			</swiper>
+			<block v-if="first.id == 0">
+				<scroll-view class="scroll-roll" scroll-y @scrolltolower="productTolower">
+					<dataGrid url="pages/details/product" :list="productList" tab="1" @drop="dropProduct"
+						@amend="amendProduct" :status="productStatus">
+					</dataGrid>
+				</scroll-view>
+			</block>
+			<block v-if="first.id == 1">
+				<scroll-view class="scroll-roll" scroll-y @scrolltolower="supplierTolower">
+					<dataGrid url="pages/details/supplier" :list="supplierList" tab="2" @drop="dropSupplier"
+						@amend="amendSupplier" :status="supplierStatus">
+					</dataGrid>
+				</scroll-view>
+			</block>
+			<block v-if="first.id == 2">
+				<scroll-view class="scroll-roll" scroll-y @scrolltolower="clientTolower">
+					<dataGrid url="pages/details/client" :list="clientList" tab="3" @drop="dropClient"
+						@amend="amendClient" :status="clientStatus">
+					</dataGrid>
+				</scroll-view>
+			</block>
 		</view>
+
 		<filtratePopup @close="openFilter()" :show="filterShow">
 			<view>
-				<block v-if="first.id==1">
+				<block v-if="first.id == 1">
 					<view class="table" style="padding: 0;">
 						<pulldown headline="类目" title="所有类目">
 						</pulldown>
@@ -63,6 +61,22 @@
 </template>
 
 <script>
+	let {
+		$getProduct,
+		$delProduct
+	} = require('@/api/product.js'); //物品
+
+	let {
+		$getSupplier,
+		$delSupplier
+	} = require('@/api/supplier.js'); //供应商
+
+	let {
+		$getClient,
+		$delClient
+	} = require('@/api/client.js'); //客户
+
+
 	import headerTab from '@/components/headerTab/index.vue';
 	import searchbox from '@/components/searchbox/index.vue';
 	import filtratePopup from '@/components/filtratePopup/index.vue';
@@ -104,68 +118,94 @@
 				},
 				filterShow: 'none',
 				productList: [], //物品
+				productPage: 1, //物品页数
+				productSize: 14, //物品页数量
+				productNext: true, //物品是否也下页
 				supplierList: [], //供应商
-				clientlist: [], //客户
+				supplierPage: 1, //供应商页数
+				supplierSize: 10, //供应商页数量
+				supplierNext: true, //供应商是否也下页
+				clientList: [], //客户
+				clientPage: 1, //客户页数
+				clientSize: 10, //客户页数量
+				clientNext: true, //客户是否也下页
+				// 加载状态
+				productStatus: 'more',
+				supplierStatus: 'more',
+				clientStatus: 'more',
 
 			}
 		},
 		onLoad() {
+
+		},
+		onShow() {
+			this.productList = [];
+			this.supplierList = [];
+			this.clientList = [];
 			this.productData();
 			this.supplierData();
 			this.clientData();
 		},
+		mounted() {
+
+		},
 		methods: {
 			// 物品数据
-			productData() {
+			async productData() {
 				let _this = this;
-				_this.$request.get('prods', {
-					page: 1,
-					size: 10,
-				}).then(res => {
-					let data = res.data
-					_this.productList = data.data;
-				})
+				let data = {
+					page: _this.productPage,
+					size: _this.productSize,
+				};
+				let res = await $getProduct(data);
+				if (!res.data.hasNextPage) {
+					_this.productNext = false;
+					_this.productStatus = 'noMore';
+				}
+				_this.productList.push(...res.data.data);
+
 			},
 			// 供应商数据
-			supplierData() {
+			async supplierData() {
 				let _this = this;
-				_this.$request.get('suppliers', {
-					page: 1,
-					size: 10,
-				}).then(res => {
-					let data = res.data
-					_this.supplierList = data.data;
+				let data = {
+					page: _this.supplierPage,
+					size: _this.supplierSize,
+				}
 
-				})
+				let res = await $getSupplier(data);
+				if (!res.data.hasNextPage) {
+					_this.supplierNext = false;
+					_this.supplierStatus = 'noMore';
+				}
+				_this.supplierList.push(...res.data.data);
+
 			},
 			// 客户数据
-			clientData() {
+			async clientData() {
 				let _this = this;
-				_this.$request.get('customers', {
-					page: 1,
-					size: 10,
-				}).then(res => {
-					let data = res.data
-					_this.clientlist = data.data;
+				let data = {
+					page: _this.clientPage,
+					size: _this.clientSize,
+				}
+				let res = await $getClient(data)
+				if (!res.data.hasNextPage) {
+					_this.clientNext = false;
+					_this.clientStatus = 'noMore';
+				}
+				_this.clientList.push(...res.data.data);
 
-				})
 			},
 			// 删除物品
-			dropProduct(id,index) {
+			dropProduct(id, index) {
 				let _this = this;
-				uni.showModal({
-					title: '提示',
-					content: '确定要删除物品',
-					success: function(res) {
-						if (res.confirm) {
-							_this.$request.del('prod/' + id).then(res=>{
-								_this.productList.splice(index,1)
-							});
-							_this.$api.msg('删除成功')
-						} else if (res.cancel) {
-							// console.log('用户点击取消');
-						}
-					}
+				_this.$api.showModal('确定要删除物品！').then(() => {
+					$delProduct(id).then(res => {
+						_this.productList.splice(index, 1);
+						_this.$api.msg('删除成功')
+					});
+
 				});
 			},
 			// 修改物品
@@ -177,22 +217,16 @@
 				})
 			},
 			// 删除供应商
-			dropSupplier(id,index) {
+			dropSupplier(id, index) {
 				let _this = this;
-				uni.showModal({
-					title: '提示',
-					content: '确定要删除供应商',
-					success: function(res) {
-						if (res.confirm) {
-							_this.$request.del('supplier/' + id).then(res=>{
-								_this.supplierList.splice(index,1)
-							});
-							_this.$api.msg('删除成功')
-						} else if (res.cancel) {
-							// console.log('用户点击取消');
-						}
-					}
+				_this.$api.showModal('确定要删除供应商！').then(() => {
+					$delSupplier(id).then(res => {
+						_this.supplierList.splice(index, 1)
+						_this.$api.msg('删除成功')
+					});
+
 				});
+
 			},
 			// 修改供应商
 			amendSupplier(id) {
@@ -203,19 +237,14 @@
 				})
 			},
 			// 删除客户
-			dropClient(id,index) {
+			dropClient(id, index) {
 				let _this = this;
-				uni.showModal({
-					title: '提示',
-					content: '确定要删除供应商',
-					success: function(res) {
-						if (res.confirm) {
-							_this.$request.del('customer/' + id).then(res=>{
-								_this.clientlist.splice(index,1)
-							});
-							_this.$api.msg('删除成功')
-						} else if (res.cancel) {}
-					}
+				_this.$api.showModal('确定要删除客户！').then(() => {
+					$delClient(id).then(res => {
+						_this.clientList.splice(index, 1)
+						_this.$api.msg('删除成功')
+					});
+
 				});
 			},
 			// 修改客户
@@ -226,6 +255,7 @@
 					type: 1
 				})
 			},
+			// 打开筛选
 			openFilter() {
 				if (this.filterShow == 'none') {
 					this.filterShow = 'show';
@@ -236,16 +266,60 @@
 					}, 500);
 				}
 			},
+			// tab切换
 			change(item) {
 				this.first = item;
 			},
-			slidingBlock(e) {
-				this.first = this.scrollTab[e.detail.current];
+			// 物品下拉加载数据
+			productTolower(e) {
+				let _this = this;
+				if (_this.productNext) {
+					_this.productStatus = 'loading';
+					_this.productPage = 2;
+					_this.productData();
+				} else {
+					setTimeout(function() {
+						_this.productStatus = 'noMore';
+					}, 1000)
+				}
 			},
+			// 供应商下拉加载
+			supplierTolower() {
+				let _this = this;
+				if (_this.supplierNext) {
+					_this.supplierStatus = 'loading';
+					_this.supplierPage = 2;
+					_this.supplierData();
+				} else {
+					setTimeout(function() {
+						_this.supplierStatus = 'noMore';
+					}, 1000)
+				}
+			},
+			// 客户下拉加载
+			clientTolower() {
+				let _this = this;
+				if (_this.clientNext) {
+					_this.clientStatus = 'loading';
+					_this.clientPage = 2;
+					_this.clientData();
+				} else {
+					setTimeout(function() {
+						_this.clientStatus = 'noMore';
+					}, 1000)
+				}
+			}
 		}
 	}
 </script>
 
 <style lang="scss">
+	.slide {
+		height: 100%;
+		width: 100%;
+	}
 
+	page {
+		overflow: hidden;
+	}
 </style>

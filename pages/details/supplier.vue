@@ -1,6 +1,6 @@
 <template>
 	<view class="">
-		<headerTab title="供应商详情"></headerTab>
+		<headerTab title="供应商详情" :record="true"></headerTab>
 
 		<liaisons :list="contact"></liaisons>
 		<slidingBlock :toggle="toggle" :tabIndex="current" @slideshow="slideshow"></slidingBlock>
@@ -66,6 +66,11 @@
 </template>
 
 <script>
+	let {
+		$getSupplierId,
+		$delSupplier
+	} = require('@/api/supplier.js'); //供应商
+
 	import headerTab from '@/components/headerTab/index.vue';
 	import slidingBlock from './components/slidingBlock.vue';
 	import operator from './components/operator.vue';
@@ -104,30 +109,31 @@
 		},
 		onLoad(option) {
 			this.id = option.id;
-			
+
 		},
 		onShow() {
 			this.getData();
 		},
 		methods: {
-			getData() {
+			async getData() {
 				let _this = this;
-				_this.$request.get('supplier/' + _this.id).then(res => {
-					let operator = {};
-					let contact = {};
-					_this.list = res.data;
-					contact.contacterName = res.data.contacterName;
-					contact.mobile = res.data.mobile;
-					contact.supplierName = res.data.supplierName;
+				let res = await $getSupplierId(_this.id)
+				let operator = {};
+				let contact = {};
+				
+				_this.list = res.data;
+				contact.contacterName = res.data.contacterName;
+				contact.mobile = res.data.mobile;
+				contact.supplierName = res.data.supplierName;
 
-					operator.createTime = res.data.createTime;
-					operator.creator = res.data.creator;
-					operator.updatedTime = res.data.updatedTime;
-					operator.updator = res.data.updator;
-					_this.contact = contact;
-					_this.operator = operator;
+				operator.createTime = res.data.createTime;
+				operator.creator = res.data.creator;
+				operator.updatedTime = res.data.updatedTime;
+				operator.updator = res.data.updator;
+				_this.contact = contact;
+				_this.operator = operator;
 
-				})
+
 			},
 			handleClose() {
 				if (this.compileShow == 'none') {
@@ -141,20 +147,12 @@
 			},
 			supplierDel() {
 				let _this = this;
-				uni.showModal({
-					title: '提示',
-					content: '确定要删除供应商',
-					success: function(res) {
-						if (res.confirm) {
-							_this.$request.del('supplier/' + _this.id);
-							setTimeout(() => {
-								_this.$navto.navtab('pages/message/index')
-							}, 1000)
-							_this.$api.msg('删除成功')
-						} else if (res.cancel) {
-							// console.log('用户点击取消');
-						}
-					}
+				_this.$api.showModal('确定要删除供应商').then(() => {
+					$delSupplier(_this.id);
+					setTimeout(() => {
+						_this.$navto.navtab('pages/message/index')
+					}, 1000)
+					_this.$api.msg('删除成功')
 				});
 
 			},
