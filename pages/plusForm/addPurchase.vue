@@ -5,7 +5,8 @@
 			<view class="from from-new">
 				<text class="title">采购日期</text>
 				<view class="fill">
-					<uni-datetime-picker v-model="purchaseDate" type="date" @change="selectPurchase">
+					<uni-datetime-picker v-model="purchaseDate" type="date" @change="selectPurchase"
+						:clear-icon="false">
 						{{purchaseDate}}
 					</uni-datetime-picker>
 				</view>
@@ -15,7 +16,8 @@
 			<view class="from from-new">
 				<text class="title">交付日期</text>
 				<view class="fill">
-					<uni-datetime-picker v-model="deliveryDate" type="date" @change="selectDelivery">
+					<uni-datetime-picker v-model="deliveryDate" type="date" @change="selectDelivery"
+						:clear-icon="false">
 						{{deliveryDate}}
 					</uni-datetime-picker>
 				</view>
@@ -32,7 +34,7 @@
 			</view>
 		</view>
 
-		<selectGoods :list="productList" @shape="accept"></selectGoods>
+		<selectGoods @shape="accept" ref="goods"></selectGoods>
 
 		<block v-if="productList.length !=0">
 			<view class="headline">
@@ -87,8 +89,7 @@
 				purchaseDate: this.$api.dateTime("yyyy-MM-dd"),
 				deliveryDate: this.$api.dateTime("yyyy-MM-dd"),
 				supplier: {}, //接收供应商数据
-				productList: [], //接收物品数据
-				goods: [], //物品传递过来的数据
+				productList: [], //物品数据
 				appoint: { //相关约定
 					settlementMode: '',
 					remarks: ""
@@ -103,7 +104,6 @@
 			_this.id = option.id ? option.id : '';
 			_this.type = option.type ? option.type : 0;
 			_this.header = option.header ? decodeURIComponent(option.header) : '新建采购订单';
-
 			if (_this.type == 1) {
 				let res = await $getPurchasesId(_this.id);
 				_this.purchaseDate = res.data.purchaseOrderDate;
@@ -144,6 +144,7 @@
 
 			}
 
+			_this.$refs.goods.productList = _this.productList;
 		},
 		onShow() {},
 		methods: {
@@ -156,7 +157,8 @@
 				this.deliveryDate = date;
 			},
 			accept(item) {
-				this.goods = item;
+				this.productList = item;
+				this.$refs.goods.productList = this.productList;
 			},
 			// 确定
 			async purchaseBnt() {
@@ -189,7 +191,7 @@
 				data.settlementMode = _this.appoint.settlementMode;
 
 				let goods = [];
-				_this.goods.forEach(item => {
+				_this.productList.forEach(item => {
 					goods.push({
 						prodNo: item.prodNo,
 						prodCustomNo: item.prodCustomNo,

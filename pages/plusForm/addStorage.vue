@@ -6,7 +6,7 @@
 			<view class="from from-new" style="margin: 0 40upx;">
 				<text class="title">采购日期</text>
 				<view class="fill">
-					<uni-datetime-picker v-model="storageDate" type="date" @change="selectStorage">
+					<uni-datetime-picker v-model="storageDate" type="date" @change="selectStorage" :clear-icon="false">
 						{{storageDate}}
 					</uni-datetime-picker>
 				</view>
@@ -58,7 +58,7 @@
 			</view>
 		</view>
 
-		<selectGoods :list="productList" @shape="accept" :hide="type != 2"></selectGoods>
+		<selectGoods ref="goods" @shape="accept" :hide="type != 2"></selectGoods>
 
 		<block v-if="productList.length !=0">
 			<view class="headline">
@@ -111,7 +111,6 @@
 				storageDate: this.$api.dateTime("yyyy-MM-dd"), //入库日期
 				warehouseName: "本地",
 				productList: [], //接收物品数据
-				goods: [], //
 
 				enterType: "采购入库", //库存状态
 				supplier: {}, //采购入库  供应商
@@ -190,6 +189,7 @@
 				_this.purchaseList = data
 				console.log(data);
 			}
+			_this.$refs.goods.productList = _this.productList;
 		},
 		methods: {
 
@@ -245,7 +245,23 @@
 				data.supplierContacterName = _this.supplier.supplierContacterName;
 				data.remarks = _this.correlation.remarks;
 				data.transactor = _this.correlation.transactore || "";
-				data.prodInfoDtos = _this.goods;
+
+				let goods = [];
+				_this.productList.forEach(e => {
+					goods.push({
+						// purchaseNo: "",
+						prodNo: e.prodNo,
+						prodCustomNo: e.prodCustomNo,
+						prodName: e.prodName,
+						prodModel: e.prodModel,
+						unit: e.unit,
+						unitPrice: e.purchasePrice,
+						quantity: e.quantity,
+						remarks: e.newRemarks,
+						...e
+					})
+				});
+				data.prodInfoDtos = goods;
 
 				if (_this.type == 1) {
 					let time = await $getStorageId(_this.id);
@@ -300,21 +316,9 @@
 				this.storageDate = date;
 			},
 			accept(item) {
-				let goods = [];
-				item.forEach(e => {
-					goods.push({
-						// purchaseNo: "",
-						prodNo: e.prodNo,
-						prodCustomNo: e.prodCustomNo,
-						prodName: e.prodName,
-						prodModel: e.prodModel,
-						unit: e.unit,
-						unitPrice: e.purchasePrice,
-						quantity: e.quantity,
-						remarks: e.newRemarks
-					})
-				});
-				this.goods = goods;
+				this.productList = item;
+				this.$refs.goods.productList = this.productList;
+
 			},
 
 		}

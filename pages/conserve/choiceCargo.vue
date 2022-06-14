@@ -3,36 +3,29 @@
 		<headerTab :title="headline"></headerTab>
 		<searchbox @filter="openFilter()"></searchbox>
 
-		<view class="slide">
-			<block v-if="id == 1">
-				<scroll-view class="scroll-roll" scroll-y @scrolltolower="productTolower">
-					<dataGrid :list="productList" :date="false" tab="1" :hide="false" :radio="true"
-						@radioChange="radioChange" :status="productStatus">
-					</dataGrid>
-				</scroll-view>
-			</block>
-			<block v-if="id == 2">
-				<scroll-view class="scroll-roll" scroll-y @scrolltolower="supplierTolower">
-					<dataGrid :list="supplierList" :date="false" tab="2" :hide="false" :radio="true"
-						@radioChange="radioChange" :status="supplierStatus">
-					</dataGrid>
-				</scroll-view>
-			</block>
-			<block v-if="id == 3">
-				<scroll-view class="scroll-roll" scroll-y @scrolltolower="clientTolower">
-					<dataGrid :list="clientList" tab="3" :date="false" :hide="false" :radio="true"
-						@radioChange="radioChange" :status="clientStatus">
-					</dataGrid>
-				</scroll-view>
-			</block>
-			<block v-if="id == 4">
-				<scroll-view class="scroll-roll" scroll-y>
-					<dataGrid :list="warehouseList" :date="false" tab="1" :hide="false" :radio="true"
-						@radioChange="radioChange">
-					</dataGrid>
-				</scroll-view>
-			</block>
+
+		<view v-if="id == 1">
+			<dataGrid :list="productList" :date="false" tab="1" :hide="false" :radio="true" @radioChange="radioChange"
+				:status="productStatus" @load="productTolower">
+			</dataGrid>
 		</view>
+		<view v-if="id == 2">
+			<dataGrid :list="supplierList" :date="false" tab="2" :hide="false" :radio="true" @radioChange="radioChange"
+				:status="supplierStatus" @load="supplierTolower">
+			</dataGrid>
+		</view>
+		<view v-if="id == 3">
+			<dataGrid :list="clientList" tab="3" :date="false" :hide="false" :radio="true" @radioChange="radioChange"
+				:status="clientStatus" @load="clientTolower">
+			</dataGrid>
+		</view>
+		<view v-if="id == 4">
+			<dataGrid :list="warehouseList" :date="false" tab="1" :hide="false" :radio="true"
+				@radioChange="radioChange">
+			</dataGrid>
+		</view>
+
+
 		<block v-if="id != 4">
 			<addOrder :url="location" top="70%"></addOrder>
 		</block>
@@ -62,6 +55,7 @@
 	import dataGrid from '@/components/dataGrid/index.vue';
 	import addOrder from '@/components/addOrder.vue';
 	import footerBtn from '@/components/footerBtn.vue';
+	import UniNumberBox from '@/components/uni-number-box/uni-number-box.vue';
 
 	export default {
 		components: {
@@ -69,7 +63,8 @@
 			searchbox,
 			dataGrid,
 			addOrder,
-			footerBtn
+			footerBtn,
+			UniNumberBox
 		},
 		data() {
 			return {
@@ -145,7 +140,21 @@
 					_this.productNext = false;
 					_this.productStatus = 'noMore';
 				}
-				_this.productList.push(...res.data.data);
+
+				let list = [];
+				res.data.data.forEach(e => {
+					list.push({
+						id: e.id,
+						name: e.prodCustomNo,
+						model: e.prodModel,
+						No: e.prodNo,
+						count: e.prodNos,
+						num: e.salePrice + e.unit,
+						...e
+
+					})
+				})
+				_this.productList.push(...list);
 			},
 			// 供应商数据
 			async supplierData() {
@@ -159,7 +168,18 @@
 					_this.supplierNext = false;
 					_this.supplierStatus = 'noMore';
 				}
-				_this.supplierList.push(...res.data.data);
+				let list = [];
+				res.data.data.forEach(e => {
+					list.push({
+						id: e.id,
+						name: e.supplierName,
+						linkman: e.contacterName,
+						phone: e.mobile,
+						...e
+
+					})
+				})
+				_this.supplierList.push(...list);
 
 			},
 			// 客户数据
@@ -169,19 +189,47 @@
 					page: _this.clientPage,
 					size: _this.clientSize,
 				}
-				let res = await $getClient(data)
+				let res = await $getClient(data);
+
 				if (!res.data.hasNextPage) {
 					_this.clientNext = false;
 					_this.clientStatus = 'noMore';
 				}
-				_this.clientList.push(...res.data.data);
+
+				let list = [];
+				res.data.data.forEach(e => {
+					list.push({
+						id: e.id,
+						name: e.customerNo,
+						linkman: e.customerName,
+						phone: e.mobile,
+						...e
+
+					})
+				})
+				_this.clientList.push(...list);
 
 			},
 			// 仓库数据
 			async warehousetData() {
 				let _this = this;
 				let res = await $getWarehouseList();
-				_this.warehouseList.push(...res.data);
+
+				let list = [];
+				res.data.forEach(e => {
+					list.push({
+						id: e.id,
+						name: e.prodCustomNo,
+						model: e.prodModel,
+						No: e.prodNo,
+						num: e.unitPrice + e.unit,
+						...e
+
+					})
+				})
+
+				_this.warehouseList.push(...list);
+				console.log(_this.warehouseList);
 			},
 			// 物品下拉加载数据
 			productTolower(e) {

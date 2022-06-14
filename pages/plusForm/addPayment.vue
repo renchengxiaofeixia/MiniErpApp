@@ -6,7 +6,7 @@
 			<view class="from from-new">
 				<text class="title">支出日期</text>
 				<view class="fill">
-					<uni-datetime-picker v-model="expendTime" type="date" @change="expendChange">
+					<uni-datetime-picker v-model="expendTime" type="date" @change="expendChange" :clear-icon="false">
 						{{expendTime}}
 					</uni-datetime-picker>
 				</view>

@@ -120,24 +120,20 @@
 				</swiper-item>
 				<swiper-item>
 					<view class="swiper-item">
-						<view class="header">
-							2022-05-05
-						</view>
-
 						<view class="table">
-							<view class="from diary goods-flex">
-								<text class="title">供应商</text>
-								<text class="green"> ￥999</text>
+							<view class="table-view" v-for="(item,index) in purchasesList" :key="index">
+								<view class="from diary goods-flex">
+									<text class="title">{{item.supplierName}}</text>
+									<text class="green"> ￥999</text>
+								</view>
+								<view class="from diary gray">
+									{{item.purchaseNo}}
+								</view>
+								<view class="from diary gray">
+									{{item.prodNos}}
+								</view>
 							</view>
-							<view class="from diary gray">
-								dd-262600-21626
-							</view>
-							<view class="from diary gray">
-								￥990 x 1件
-							</view>
-
 						</view>
-
 					</view>
 				</swiper-item>
 			</swiper>
@@ -158,7 +154,9 @@
 <script>
 	let {
 		$getProductId,
-		$delProduct
+		$delProduct,
+		$getGoodsInventorys,
+		$getGoodsPurchases
 	} = require('@/api/product.js'); //物品
 
 	let {
@@ -198,9 +196,10 @@
 				current: 0,
 				compileShow: "none",
 				id: Number,
-				list: {},
-				operator: {},
-				supplierList: [],
+				list: {}, //物品
+				operator: {}, //操作人
+				supplierList: [], //供应商
+				purchasesList: [], //采购记录
 			}
 		},
 		onLoad(option) {
@@ -227,16 +226,21 @@
 				let supplier = await $goodsSupplier(_this.id);
 				_this.supplierList = supplier.data;
 
+				let inventorys = await $getGoodsInventorys(_this.list.prodNo);
+
+				let purchases = await $getGoodsPurchases(_this.list.prodNo);
+				_this.purchasesList = purchases.data;
+
 			},
 			cutproduct() {
 				let _this = this;
 
-				_this.$api.showModal('确定要删除物品').then(() => {
+				_this.$api.showModal('确定要删除物品！').then(() => {
 					$delProduct(_this.id);
 					setTimeout(() => {
 						_this.$navto.navtab('pages/message/index')
 					}, 500)
-					_this.$api.msg('删除成功')
+					_this.$api.msg('删除成功！')
 
 				});
 
@@ -280,6 +284,16 @@
 		}
 	}
 
+	.table-view {
+		border-bottom: 1rpx solid #ccc;
+		padding: 14rpx 0;
+
+		&:last-child {
+			border-bottom: 0;
+		}
+
+
+	}
 
 	.swiper {
 		height: 60vh;

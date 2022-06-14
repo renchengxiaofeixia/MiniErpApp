@@ -480,6 +480,22 @@
 				}
 			}
 		}]
+	}, {
+		"root": "pages/system",
+		"name": "system",
+		"pages": [{
+			"path": "role",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}]
 	}],
 	"tabBar": {
 		"color": "#282828",

@@ -19,6 +19,9 @@
 </template>
 
 <script>
+	let {
+
+	} = require('@/api/user.js');
 	import headerTab from '@/components/headerTab/index.vue';
 	export default {
 		components: {
@@ -43,16 +46,18 @@
 </script>
 
 <style lang="scss">
-.mgs{
-	padding: 20rpx 0;
-	border-bottom: 1rpx solid #ccc;
-	font-size: 30rpx;
-	align-items: center;
-	&:last-child{
-		border-bottom: none;
+	.mgs {
+		padding: 20rpx 0;
+		border-bottom: 1rpx solid #ccc;
+		font-size: 30rpx;
+		align-items: center;
+
+		&:last-child {
+			border-bottom: none;
+		}
+
+		.name {
+			width: 160rpx;
+		}
 	}
-	.name{
-		width: 160rpx;
-	}
-}
 </style>

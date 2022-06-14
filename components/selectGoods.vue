@@ -2,85 +2,81 @@
 	<view>
 		<view class="headline option-gooods">
 			<text>选择物品</text>
-			<view class="icon bg-green" @click="$navto.navto('pages/conserve/choiceCargo',{id:ids,headline:'选择物品'})">
+			<view class="icon bg-green" @click="$navto.navto('pages/conserve/choiceCargo',{id: ids, headline:'选择物品'})">
 				<text class="icon-tianjia iconfont"></text>
 				<text class="">添加</text>
 			</view>
 		</view>
 
-		<block>
-			<view class="product" v-for="(item,index) in productList" :key="index">
-				<view class="product-show">
-					<view class="goods-flex">
-						<view class="product-btr">
-							<text class="iconfont icon-guanbi1 red" @click="disposeOf(index)"></text>
-							<text class="name">{{item.prodName}}</text>
-							<text class="gray">({{item.prodModel}})</text>
-						</view>
-
-						<view class="product-price green" v-if="item.totalPrice">
-							￥{{item.totalPrice}}
-						</view>
+		<view class="product" v-for="(item,index) in productList" :key="index">
+			<view class="product-show">
+				<view class="goods-flex">
+					<view class="product-btr">
+						<text class="iconfont icon-guanbi1 red" @click="disposeOf(index)"></text>
+						<text class="name">{{item.prodName}}</text>
+						<text class="gray">({{item.prodModel}})</text>
 					</view>
-					<view class="serial gray">
-						{{item.prodNo}}
+					<view class="product-price green" v-if="item.totalPrice">
+						￥{{item.totalPrice}}
 					</view>
 				</view>
-				<view class="goods-flex product-back product-show" v-if="item.purchasePrice">
-					<view class="product-title">
-						单价
-					</view>
-					<view class="product-sum">
-						<input type="digit" placeholder="填写单价" v-model="item.purchasePrice"
-							@input="numberFixedDigit(item)">
-					</view>
-				</view>
-				<view class="goods-flex product-back product-show">
-					<view class="product-title">
-						数量
-					</view>
-					<view class="product-sum">
-						<block v-if="hide">
-							<uni-number-box :min="1" v-model="item.quantity" @change="changeValue(item)" :max="1000" />
-						</block>
-
-						<block v-else>
-							<uni-number-box :min="1" v-model="item.quantity" @change="changeValue(item)"
-								:max="item.notReceiverQuantity" />
-							<text style="margin-left: 10upx; font-size: 24upx;" class="red">
-								<block v-if="item.notReceiverQuantity == item.quantity">
-									还剩{{item.notReceiverQuantity}}可入库
-								</block>
-								<block v-if="item.nowQuantity == item.quantity">
-									库存：{{item.nowQuantity}}
-								</block>
-							</text>
-						</block>
-					</view>
-				</view>
-				<view class="goods-flex product-back product-show">
-					<view class="product-title">
-						备注
-					</view>
-					<view class="product-sum">
-						<input type="text" placeholder="填写备注" v-model="item.newRemarks">
-					</view>
+				<view class="serial gray">
+					{{item.prodNo}}
 				</view>
 			</view>
-		</block>
+			<view class="goods-flex product-back product-show" v-if="ids != 4">
+				<view class="product-title">
+					单价
+				</view>
+				<view class="product-sum">
+					<input type="digit" placeholder="填写单价" v-model="item.purchasePrice" @input="numberFixedDigit(item)">
+				</view>
+			</view>
+			<view class="goods-flex product-back product-show">
+				<view class="product-title">
+					数量
+				</view>
+				<view class="product-sum">
+					<block v-if="hide">
+						<uni-number-box :min="1" v-model="item.quantity" @change="changeValue(item)" :max="1000" />
+					</block>
+					<block v-else>
+						<uni-number-box :min="1" v-model="item.quantity" @change="changeValue(item)"
+							:max="item.notReceiverQuantity" />
+						<text style="margin-left: 10upx; font-size: 24upx;" class="red">
+							<block v-if="item.notReceiverQuantity == item.quantity">
+								还剩{{item.notReceiverQuantity}}可入库
+							</block>
+							<block v-if="item.nowQuantity == item.quantity">
+								库存：{{item.nowQuantity}}
+							</block>
+						</text>
+					</block>
+				</view>
+			</view>
+			<view class="goods-flex product-back product-show">
+				<view class="product-title">
+					备注
+				</view>
+				<view class="product-sum">
+					<input type="text" placeholder="填写备注" v-model="item.newRemarks">
+				</view>
+			</view>
+		</view>
+
 	</view>
 </template>
 
 <script>
+	import UniNumberBox from '@/components/uni-number-box/uni-number-box.vue';
 	export default {
+		components: {
+			UniNumberBox
+		},
 		props: {
 			ids: {
 				type: Number,
 				default: 1
-			},
-			list: {
-				type: Array,
-				default: []
 			},
 			hide: {
 				type: Boolean,
@@ -93,12 +89,11 @@
 			};
 		},
 		watch: {
-			list(item) {
-				this.productList = JSON.parse(JSON.stringify(item));
-			},
 			productList: {
 				handler(item, index) {
+					this.productList = this.productList;
 					this.circulation(); //监听到数据变化执行方法
+					this.$forceUpdate()
 				},
 				deep: true // 深度监听父组件传过来对象变化
 			}
@@ -135,7 +130,6 @@
 			},
 			// 物品数据的传递
 			circulation() {
-				console.log(this.productList);
 				this.$emit("shape", this.productList);
 			},
 

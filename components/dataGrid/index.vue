@@ -5,113 +5,86 @@
 			<text class="sum">
 				一共{{list.length}}条数据
 			</text>
-			<!-- <text class="price">
-				￥1000.00
-			</text> -->
 		</view>
 		<view class="tabulation">
-			<radio-group @change="radioChange">
-				<scroll-view class="scroll-view" scroll-x="true" v-for="(item,index) in list" :key="index">
-					<view class="scroll-item">
-						<view class="goods-list" @click.stop="$navto.navto(url,{id:item.id})">
-							<view class="goods-flex">
-								<view class="black name">
-									<block v-if="tab == 1">{{item.prodName}} <text class="model"
-											v-if="item.prodModel">({{item.prodModel}})</text> </block>
-									<block v-if="tab == 2 || tab == 4 || tab==6">{{item.supplierName}}</block>
-									<block v-if="tab == 3 || tab == 5">{{item.customerNo}}</block>
-									<block v-if="tab == 8">{{item.ourContacterName}}</block>
-									<!-- <block>李三</block>
-								<text class="gray shift">调拨到</text>
-								<block>李三</block> -->
-								</view>
-								<view class="green" v-if="tab == 1">
-									<text>0 </text>
-									<text>{{item.unit}}</text>
-								</view>
-								<view class="green" v-if="tab == 4 || tab == 5 ||tab == 6">
-									￥{{item.aggregateAmount}}
-								</view>
+			<scroll-view class="scroll-roll" scroll-y @scrolltolower="load" style="height: 79vh;" v-if="list != 0">
+				<radio-group @change="radioChange">
+					<view class="scroll-view" v-for="(item,index) in list" :key="index">
+						<view class="scroll-item">
+							<view class="goods-list" @click.stop="$navto.navto(url,{id:item.id})">
+								<view class="goods-flex">
+									<view class="black name">
+										{{item.name}}
+										<text class="model" v-if="item.model">({{item.model}})</text>
+										<!-- <block>李三</block>
+							                 <text class="gray shift">调拨到</text>
+								             <block>李三</block> -->
+									</view>
 
-							</view>
-							<view class="goods-flex gray">
-								<view>
-									<view v-if="tab == 1">{{item.prodNo}}</view>
-									<block v-if="tab == 2 || tab == 3">
-										<view class="">
-											<text>联系人：</text>
-											<text v-if="tab == 2">{{item.contacterName}}</text>
-											<text v-if="tab == 3">{{item.customerName}}</text>
-										</view>
-										<view class="">
-											<text>联系人电话：</text>
-											<text>{{item.mobile}}</text>
-										</view>
-									</block>
-									<view v-if="tab == 4">
-										{{item.purchaseNo}}
+									<view class="green" v-if="item.price">
+										￥{{item.price}}
 									</view>
-									<view v-if="tab == 5">
-										{{item.orderNo}}
+									<view class="green" v-if="item.num">
+										{{item.num}}
 									</view>
-									<view v-if="tab == 6">
-										{{item.enterWarehouseNo}}
-									</view>
-									<view v-if="tab == 4 || tab == 5 || tab == 6">
-										{{item.prodNos}}
-									</view>
-									<block v-if="tab == 8">
-										<view>
-											{{item.checkNo}}
-										</view>
-										<view>
-											{{item.prodNos}}
-										</view>
-									</block>
 								</view>
-								<view class="supply-img" v-if="tab == 2 && !radio"
-									@click.stop="$api.dialPhone(item.mobile)">
-									<image src="../../static/image/adapter_supplier_search_result_item_phone_call.png"
-										mode="aspectFit"></image>
-								</view>
+								<view class="goods-flex gray">
+									<view>
+										<view v-if="item.No">
+											{{item.No}}
+										</view>
+										<view v-if="item.count">
+											{{item.count}}
+										</view>
+										<block v-if="tab == 2 || tab == 3">
+											<view class="">
+												联系人：{{item.linkman}}
+											</view>
+											<view>
+												联系人电话：{{item.phone}}
+											</view>
+										</block>
+									</view>
+									<view class="supply-img" v-if="tab == 2 && !radio"
+										@click.stop="$api.dialPhone(item.mobile)">
+										<image
+											src="../../static/image/adapter_supplier_search_result_item_phone_call.png"
+											mode="aspectFit"></image>
+									</view>
 
-								<view class="supply-img" v-if="tab == 3 && !radio">
-									<image src="../../static/image/home_main_btn_tab_product2.png" mode="aspectFit">
-									</image>
+									<view class="supply-img" v-if="tab == 3 && !radio">
+										<image src="../../static/image/home_main_btn_tab_product2.png" mode="aspectFit">
+										</image>
+									</view>
+									<view class="storage" v-if="item.check">
+										{{item.check}}
+									</view>
+									<label class="radio" v-if="radio">
+										<radio :value="JSON.stringify(item)" />
+									</label>
 								</view>
-								<view class="storage" v-if="tab == 4">
-									{{item.purchaseStatus}}
-								</view>
-								<view class="storage" v-if="tab == 5">
-									{{item.orderStatus}}
-								</view>
-								<label class="radio" v-if="radio">
-									<radio :value="JSON.stringify(item)" />
-								</label>
 							</view>
-						</view>
-						<view class="goods-btn" v-if="hide">
-							<button class="pinless" style="background-color: #ffb535;" @click.stop="amend(item.id)">
-								修改
-							</button>
-							<button class="pinless" style="background-color: #ff4622;"
-								@click.stop="drop(item.id,index)">
-								删除
-							</button>
+							<view class="goods-btn" v-if="hide">
+								<button class="pinless" style="background-color: #ffb535;" @click.stop="amend(item.id)">
+									修改
+								</button>
+								<button class="pinless" style="background-color: #ff4622;"
+									@click.stop="drop(item.id,index)">
+									删除
+								</button>
+							</view>
 						</view>
 					</view>
-				</scroll-view>
-			</radio-group>
-			<block v-if="list.length !=0">
+				</radio-group>
 				<uni-load-more :status="status" IconType="auto" :content-text="contentText" />
-			</block>
-
-			<view class="empty-log" v-if="list.length == 0">
+			</scroll-view>
+			<view class="empty-log" v-else>
 				<image src="../../static/image/nodata.png" mode="aspectFill"></image>
-				<text v-if="userLoginFlag">无相关信息，请去新建！</text>
+				<text v-if="userLoginFlag">空空如也！</text>
 				<text v-else @click="$navto.navto('pages/user/login')" class="isLog">去登录 ！</text>
 			</view>
 		</view>
+
 	</view>
 </template>
 
@@ -154,7 +127,7 @@
 					contentdown: '下拉加载',
 					contentrefresh: '加载中',
 					contentnomore: '没有更多'
-				}
+				},
 
 			};
 		},
@@ -181,6 +154,9 @@
 			},
 			radioChange(e) {
 				this.$emit("radioChange", e);
+			},
+			load(e) {
+				this.$emit("load", e);
 			}
 		}
 	}
@@ -212,6 +188,7 @@
 			.scroll-view {
 				width: 750rpx;
 				border-bottom: 1rpx solid #eee;
+				overflow-x: auto;
 
 				.scroll-item {
 					display: flex;

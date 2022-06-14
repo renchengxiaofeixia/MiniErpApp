@@ -25,10 +25,21 @@ function $postSupplier(data) {
 	return request.post('supplier', data);
 }
 
-// 新建供应商
+// 修改供应商
 function $putSupplier(id, data) {
 	return request.put('supplier/' + id, data);
 }
+
+//  供应商 可供物品
+function $getSupplierGoods(id) {
+	return request.get('supplier/prodinfos/' + id);
+}
+
+//  供应商 采购记录
+function $getPurchaseRecord(id) {
+	return request.get('supplier/purchases/' + id);
+}
+
 
 module.exports = {
 	$getSupplier,
@@ -36,5 +47,7 @@ module.exports = {
 	$getSupplierId,
 	$goodsSupplier,
 	$postSupplier,
-	$putSupplier
+	$putSupplier,
+	$getSupplierGoods,
+	$getPurchaseRecord
 }

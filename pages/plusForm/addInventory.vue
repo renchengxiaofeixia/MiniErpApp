@@ -6,7 +6,8 @@
 			<view class="from from-new">
 				<text class="title">盘点日期</text>
 				<view class="fill">
-					<uni-datetime-picker v-model="inventoryDate" type="date" @change="selectInventory">
+					<uni-datetime-picker v-model="inventoryDate" type="date" @change="selectInventory"
+						:clear-icon="false">
 						{{inventoryDate}}
 					</uni-datetime-picker>
 				</view>
@@ -26,7 +27,7 @@
 			</view>
 		</view>
 
-		<selectGoods :list="productList" @shape="accept" :ids="4" :hide="false"></selectGoods>
+		<selectGoods ref="goods" @shape="accept" :ids="4" :hide="false"></selectGoods>
 
 		<footerBtn @confirm="checkBnt()"></footerBtn>
 	</view>
@@ -62,7 +63,6 @@
 				warehouseName: "", //仓库名
 				checkName: "", //盘点人
 				productList: [], //接收物品数据
-				goods: [], //
 
 				purchaseNo: "", //单号
 				updatedTime: ""
@@ -87,6 +87,7 @@
 				})
 
 			}
+			this.$refs.goods.productList = this.productList;
 		},
 		methods: {
 			async goodsData() {
@@ -125,6 +126,24 @@
 				data.remarks = _this.remarks;
 				data.ourContacterName = _this.checkName;
 				data.warehouseName = _this.warehouseName;
+
+				let goods = [];
+				_this.productList.forEach(e => {
+					goods.push({
+						// purchaseNo: "",
+						prodNo: e.prodNo,
+						prodCustomNo: e.prodCustomNo,
+						prodName: e.prodName,
+						prodModel: e.prodModel,
+						unit: e.unit,
+						unitPrice: e.purchasePrice,
+						quantity: e.quantity,
+						remarks: e.newRemarks,
+						systemNum: e.notReceiverQuantity,
+						actualNum: e.quantity,
+
+					})
+				});
 				data.prodInfoDtos = _this.goods;
 
 				if (_this.type == 1) {
@@ -163,24 +182,8 @@
 				this.inventoryDate = date;
 			},
 			accept(item) {
-				let goods = [];
-				item.forEach(e => {
-					goods.push({
-						// purchaseNo: "",
-						prodNo: e.prodNo,
-						prodCustomNo: e.prodCustomNo,
-						prodName: e.prodName,
-						prodModel: e.prodModel,
-						unit: e.unit,
-						unitPrice: e.purchasePrice,
-						quantity: e.quantity,
-						remarks: e.newRemarks,
-						systemNum: e.notReceiverQuantity,
-						actualNum: e.quantity,
-
-					})
-				});
-				this.goods = goods;
+				this.productList = item;
+				this.$refs.goods.productList = this.productList;
 			},
 
 		}

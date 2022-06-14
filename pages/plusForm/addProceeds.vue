@@ -6,7 +6,7 @@
 			<view class="from from-new">
 				<text class="title">收款日期</text>
 				<view class="fill">
-					<uni-datetime-picker v-model="receiveTime" type="date" @change="receiveChange">
+					<uni-datetime-picker v-model="receiveTime" type="date" @change="receiveChange" :clear-icon="false">
 						{{receiveTime}}
 					</uni-datetime-picker>
 				</view>

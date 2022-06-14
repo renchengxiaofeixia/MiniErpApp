@@ -1,30 +1,22 @@
 <template>
 	<view class="">
 		<headerTab :scrollTab="scrollTab" @tabKey="change" :tab="first.id"></headerTab>
-		<searchbox @filter="openFilter()"></searchbox>
+		<searchbox @filter="openFilter()" @confirm="confirm" :placeholder="first.placeholder"></searchbox>
 
-		<view class="slide">
-			<block v-if="first.id == 0">
-				<scroll-view class="scroll-roll" scroll-y @scrolltolower="productTolower">
-					<dataGrid url="pages/details/product" :list="productList" tab="1" @drop="dropProduct"
-						@amend="amendProduct" :status="productStatus">
-					</dataGrid>
-				</scroll-view>
-			</block>
-			<block v-if="first.id == 1">
-				<scroll-view class="scroll-roll" scroll-y @scrolltolower="supplierTolower">
-					<dataGrid url="pages/details/supplier" :list="supplierList" tab="2" @drop="dropSupplier"
-						@amend="amendSupplier" :status="supplierStatus">
-					</dataGrid>
-				</scroll-view>
-			</block>
-			<block v-if="first.id == 2">
-				<scroll-view class="scroll-roll" scroll-y @scrolltolower="clientTolower">
-					<dataGrid url="pages/details/client" :list="clientList" tab="3" @drop="dropClient"
-						@amend="amendClient" :status="clientStatus">
-					</dataGrid>
-				</scroll-view>
-			</block>
+		<view v-if="first.id == 0">
+			<dataGrid url="pages/details/product" :list="productList" tab="1" @drop="dropProduct" @amend="amendProduct"
+				:status="productStatus" ref="sheet">
+			</dataGrid>
+		</view>
+		<view v-if="first.id==1">
+			<dataGrid url="pages/details/supplier" :list="supplierList" tab="2" @drop="dropSupplier"
+				@amend="amendSupplier" :status="supplierStatus" ref="sheet" @load="supplierTolower">
+			</dataGrid>
+		</view>
+		<view v-if="first.id == 2">
+			<dataGrid url="pages/details/client" :list="clientList" tab="3" @drop="dropClient" @amend="amendClient"
+				:status="clientStatus" ref="sheet" @load="clientTolower">
+			</dataGrid>
 		</view>
 
 		<filtratePopup @close="openFilter()" :show="filterShow">
@@ -46,7 +38,7 @@
 					<view class="contact-date">
 						下次联系日期
 					</view>
-					<uni-datetime-picker v-model="range" type="daterange" @maskClick="maskClick" />
+					<uni-datetime-picker v-model="range" type="daterange" @maskClick="maskClick" :clear-icon="false"/>
 				</view>
 				<view class="table" style="padding: 0;">
 					<pulldown headline="展示状态">
@@ -75,8 +67,6 @@
 		$getClient,
 		$delClient
 	} = require('@/api/client.js'); //客户
-
-
 	import headerTab from '@/components/headerTab/index.vue';
 	import searchbox from '@/components/searchbox/index.vue';
 	import filtratePopup from '@/components/filtratePopup/index.vue';
@@ -100,21 +90,29 @@
 			return {
 				scrollTab: [{
 					text: '物品',
+					open: true,
 					id: 0,
 					url: "pages/plusForm/addGoods",
+					placeholder: "物品编号/名称/规格型号"
 				}, {
 					text: '供应商',
+					open: true,
 					id: 1,
 					url: "pages/plusForm/addSupplier",
+					placeholder: "供应商名称/联系人/联系电话"
 				}, {
 					text: '客户',
+					open: true,
 					id: 2,
 					url: "pages/plusForm/addCustomer",
+					placeholder: "客户名称/联系人/联系电话"
 				}],
 				first: {
 					text: '物品',
+					open: true,
 					id: 0,
 					url: "pages/plusForm/addGoods",
+					placeholder: "物品编号/名称/规格型号"
 				},
 				filterShow: 'none',
 				productList: [], //物品
@@ -140,34 +138,48 @@
 
 		},
 		onShow() {
-			this.productList = [];
-			this.supplierList = [];
-			this.clientList = [];
-			this.productData();
-			this.supplierData();
-			this.clientData();
+			this.first.open = true;
+			this.getData(this.first.id);
+
 		},
 		mounted() {
 
 		},
 		methods: {
 			// 物品数据
-			async productData() {
+			async productData(sky) {
 				let _this = this;
 				let data = {
 					page: _this.productPage,
 					size: _this.productSize,
 				};
 				let res = await $getProduct(data);
+				if (sky) {
+					_this.productList = [];
+				}
 				if (!res.data.hasNextPage) {
 					_this.productNext = false;
 					_this.productStatus = 'noMore';
 				}
-				_this.productList.push(...res.data.data);
+
+				let list = [];
+				res.data.data.forEach(e => {
+					list.push({
+						id: e.id,
+						name: e.prodCustomNo,
+						model: e.prodModel,
+						No: e.prodNo,
+						count: e.prodNos,
+						num: e.salePrice + e.unit,
+
+					})
+				})
+
+				_this.productList.push(...list);
 
 			},
 			// 供应商数据
-			async supplierData() {
+			async supplierData(sky) {
 				let _this = this;
 				let data = {
 					page: _this.supplierPage,
@@ -175,26 +187,54 @@
 				}
 
 				let res = await $getSupplier(data);
+				if (sky) {
+					_this.supplierList = [];
+				}
 				if (!res.data.hasNextPage) {
 					_this.supplierNext = false;
 					_this.supplierStatus = 'noMore';
 				}
-				_this.supplierList.push(...res.data.data);
+
+				let list = [];
+				res.data.data.forEach(e => {
+					list.push({
+						id: e.id,
+						name: e.supplierName,
+						linkman: e.contacterName,
+						phone: e.mobile
+
+					})
+				})
+
+				_this.supplierList.push(...list);
 
 			},
 			// 客户数据
-			async clientData() {
+			async clientData(sky) {
 				let _this = this;
 				let data = {
 					page: _this.clientPage,
 					size: _this.clientSize,
 				}
-				let res = await $getClient(data)
+				let res = await $getClient(data);
+				if (sky) {
+					_this.clientList = [];
+				}
 				if (!res.data.hasNextPage) {
 					_this.clientNext = false;
 					_this.clientStatus = 'noMore';
 				}
-				_this.clientList.push(...res.data.data);
+				let list = [];
+				res.data.data.forEach(e => {
+					list.push({
+						id: e.id,
+						name: e.customerNo,
+						linkman: e.customerName,
+						phone: e.mobile
+
+					})
+				})
+				_this.clientList.push(...list);
 
 			},
 			// 删除物品
@@ -202,10 +242,9 @@
 				let _this = this;
 				_this.$api.showModal('确定要删除物品！').then(() => {
 					$delProduct(id).then(res => {
-						_this.productList.splice(index, 1);
 						_this.$api.msg('删除成功')
+						_this.productList.splice(index, 1);
 					});
-
 				});
 			},
 			// 修改物品
@@ -224,9 +263,7 @@
 						_this.supplierList.splice(index, 1)
 						_this.$api.msg('删除成功')
 					});
-
 				});
-
 			},
 			// 修改供应商
 			amendSupplier(id) {
@@ -242,7 +279,7 @@
 				_this.$api.showModal('确定要删除客户！').then(() => {
 					$delClient(id).then(res => {
 						_this.clientList.splice(index, 1)
-						_this.$api.msg('删除成功')
+						_this.$api.msg('删除成功');
 					});
 
 				});
@@ -266,9 +303,26 @@
 					}, 500);
 				}
 			},
+			//搜索
+			confirm(val) {
+				console.log(val);
+			},
 			// tab切换
 			change(item) {
 				this.first = item;
+				this.getData(item.id);
+			},
+			// 请求数据
+			getData(index) {
+				if (this.first.id == 0 && this.first.open) {
+					this.productData(true);
+				} else if (this.first.id == 1 && this.first.open) {
+					this.supplierData(true);
+				} else if (this.first.id == 2 && this.first.open) {
+					this.clientData(true);
+				}
+				this.scrollTab[index].open = false;
+				this.first.open = false;
 			},
 			// 物品下拉加载数据
 			productTolower(e) {

@@ -25,11 +25,22 @@ function $putProduct(id, data) {
 	return request.put('prod/' + id, data);
 }
 
+// 物品库存​​
+function $getGoodsInventorys(id) {
+	return request.get('inventorys/' + id);
+}
+
+// 物品采购记录
+function $getGoodsPurchases(id) {
+	return request.get('purchases/' + id);
+}
 
 module.exports = {
 	$getProduct,
 	$delProduct,
 	$postProduct,
 	$getProductId,
-	$putProduct
+	$putProduct,
+	$getGoodsInventorys,
+	$getGoodsPurchases
 }

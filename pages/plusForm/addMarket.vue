@@ -5,7 +5,7 @@
 			<view class="from from-new">
 				<text class="title">销售日期</text>
 				<view class="fill">
-					<uni-datetime-picker v-model="sellDate" type="date" @change="selectSell">
+					<uni-datetime-picker v-model="sellDate" type="date" @change="selectSell" :clear-icon="false">
 						{{sellDate}}
 					</uni-datetime-picker>
 				</view>
@@ -15,7 +15,8 @@
 			<view class="from from-new">
 				<text class="title">交货日期</text>
 				<view class="fill">
-					<uni-datetime-picker v-model="deliveryDate" type="date" @change="selectDelivery">
+					<uni-datetime-picker v-model="deliveryDate" type="date" @change="selectDelivery"
+						:clear-icon="false">
 						{{deliveryDate}}
 					</uni-datetime-picker>
 				</view>
@@ -65,7 +66,7 @@
 			</view>
 		</view>
 
-		<selectGoods :list="productList" @shape="accept"></selectGoods>
+		<selectGoods ref="goods" @shape="accept"></selectGoods>
 
 		<view class="table remarks" v-if="productList.length != 0">
 			<view class="from from-new">
@@ -181,9 +182,10 @@
 				})
 
 			}
+			_this.$refs.goods.productList = _this.productList;
 		},
 		onShow() {
-			console.log(this.client);
+
 		},
 		methods: {
 			// 确定
@@ -221,7 +223,7 @@
 				data.customerName = _this.client.customerName;
 
 				let goods = [];
-				_this.goods.forEach(item => {
+				_this.productList.forEach(item => {
 					goods.push({
 						prodNo: item.prodNo,
 						prodCustomNo: item.prodCustomNo,
@@ -272,7 +274,8 @@
 				});
 			},
 			accept(item) {
-				this.goods = item;
+				this.productList = item;
+				this.$refs.goods.productList = this.productList;
 			},
 			// 销售
 			selectSell(date) {

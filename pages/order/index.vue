@@ -1,22 +1,18 @@
 <template>
 	<view class="">
 		<headerTab :scrollTab="scrollTab" @tabKey="change" :tab="order.id"></headerTab>
-		<searchbox @filter="openFilter()"></searchbox>
+		<searchbox @filter="openFilter()" @confirm="confirm" :placeholder="order.placeholder"></searchbox>
 
-		<view class="slide">
-			<block v-if="order.id == 0">
-				<scroll-view class="scroll-roll" scroll-y>
-					<dataGrid url="pages/details/purchase" :list="purchaseList" tab="4" @drop="dropPurchase"
-						@amend="amendPurchase">
-					</dataGrid>
-				</scroll-view>
-			</block>
-			<block v-if="order.id == 1">
-				<scroll-view class="scroll-roll" scroll-y>
-					<dataGrid url="pages/details/sell" :list="marketList" tab="5" @drop="dropSell" @amend="amendSell">
-					</dataGrid>
-				</scroll-view>
-			</block>
+		<view class="" v-show="order.id == 0">
+			<dataGrid url="pages/details/purchase" :list="purchaseList" tab="4" @drop="dropPurchase"
+				@amend="amendPurchase" ref="sheet">
+			</dataGrid>
+		</view>
+
+		<view class="" v-show="order.id == 1">
+			<dataGrid url="pages/details/sell" :list="marketList" tab="5" @drop="dropSell" @amend="amendSell"
+				ref="sheet">
+			</dataGrid>
 		</view>
 
 		<filtratePopup @close="openFilter()" :show="filterShow">
@@ -61,7 +57,7 @@
 					<view class="contact-date">
 						入库日期
 					</view>
-					<uni-datetime-picker v-model="range" type="daterange" @maskClick="maskClick" />
+					<uni-datetime-picker v-model="range" type="daterange" @maskClick="maskClick" :clear-icon="false"/>
 				</view>
 			</view>
 
@@ -102,16 +98,22 @@
 				scrollTab: [{
 					text: '采购',
 					url: "pages/plusForm/addPurchase",
-					id: 0
+					id: 0,
+					open: true,
+					placeholder: "供应商/采购单号/物品名称"
 				}, {
 					text: '销售',
 					url: "pages/plusForm/addMarket",
-					id: 1
+					id: 1,
+					open: true,
+					placeholder: "客户/销售单号/物品名称/销售员"
 				}],
 				order: {
 					text: '采购',
 					url: "pages/plusForm/addPurchase",
-					id: 0
+					id: 0,
+					open: true,
+					placeholder: "供应商/采购单号/物品名称"
 				},
 				filterShow: 'none',
 				purchaseList: [], //采购数据
@@ -122,24 +124,66 @@
 
 		},
 		onShow() {
-			this.purchaseList = [];
-			this.marketList = [];
-			this.purchaseData();
-			this.marketData();
+			this.order.open = true;
+			this.getData(this.order.id)
 		},
 		methods: {
 			// 采购
-			async purchaseData() {
+			async purchaseData(sky) {
 				let _this = this;
 				let res = await $getPurchases();
-				_this.purchaseList.push(...res.data.data);
+				if (sky) {
+					_this.purchaseList = [];
+				}
+				let list = [];
+				res.data.data.forEach(e => {
+					list.push({
+						id: e.id,
+						name: e.supplierName,
+						No: e.purchaseNo,
+						check: e.purchaseStatus,
+						count: e.prodNos,
+						price: e.aggregateAmount.toString()
+
+					})
+
+				})
+				_this.purchaseList.push(...list);
+				_this.$forceUpdate();
 
 			},
 			// 销售
-			async marketData() {
+			async marketData(sky) {
 				let _this = this;
 				let res = await $getOrder();
-				_this.marketList.push(...res.data.data);
+				if (sky) {
+					_this.marketList = [];
+				}
+				let list = [];
+				res.data.data.forEach(e => {
+					list.push({
+						id: e.id,
+						name: e.customerNo,
+						No: e.orderNo,
+						check: e.orderStatus,
+						count: e.prodNos,
+						price: e.aggregateAmount.toString()
+
+					})
+				})
+				_this.marketList.push(...list);
+				_this.$forceUpdate();
+
+			},
+			getData(index) {
+				if (this.order.id == 0 && this.order.open) {
+					this.purchaseData(true);
+				} else if (this.order.id == 1 && this.order.open) {
+					this.marketData(true);
+				}
+				this.scrollTab[index].open = false;
+				this.order.open = false;
+
 
 			},
 			// 删除采购
@@ -150,7 +194,6 @@
 						_this.purchaseList.splice(index, 1)
 						_this.$api.msg('删除成功！');
 					});
-
 				});
 			},
 			// 修改采购
@@ -179,6 +222,10 @@
 					header: '修改销售订单'
 				})
 			},
+			//搜索
+			confirm(val) {
+				console.log(val);
+			},
 			openFilter() {
 				if (this.filterShow == 'none') {
 					this.filterShow = 'show';
@@ -191,6 +238,8 @@
 			},
 			change(item) {
 				this.order = item;
+				console.log(this.order);
+				this.getData(item.id);
 			}
 		}
 	}

@@ -5,7 +5,7 @@
 			<view class="from from-new">
 				<text class="title">联系日期</text>
 				<view class="fill">
-					<uni-datetime-picker v-model="contactTime" type="date" @change="selectTime">
+					<uni-datetime-picker v-model="contactTime" type="date" @change="selectTime" :clear-icon="false">
 						{{contactTime}}
 					</uni-datetime-picker>
 				</view>
@@ -14,7 +14,7 @@
 			<view class="from from-new">
 				<text class="title">下次联系</text>
 				<view class="fill">
-					<uni-datetime-picker v-model="nextContactTime" type="date" @change="selectNextTime">
+					<uni-datetime-picker v-model="nextContactTime" type="date" @change="selectNextTime" :clear-icon="false">
 						{{nextContactTime}}
 					</uni-datetime-picker>
 				</view>

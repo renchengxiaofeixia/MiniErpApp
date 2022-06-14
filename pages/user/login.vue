@@ -26,10 +26,10 @@
 </template>
 
 <script>
+	let app = getApp();
 	let {
 		$login
 	} = require('@/api/user.js');
-
 	import headerTab from '@/components/headerTab/index.vue';
 
 	export default {
@@ -68,16 +68,19 @@
 						key: "token",
 						data: token,
 						success: function() {
+							app.globalData.userLogin = true;
+							app.globalData.token = token;
 							setTimeout(() => {
 								_this.$navto.navBack();
 							}, 1000)
+
 						}
 					})
 					_this.$api.msg('成功登录！');
 				}).catch(error => {
 					_this.$api.msg(error.data);
 				});
-				
+
 			}
 		}
 	}
