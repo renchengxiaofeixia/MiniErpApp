@@ -4,7 +4,8 @@
 		globalData: {
 			//用于判断用户是否登录(默认为否)
 			userLogin: false,
-			token: uni.getStorageSync('token')
+			token: uni.getStorageSync('token'),
+			userName: uni.getStorageSync('userName'),
 		},
 		onLaunch: function() {
 			console.log('App Launch')

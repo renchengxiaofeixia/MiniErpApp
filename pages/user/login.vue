@@ -28,7 +28,8 @@
 <script>
 	let app = getApp();
 	let {
-		$login
+		$login,
+		$getUserMessage
 	} = require('@/api/user.js');
 	import headerTab from '@/components/headerTab/index.vue';
 
@@ -71,6 +72,10 @@
 							app.globalData.userLogin = true;
 							app.globalData.token = token;
 							setTimeout(() => {
+								$getUserMessage(res.data.id).then(item => {
+									uni.setStorageSync("userName", item.data)
+									app.globalData.userName = item.data;
+								});
 								_this.$navto.navBack();
 							}, 1000)
 

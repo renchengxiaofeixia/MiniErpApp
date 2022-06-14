@@ -1,6 +1,5 @@
 <template>
 	<view class="listing">
-
 		<view class="amount" v-if="hide">
 			<text class="sum">
 				一共{{list.length}}条数据
@@ -13,12 +12,14 @@
 						<view class="scroll-item">
 							<view class="goods-list" @click.stop="$navto.navto(url,{id:item.id})">
 								<view class="goods-flex">
-									<view class="black name">
+									<view class="black name" v-if="item.name">
 										{{item.name}}
 										<text class="model" v-if="item.model">({{item.model}})</text>
-										<!-- <block>李三</block>
-							                 <text class="gray shift">调拨到</text>
-								             <block>李三</block> -->
+									</view>
+									<view v-if="item.inWarehouseName">
+										{{item.inWarehouseName}}
+										<text class="gray shift">调拨到</text>
+										{{item.inWarehouseName}}
 									</view>
 
 									<view class="green" v-if="item.price">
@@ -45,17 +46,17 @@
 											</view>
 										</block>
 									</view>
-									<view class="supply-img" v-if="tab == 2 && !radio"
-										@click.stop="$api.dialPhone(item.mobile)">
+
+									<view class="supply-img" v-if="!radio && (tab == 2 || tab == 3)">
 										<image
 											src="../../static/image/adapter_supplier_search_result_item_phone_call.png"
-											mode="aspectFit"></image>
-									</view>
-
-									<view class="supply-img" v-if="tab == 3 && !radio">
-										<image src="../../static/image/home_main_btn_tab_product2.png" mode="aspectFit">
+											mode="aspectFit" v-if="tab == 2" @click.stop="$api.dialPhone(item.mobile)">
+										</image>
+										<image src="../../static/image/home_main_btn_tab_product2.png" mode="aspectFit"
+											v-if="tab == 3">
 										</image>
 									</view>
+
 									<view class="storage" v-if="item.check">
 										{{item.check}}
 									</view>

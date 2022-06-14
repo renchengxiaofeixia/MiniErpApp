@@ -17,7 +17,7 @@ function $getSupplierId(id) {
 
 // 物品供应商
 function $goodsSupplier(id) {
-	return request.get('suppliers/' + id);
+	return request.get('prod/suppliers/' + id);
 }
 
 // 新建供应商

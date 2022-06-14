@@ -68,9 +68,9 @@
 		$putPurchases,
 		$postPurchases
 	} = require('@/api/purchase.js'); //采购
+	
 	let {
 		$getOrderGoods
-
 	} = require('@/api/market.js'); //销售
 	import headerTab from '@/components/headerTab/index.vue';
 	import selectGoods from "@/components/selectGoods.vue"

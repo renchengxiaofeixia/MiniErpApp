@@ -1,60 +1,68 @@
 <template>
 	<view>
-		<headerTab title="出库单详情"></headerTab>
+		<headerTab title="调拨单详情"></headerTab>
 
 		<view class="goods-list gray">
 			<view class="goods-flex">
 				<view>
 					<view class="track">
 						<text>调拨单号：</text>
-						<text class="black"> wp002151</text>
+						<text class="black">{{transfer.transferNo}}</text>
 					</view>
 					<view class="track">
 						<text>调入日期：</text>
-						<text class="black"> wp002151</text>
+						<text class="black">{{transfer.transferDate}}</text>
 					</view>
 					<view class="track">
 						<text>调入仓库：</text>
-						<text class="black"> wp002151</text>
+						<text class="black">{{transfer.inWarehouseName}}</text>
 					</view>
 					<view class="track">
 						<text>调出仓库：</text>
-						<text class="black"> wp002151</text>
+						<text class="black">{{transfer.outWarehouseName}}</text>
 					</view>
 				</view>
 			</view>
 		</view>
 
-		<productMessage></productMessage>
+		<productMessage title="调拨物品" :list="goodsList" :hide="false"></productMessage>
 
 		<view class="table">
-			<pulldown headline="基本信息">
+			<pulldown headline="相关信息">
 				<view class="shove">
 					<view class="track">
 						<text class="gray">经办人：</text>
-						<text class="black"> 110</text>
+						<text class="black"> {{transfer.contacterName}}</text>
 					</view>
 					<view class="track">
 						<text class="gray">备注：</text>
-						<text class="black"> 110</text>
+						<text class="black"> {{transfer.remarks}}</text>
 					</view>
 				</view>
 			</pulldown>
 		</view>
-		<operator></operator>
+		<operator :list="operation"></operator>
+
 		<copyreader :show="compileShow" @close="handleClose()">
-			<view class="operation red" hover-class="checkActive">
+			<view class="operation red" hover-class="checkActive" @click="transferDel">
 				删除
 			</view>
-			<view class="operation" hover-class="checkActive" @click="$navto.navto('pages/plusForm/addAllot')">
-				复制
+			<view class="operation" hover-class="checkActive"
+				@click="$navto.navto('pages/plusForm/addAllot',{id:id,header:'修改调拨单',type: 1})">
+				修改
 			</view>
 		</copyreader>
+
 		<addOrder type="2" @click="handleClose()"></addOrder>
 	</view>
 </template>
 
 <script>
+	let {
+		$getTransferId,
+		$getTransferGoods,
+		$delTransfer
+	} = require('@/api/transfer.js'); //调拨
 	import headerTab from '@/components/headerTab/index.vue';
 	import pulldown from '@/components/pulldown.vue';
 	import productMessage from './components/productMessage.vue';
@@ -73,13 +81,53 @@
 		},
 		data() {
 			return {
+				id: '',
 				compileShow: "none",
+				transfer: {},
+				operation: {}, //操作日记
+				goodsList: [], //物品
+
 			}
 		},
-		onLoad() {
-
+		onLoad(e) {
+			this.id = e.id
+		},
+		onShow() {
+			this.getData();
+			this.goodsData();
 		},
 		methods: {
+			async getData() {
+				let _this = this;
+				let res = await $getTransferId(_this.id);
+				_this.transfer = res.data;
+				// 操作日记
+				_this.operation.createTime = res.data.createTime;
+				_this.operation.creator = res.data.creator;
+				_this.operation.updatedTime = res.data.updatedTime;
+				_this.operation.updator = res.data.updator;
+			},
+			async goodsData() {
+				let _this = this;
+				let res = await $getTransferGoods(_this.id);
+				res.data.forEach(item => {
+					item.systemNum = item.systemNum;
+					item.actualNum = item.transferNum;
+				})
+				_this.goodsList = res.data;
+			},
+			// 删除
+			transferDel() {
+				let _this = this;
+				_this.$api.showModal('你要确定要删除该调拨单吗?').then(() => {
+					$delTransfer(_this.id).then(res => {
+						_this.$api.msg('删除成功！');
+						setTimeout(function() {
+							_this.$navto.navtab('pages/warehouse/index')
+						}, 500)
+					})
+				});
+			},
 			handleClose() {
 				if (this.compileShow == 'none') {
 					this.compileShow = 'show';

@@ -10,6 +10,11 @@ function $register(data) {
 	return request.post("signup", data)
 }
 
+// 获取用户信息
+function $getUserMessage(id) {
+	return request.get("user/" + id)
+}
+
 // 获取销售员
 function $getUsers() {
 	return request.get("users")
@@ -53,6 +58,7 @@ function $delRole(id) {
 module.exports = {
 	$login,
 	$register,
+	$getUserMessage,
 	$getUsers,
 	$postUsers,
 	$getAddress,
@@ -60,5 +66,5 @@ module.exports = {
 	$getRole,
 	$getRoleId,
 	$putRole,
-	$delRole
+	$delRole,
 }

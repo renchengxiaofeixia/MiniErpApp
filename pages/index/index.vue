@@ -58,8 +58,9 @@
 		<view class="popup" :class="show">
 			<view class="mask" @click="handleClose()"></view>
 			<view class="layer">
-				
-				<view class="header bg-green" :style="{height:height + 80  + 'px'}" @click="$navto.navto('pages/user/personal')">
+
+				<view class="header bg-green" :style="{height:height + 80  + 'px'}"
+					@click="$navto.navto('pages/user/personal')">
 					<view class="header-flex" :style="{'padding-top': paddingTop + 20 + 'px'}">
 						<view class="login-img">
 							<!-- <image src="../../static/image/adapter_supplier_search_result_item_phone_call.png" mode="">
@@ -68,7 +69,7 @@
 						</view>
 						<view class="login-text">
 							<view class="login-name">
-								555555555555s
+								{{user.userName}}
 							</view>
 						</view>
 					</view>
@@ -77,7 +78,7 @@
 				<view class="" style="padding-top: 30rpx;">
 					<view class="goods-flex set" hover-class="checkActive" @click="$navto.navto('pages/system/role')">
 						<view class="">
-						<text class="iconfont icon-yonghu"></text>	角色管理
+							<text class="iconfont icon-yonghu"></text> 角色管理
 						</view>
 						<text class="iconfont icon-right-1-copy"></text>
 					</view>
@@ -93,7 +94,8 @@
 	export default {
 		data() {
 			return {
-				show: 'none'
+				show: 'none',
+				user: app.globalData.userName,
 
 			}
 		},
@@ -124,8 +126,7 @@
 		onLoad() {
 
 		},
-		onShow() {
-		},
+		onShow() {},
 		methods: {
 			login() {
 				let _this = this;

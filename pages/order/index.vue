@@ -5,13 +5,12 @@
 
 		<view class="" v-show="order.id == 0">
 			<dataGrid url="pages/details/purchase" :list="purchaseList" tab="4" @drop="dropPurchase"
-				@amend="amendPurchase" ref="sheet">
+				@amend="amendPurchase">
 			</dataGrid>
 		</view>
 
 		<view class="" v-show="order.id == 1">
-			<dataGrid url="pages/details/sell" :list="marketList" tab="5" @drop="dropSell" @amend="amendSell"
-				ref="sheet">
+			<dataGrid url="pages/details/sell" :list="marketList" tab="5" @drop="dropSell" @amend="amendSell">
 			</dataGrid>
 		</view>
 

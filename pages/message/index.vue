@@ -5,17 +5,17 @@
 
 		<view v-if="first.id == 0">
 			<dataGrid url="pages/details/product" :list="productList" tab="1" @drop="dropProduct" @amend="amendProduct"
-				:status="productStatus" ref="sheet">
+				:status="productStatus">
 			</dataGrid>
 		</view>
 		<view v-if="first.id==1">
 			<dataGrid url="pages/details/supplier" :list="supplierList" tab="2" @drop="dropSupplier"
-				@amend="amendSupplier" :status="supplierStatus" ref="sheet" @load="supplierTolower">
+				@amend="amendSupplier" :status="supplierStatus"  @load="supplierTolower">
 			</dataGrid>
 		</view>
 		<view v-if="first.id == 2">
 			<dataGrid url="pages/details/client" :list="clientList" tab="3" @drop="dropClient" @amend="amendClient"
-				:status="clientStatus" ref="sheet" @load="clientTolower">
+				:status="clientStatus" @load="clientTolower">
 			</dataGrid>
 		</view>
 

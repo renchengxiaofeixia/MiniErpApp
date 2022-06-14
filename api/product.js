@@ -27,12 +27,12 @@ function $putProduct(id, data) {
 
 // 物品库存​​
 function $getGoodsInventorys(id) {
-	return request.get('inventorys/' + id);
+	return request.get('prod/inventorys/' + id);
 }
 
 // 物品采购记录
 function $getGoodsPurchases(id) {
-	return request.get('purchases/' + id);
+	return request.get('prod/purchases/' + id);
 }
 
 module.exports = {

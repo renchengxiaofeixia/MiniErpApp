@@ -5,21 +5,20 @@
 
 
 		<view v-if="warehouse.id == 0">
-			<dataGrid url="pages/details/storage" :list="storageList" tab="6" @drop="dropStorage" ref="sheet"
-				@amend="amendStorage">
+			<dataGrid url="pages/details/storage" :list="storageList" tab="6" @drop="dropStorage" @amend="amendStorage">
 			</dataGrid>
 		</view>
-		<view v-if="warehouse.id == 1">
+		<!-- <view v-if="warehouse.id == 1">
 			<dataGrid url="pages/details/delivery">
 			</dataGrid>
-		</view>
-		<view v-if="warehouse.id == 2">
-			<dataGrid url="pages/details/inventory" :list="inventoryList" tab="8" @drop="dropInventory" ref="sheet"
+		</view> -->
+		<view v-if="warehouse.id == 1">
+			<dataGrid url="pages/details/inventory" :list="inventoryList" tab="8" @drop="dropInventory"
 				@amend="amendInventory">
 			</dataGrid>
 		</view>
-		<view v-if="warehouse.id == 3">
-			<dataGrid url="pages/details/allocate"></dataGrid>
+		<view v-if="warehouse.id == 2">
+			<dataGrid url="pages/details/allocate" :list="transferList"></dataGrid>
 		</view>
 
 
@@ -37,7 +36,7 @@
 					<view class="contact-date">
 						下次联系日期
 					</view>
-					<uni-datetime-picker v-model="range" type="daterange" @maskClick="maskClick" :clear-icon="false"/>
+					<uni-datetime-picker v-model="range" type="daterange" @maskClick="maskClick" :clear-icon="false" />
 				</view>
 				<view class="table" style="padding: 0;">
 					<pulldown headline="展示状态">
@@ -61,6 +60,10 @@
 		$getCheck,
 		$delCheck
 	} = require('@/api/inventory.js'); //盘点
+
+	let {
+		$getTransfer
+	} = require('@/api/transfer.js'); //调拨
 	import headerTab from '@/components/headerTab/index.vue';
 	import searchbox from '@/components/searchbox/index.vue';
 	import dataGrid from '@/components/dataGrid/index.vue';
@@ -83,30 +86,33 @@
 		data() {
 			return {
 				scrollTab: [{
-					text: '入库',
-					url: 'pages/plusForm/addStorage',
-					id: 0,
-					open: true,
-					placeholder: "入库方/入库单号/物品名称"
-				}, {
-					text: '出库',
-					url: 'pages/plusForm/adddElivery',
-					id: 1,
-					open: true,
-					placeholder: "出库对象/出库单号/物品名称"
-				}, {
-					text: '盘点',
-					url: 'pages/plusForm/addInventory',
-					id: 2,
-					open: true,
-					placeholder: "盘点单号/物品编号/物品名称"
-				}, {
-					text: '调拨',
-					url: 'pages/plusForm/addAllot',
-					id: 3,
-					open: true,
-					placeholder: "调拨单号/物品编号/物品名称"
-				}],
+						text: '入库',
+						url: 'pages/plusForm/addStorage',
+						id: 0,
+						open: true,
+						placeholder: "入库方/入库单号/物品名称"
+					},
+					// {
+					// 	text: '出库',
+					// 	url: 'pages/plusForm/adddElivery',
+					// 	id: 1,
+					// 	open: true,
+					// 	placeholder: "出库对象/出库单号/物品名称"
+					// }, 
+					{
+						text: '盘点',
+						url: 'pages/plusForm/addInventory',
+						id: 1,
+						open: true,
+						placeholder: "盘点单号/物品编号/物品名称"
+					}, {
+						text: '调拨',
+						url: 'pages/plusForm/addAllot',
+						id: 2,
+						open: true,
+						placeholder: "调拨单号/物品编号/物品名称"
+					}
+				],
 				warehouse: {
 					text: '入库',
 					url: 'pages/plusForm/addStorage',
@@ -117,9 +123,8 @@
 				},
 				filterShow: 'none',
 				storageList: [], //入库
-				deliveryList: [], //出库
 				inventoryList: [], //盘点
-				allotList: [], //调拨
+				transferList: [], //调拨
 
 			}
 		},
@@ -152,11 +157,6 @@
 				_this.storageList.push(...list);
 
 			},
-			// 出库数据
-			async deliveryData() {
-
-
-			},
 			// 盘点数据
 			async inventoryData(sky) {
 				let _this = this;
@@ -168,7 +168,7 @@
 				res.data.data.forEach(e => {
 					list.push({
 						id: e.id,
-						name: e.ourContacterName,
+						name: e.contacterName,
 						No: e.checkNo,
 						count: e.prodNos
 
@@ -177,15 +177,32 @@
 				_this.inventoryList.push(...list);
 
 			},
+			async transferData(sky) {
+				let _this = this;
+				let res = await $getTransfer();
+				if (sky) {
+					_this.transferList = [];
+				}
+				let list = [];
+				res.data.data.forEach(e => {
+					list.push({
+						id: e.id,
+						inWarehouseName: e.inWarehouseName,
+						outWarehouseName: e.outWarehouseName,
+						No: e.transferNo,
+						count: e.prodNos
+
+					})
+				})
+				_this.transferList.push(...list);
+			},
 			getData(index) {
 				if (this.warehouse.id == 0 && this.warehouse.open) {
 					this.storageData(true);
 				} else if (this.warehouse.id == 1 && this.warehouse.open) {
-					this.deliveryList = [];
-				} else if (this.warehouse.id == 2 && this.warehouse.open) {
 					this.inventoryData(true);
 				} else if (this.warehouse.id == 2 && this.warehouse.open) {
-					this.allotList = [];
+					this.transferData(true)
 
 				}
 				this.scrollTab[index].open = false;

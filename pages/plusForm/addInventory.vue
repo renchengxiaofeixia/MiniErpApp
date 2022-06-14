@@ -17,18 +17,29 @@
 				<text class="title">仓库名</text>
 				<input type="text" placeholder="填写仓库名称" class="fill" v-model="warehouseName">
 			</view>
-			<view class="from from-new">
-				<text class="title">盘点人</text>
-				<input type="text" placeholder="填写盘点人" class="fill" v-model="checkName">
-			</view>
-			<view class="from from-new">
-				<text class="title">备注</text>
-				<input type="text" placeholder="填写备注" class="fill" v-model="remarks">
-			</view>
 		</view>
+
+
 
 		<selectGoods ref="goods" @shape="accept" :ids="4" :hide="false"></selectGoods>
 
+		<block v-if="productList.length !=0">
+			<view class="headline">
+				相关信息
+			</view>
+			<view class="table product">
+				<view class="from from-new">
+					<text class="title">经办人</text>
+					<input type="text" placeholder="填写经办人" v-model="checkName" class="fill">
+					<text class="iconfont icon-right-1-copy"></text>
+				</view>
+				<view class="from from-new">
+					<text class="title">备注</text>
+					<input type="text" placeholder="填写备注" class="fill" v-model="remarks">
+					<text class="iconfont icon-right-1-copy"></text>
+				</view>
+			</view>
+		</block>
 		<footerBtn @confirm="checkBnt()"></footerBtn>
 	</view>
 </template>
@@ -76,7 +87,7 @@
 			_this.header = option.header ? decodeURIComponent(option.header) : '新建盘点单';
 
 			if (_this.type == 1) {
-				_this.goodsData();
+				_this.getData();
 				//物品
 				let isGoods = await $getCheckGoods(_this.id);
 				_this.productList = isGoods.data;
@@ -90,7 +101,7 @@
 			this.$refs.goods.productList = this.productList;
 		},
 		methods: {
-			async goodsData() {
+			async getData() {
 				let _this = this;
 				let res = await $getCheckId(_this.id);
 				let data = res.data;
@@ -98,7 +109,7 @@
 				_this.inventoryDate = data.checkDate || _this.$api.dateTime("yyyy-MM-dd");
 				_this.warehouseName = data.warehouseName;
 				_this.remarks = data.remarks;
-				_this.checkName = data.ourContacterName;
+				_this.checkName = data.contacterName;
 
 				_this.updatedTime = new Date(data.updatedTime).valueOf();
 
@@ -124,7 +135,7 @@
 				let data = {};
 				data.checkDate = _this.inventoryDate;
 				data.remarks = _this.remarks;
-				data.ourContacterName = _this.checkName;
+				data.contacterName = _this.checkName;
 				data.warehouseName = _this.warehouseName;
 
 				let goods = [];
@@ -137,7 +148,6 @@
 						prodModel: e.prodModel,
 						unit: e.unit,
 						unitPrice: e.purchasePrice,
-						quantity: e.quantity,
 						remarks: e.newRemarks,
 						systemNum: e.notReceiverQuantity,
 						actualNum: e.quantity,

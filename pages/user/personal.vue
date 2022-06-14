@@ -4,34 +4,26 @@
 		<view class="table">
 			<view class="goods-flex mgs">
 				<view class="gray name">登录名：</view>
-				<view class="black fill">123</view>
+				<view class="black fill">{{user.userName}}</view>
 			</view>
 			<view class="goods-flex mgs">
 				<view class="gray name">手机号：</view>
-				<view class="black fill">123</view>
-			</view>
-			<view class="goods-flex mgs">
-				<view class="gray name">邮箱：</view>
-				<view class="black fill">123</view>
+				<view class="black fill">{{user.mobile}}</view>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
-	let {
-
-	} = require('@/api/user.js');
+	let app = getApp();
 	import headerTab from '@/components/headerTab/index.vue';
 	export default {
 		components: {
 			headerTab,
-
 		},
 		data() {
 			return {
-
-
+				user: app.globalData.userName,
 			}
 		},
 		onLoad(e) {
