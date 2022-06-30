@@ -37,10 +37,10 @@
 					数量
 				</view>
 				<view class="product-sum">
-					<block v-if="hide">
+					<view v-show="hide">
 						<uni-number-box :min="1" v-model="item.quantity" @change="changeValue(item)" :max="1000" />
-					</block>
-					<block v-else>
+					</view>
+					<view  v-show="!hide">
 						<uni-number-box :min="1" v-model="item.quantity" @change="changeValue(item)"
 							:max="item.notReceiverQuantity" />
 						<text style="margin-left: 10upx; font-size: 24upx;" class="red">
@@ -51,7 +51,7 @@
 								库存：{{item.nowQuantity}}
 							</block>
 						</text>
-					</block>
+					</view>
 				</view>
 			</view>
 			<view class="goods-flex product-back product-show">
@@ -68,11 +68,7 @@
 </template>
 
 <script>
-	import UniNumberBox from '@/components/uni-number-box/uni-number-box.vue';
 	export default {
-		components: {
-			UniNumberBox
-		},
 		props: {
 			ids: {
 				type: Number,
@@ -91,11 +87,10 @@
 		watch: {
 			productList: {
 				handler(item, index) {
-					this.productList = this.productList;
+					this.productList = item;
 					this.circulation(); //监听到数据变化执行方法
-					this.$forceUpdate()
-				},
-				deep: true // 深度监听父组件传过来对象变化
+			
+				}
 			}
 		},
 		methods: {

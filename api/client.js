@@ -25,12 +25,16 @@ function $putClient(id, data) {
 	return request.put('customer/' + id, data);
 }
 
-
+//销售记录
+function $getClientRecord(id) {
+	return request.get('customer/orders/' + id);
+}
 
 module.exports = {
 	$getClient,
 	$delClient,
 	$getClientId,
 	$postClient,
-	$putClient
+	$putClient,
+	$getClientRecord
 }

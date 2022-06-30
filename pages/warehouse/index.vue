@@ -1,7 +1,7 @@
 <template>
 	<view class="">
 		<headerTab :scrollTab="scrollTab" @tabKey="change" :tab="warehouse.id"></headerTab>
-		<searchbox @filter="openFilter()" @confirm="confirm" :placeholder="warehouse.placeholder"></searchbox>
+		<searchbox @filter="showDrawer()" @confirm="confirm" :placeholder="warehouse.placeholder"></searchbox>
 
 
 		<view v-if="warehouse.id == 0">
@@ -22,15 +22,15 @@
 		</view>
 
 
-		<filtratePopup @close="openFilter()" :show="filterShow">
+		<filtratePopup ref="show">
 			<view>
-				<view class="table" style="padding: 0;">
+				<!-- <view class="table" style="padding: 0;">
 					<pulldown headline="库存状况">
 						<stateBar
 							:list="[{monicker: '全部',id: 1}, {monicker: '正常',id: 2}, {monicker: '负库存',id: 3}, {monicker: '超出上限',id: 4}, {monicker: '超出下限',id: 5}]">
 						</stateBar>
 					</pulldown>
-				</view>
+				</view> -->
 
 				<view class="table" style="padding: 0;">
 					<view class="contact-date">
@@ -70,7 +70,6 @@
 	import addOrder from '@/components/addOrder.vue';
 
 	import filtratePopup from '@/components/filtratePopup/index.vue';
-	import pulldown from "@/components/pulldown.vue"
 	import stateBar from "@/components/stateBar.vue"
 
 	export default {
@@ -80,7 +79,6 @@
 			dataGrid,
 			addOrder,
 			filtratePopup,
-			pulldown, //折叠样式
 			stateBar,
 		},
 		data() {
@@ -121,10 +119,23 @@
 					placeholder: "入库方/入库单号/物品名称"
 
 				},
-				filterShow: 'none',
 				storageList: [], //入库
+				storagePage: 1, //页数
+				storageSize: 14, //页数量
+				storageNext: true, //是否也下页
+				storageStatus: 'more', //加载中
+
 				inventoryList: [], //盘点
+				inventoryPage: 1, //页数
+				inventorySize: 14, //页数量
+				inventoryNext: true, //是否也下页
+				inventoryStatus: 'more', //加载中
+
 				transferList: [], //调拨
+				transferPage: 1, //页数
+				transferSize: 14, //页数量
+				transferNext: true, //是否也下页
+				transferStatus: 'more', //加载中
 
 			}
 		},
@@ -139,7 +150,15 @@
 			// 入库数据
 			async storageData(sky) {
 				let _this = this;
-				let res = await $getStorage();
+				let data = {
+					page: _this.storagePage,
+					size: _this.storageSize,
+				};
+
+				let res = await $getStorage(data);
+				if (!res) {
+					return
+				}
 				if (sky) {
 					_this.storageList = [];
 				}
@@ -160,7 +179,15 @@
 			// 盘点数据
 			async inventoryData(sky) {
 				let _this = this;
-				let res = await $getCheck();
+				let data = {
+					page: _this.inventoryPage,
+					size: _this.inventorySize,
+				};
+
+				let res = await $getCheck(data);
+				if (!res) {
+					return
+				}
 				if (sky) {
 					_this.inventoryList = [];
 				}
@@ -177,9 +204,18 @@
 				_this.inventoryList.push(...list);
 
 			},
+			// 调拨数据
 			async transferData(sky) {
 				let _this = this;
-				let res = await $getTransfer();
+				let data = {
+					page: _this.transferPage,
+					size: _this.transferSize,
+				};
+
+				let res = await $getTransfer(data);
+				if (!res) {
+					return
+				}
 				if (sky) {
 					_this.transferList = [];
 				}
@@ -226,6 +262,19 @@
 					type: 1
 				})
 			},
+			//入库下拉加载
+			storageTolower() {
+				let _this = this;
+				if (_this.storageNext) {
+					_this.storageStatus = 'loading';
+					_this.storagePage = 2;
+					_this.storageData();
+				} else {
+					setTimeout(function() {
+						_this.storageStatus = 'noMore';
+					}, 1000)
+				}
+			},
 			// 删除盘点
 			dropInventory(id, index) {
 				let _this = this;
@@ -244,6 +293,19 @@
 					type: 1
 				})
 			},
+			//盘点下拉加载
+			inventoryTolower() {
+				let _this = this;
+				if (_this.inventoryNext) {
+					_this.inventoryStatus = 'loading';
+					_this.inventoryPage = 2;
+					_this.inventoryData();
+				} else {
+					setTimeout(function() {
+						_this.inventoryStatus = 'noMore';
+					}, 1000)
+				}
+			},
 			//搜索
 			confirm(val) {
 				console.log(val);
@@ -252,15 +314,8 @@
 				this.warehouse = item;
 				this.getData(item.id);
 			},
-			openFilter() {
-				if (this.filterShow == 'none') {
-					this.filterShow = 'show';
-				} else {
-					this.filterShow = 'hide';
-					setTimeout(() => {
-						this.filterShow = 'none';
-					}, 500);
-				}
+			showDrawer() {
+				this.$refs.show.showDrawer()
 			},
 
 		}

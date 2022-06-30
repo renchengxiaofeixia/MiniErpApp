@@ -1,14 +1,21 @@
-const baseUrl = 'http://192.168.110.187:30008/';
+// const baseUrl = 'http://192.168.110.187:30008/';
+const baseUrl = 'https://127.0.0.1:7053/';
 
-export default function request(url, method, data, header) {
+export default function request(url, method, data, isToken = false) {
 	// options.header = {
 	// 	"Content-Type": "application/x-www-form-urlencoded",
 	// }
+	let header = {};
 	const token = getApp().globalData.token;
 	if (token) {
 		header = {
 			'Authorization': 'Bearer ' + token
 		}
+	}
+
+	if (!isToken && !token) {
+		console.log("请登录");
+		return
 	}
 	return new Promise((resolve, reject) => {
 		uni.request({
@@ -33,5 +40,5 @@ export default function request(url, method, data, header) {
 }
 
 ['get', 'post', 'put', 'delete'].forEach((method) => {
-	request[method] = (url, data, opt) => request(url, method, data, opt || {})
+	request[method] = (url, data, opt) => request(url, method, data, opt || "")
 });

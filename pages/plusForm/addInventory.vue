@@ -52,14 +52,12 @@
 		$putCheck
 	} = require('@/api/inventory.js'); //盘点
 	import headerTab from '@/components/headerTab/index.vue';
-	import pulldown from "@/components/pulldown.vue"
 	import stateBar from "@/components/stateBar.vue"
 	import selectGoods from "@/components/selectGoods.vue"
 	import footerBtn from '@/components/footerBtn.vue';
 	export default {
 		components: {
 			headerTab,
-			pulldown,
 			stateBar,
 			selectGoods,
 			footerBtn

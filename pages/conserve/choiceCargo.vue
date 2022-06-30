@@ -4,29 +4,29 @@
 		<searchbox @filter="openFilter()"></searchbox>
 
 
-		<view v-if="id == 1">
+		<view v-show="id == 1">
 			<dataGrid :list="productList" :date="false" tab="1" :hide="false" :radio="true" @radioChange="radioChange"
 				:status="productStatus" @load="productTolower">
 			</dataGrid>
 		</view>
-		<view v-if="id == 2">
+		<view v-show="id == 2">
 			<dataGrid :list="supplierList" :date="false" tab="2" :hide="false" :radio="true" @radioChange="radioChange"
 				:status="supplierStatus" @load="supplierTolower">
 			</dataGrid>
 		</view>
-		<view v-if="id == 3">
+		<view v-show="id == 3">
 			<dataGrid :list="clientList" tab="3" :date="false" :hide="false" :radio="true" @radioChange="radioChange"
 				:status="clientStatus" @load="clientTolower">
 			</dataGrid>
 		</view>
-		<view v-if="id == 4">
+		<view v-show="id == 4">
 			<dataGrid :list="warehouseList" :date="false" tab="1" :hide="false" :radio="true"
 				@radioChange="radioChange">
 			</dataGrid>
 		</view>
 
 
-		<block v-if="id != 4">
+		<block v-show="id != 4">
 			<addOrder :url="location" top="70%"></addOrder>
 		</block>
 
@@ -55,8 +55,8 @@
 	import dataGrid from '@/components/dataGrid/index.vue';
 	import addOrder from '@/components/addOrder.vue';
 	import footerBtn from '@/components/footerBtn.vue';
-	import UniNumberBox from '@/components/uni-number-box/uni-number-box.vue';
-
+	import UniNumberBox from '@/uni_modules/uni-number-box/components/uni-number-box/uni-number-box.vue';
+	
 	export default {
 		components: {
 			headerTab,
@@ -277,15 +277,15 @@
 					val.totalPrice = 0;
 					val.num = 1;
 					val.newRemarks = "";
-					this.productPitch = val;
+					this.$set(this,'productPitch',val)
 				} else if (this.id == 2) {
-					this.supplierPitch = val;
+					this.$set(this,'supplierPitch',val)
 				} else if (this.id == 3) {
-					this.clientPitch = val;
+					this.$set(this,'clientPitch',val)
 				} else if (this.id == 4) {
 					val.quantity = 1;
 					val.newRemarks = "";
-					this.warehousePitch = val;
+					this.$set(this,'warehousePitch',val)
 				}
 
 			},

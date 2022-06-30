@@ -1,8 +1,8 @@
 import request from '@/libs/request.js'
 
 // 入库列表
-function $getStorage() {
-	return request.get("enterwarehouses");
+function $getStorage(data) {
+	return request.get("enterwarehouses",data);
 }
 // 入库物品
 function $goodsStorage(id) {

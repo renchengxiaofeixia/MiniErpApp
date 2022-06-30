@@ -6,8 +6,8 @@ function $postOrder(data) {
 }
 
 // 销售列表
-function $getOrder() {
-	return request.get("orders");
+function $getOrder(data) {
+	return request.get("orders",data);
 }
 // 销售详情
 function $getOrderId(id) {

@@ -28,18 +28,20 @@
 		<productMessage title="调拨物品" :list="goodsList" :hide="false"></productMessage>
 
 		<view class="table">
-			<pulldown headline="相关信息">
-				<view class="shove">
-					<view class="track">
-						<text class="gray">经办人：</text>
-						<text class="black"> {{transfer.contacterName}}</text>
+			<uni-collapse>
+				<uni-collapse-item title="相关信息">
+					<view class="shove">
+						<view class="track">
+							<text class="gray">经办人：</text>
+							<text class="black"> {{transfer.contacterName}}</text>
+						</view>
+						<view class="track">
+							<text class="gray">备注：</text>
+							<text class="black"> {{transfer.remarks}}</text>
+						</view>
 					</view>
-					<view class="track">
-						<text class="gray">备注：</text>
-						<text class="black"> {{transfer.remarks}}</text>
-					</view>
-				</view>
-			</pulldown>
+				</uni-collapse-item>
+			</uni-collapse>
 		</view>
 		<operator :list="operation"></operator>
 
@@ -64,7 +66,6 @@
 		$delTransfer
 	} = require('@/api/transfer.js'); //调拨
 	import headerTab from '@/components/headerTab/index.vue';
-	import pulldown from '@/components/pulldown.vue';
 	import productMessage from './components/productMessage.vue';
 	import operator from './components/operator.vue';
 	import addOrder from '@/components/addOrder.vue';
@@ -72,7 +73,6 @@
 	export default {
 		components: {
 			headerTab,
-			pulldown,
 			productMessage,
 			operator,
 			addOrder,
@@ -153,7 +153,8 @@
 	}
 
 	.shove {
-		padding: 20rpx 0;
+		padding: 20rpx;
+		border-top: 1rpx solid #ccc;
 	}
 
 	.phone {

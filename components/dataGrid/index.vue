@@ -5,93 +5,39 @@
 				一共{{list.length}}条数据
 			</text>
 		</view>
+
 		<view class="tabulation">
-			<scroll-view class="scroll-roll" scroll-y @scrolltolower="load" style="height: 79vh;" v-if="list != 0">
+			<scroll-view class="scroll-roll" scroll-y @scrolltolower="load" style="height: 79vh;"
+				v-if="list.length != 0">
 				<radio-group @change="radioChange">
-					<view class="scroll-view" v-for="(item,index) in list" :key="index">
-						<view class="scroll-item">
-							<view class="goods-list" @click.stop="$navto.navto(url,{id:item.id})">
-								<view class="goods-flex">
-									<view class="black name" v-if="item.name">
-										{{item.name}}
-										<text class="model" v-if="item.model">({{item.model}})</text>
-									</view>
-									<view v-if="item.inWarehouseName">
-										{{item.inWarehouseName}}
-										<text class="gray shift">调拨到</text>
-										{{item.inWarehouseName}}
-									</view>
-
-									<view class="green" v-if="item.price">
-										￥{{item.price}}
-									</view>
-									<view class="green" v-if="item.num">
-										{{item.num}}
-									</view>
-								</view>
-								<view class="goods-flex gray">
-									<view>
-										<view v-if="item.No">
-											{{item.No}}
-										</view>
-										<view v-if="item.count">
-											{{item.count}}
-										</view>
-										<block v-if="tab == 2 || tab == 3">
-											<view class="">
-												联系人：{{item.linkman}}
-											</view>
-											<view>
-												联系人电话：{{item.phone}}
-											</view>
-										</block>
-									</view>
-
-									<view class="supply-img" v-if="!radio && (tab == 2 || tab == 3)">
-										<image
-											src="../../static/image/adapter_supplier_search_result_item_phone_call.png"
-											mode="aspectFit" v-if="tab == 2" @click.stop="$api.dialPhone(item.mobile)">
-										</image>
-										<image src="../../static/image/home_main_btn_tab_product2.png" mode="aspectFit"
-											v-if="tab == 3">
-										</image>
-									</view>
-
-									<view class="storage" v-if="item.check">
-										{{item.check}}
-									</view>
-									<label class="radio" v-if="radio">
-										<radio :value="JSON.stringify(item)" />
-									</label>
-								</view>
-							</view>
-							<view class="goods-btn" v-if="hide">
-								<button class="pinless" style="background-color: #ffb535;" @click.stop="amend(item.id)">
-									修改
-								</button>
-								<button class="pinless" style="background-color: #ff4622;"
-									@click.stop="drop(item.id,index)">
-									删除
-								</button>
-							</view>
-						</view>
-					</view>
+					<block v-for="(item,index) in list" :key="index">
+						<goodsList :item="item" :url="url" :tab="tab" :radio="radio" :hide="hide"
+							@amend="amend(item.id)" @drop="drop(item.id,index)">
+							<label class="radio" v-if="radio">
+								<radio :value="JSON.stringify(item)" />
+							</label>
+						</goodsList>
+					</block>
 				</radio-group>
 				<uni-load-more :status="status" IconType="auto" :content-text="contentText" />
 			</scroll-view>
+			
 			<view class="empty-log" v-else>
 				<image src="../../static/image/nodata.png" mode="aspectFill"></image>
 				<text v-if="userLoginFlag">空空如也！</text>
 				<text v-else @click="$navto.navto('pages/user/login')" class="isLog">去登录 ！</text>
 			</view>
 		</view>
-
 	</view>
 </template>
 
 <script>
 	let app = getApp();
+	import goodsList from './goodsList.vue';
 	export default {
+		components: {
+			goodsList
+		},
 		props: {
 			tab: {
 				type: String,
@@ -120,33 +66,21 @@
 		},
 		data() {
 			return {
-				touch: false,
-				content: [],
-				current: 0,
 				userLoginFlag: false,
 				contentText: {
 					contentdown: '下拉加载',
 					contentrefresh: '加载中',
 					contentnomore: '没有更多'
-				},
-
+				}
 			};
 		},
 		watch: {
-			list(item) {
-				this.list = item;
-			}
+
 		},
 		created() {
 			this.userLoginFlag = app.globalData.userLogin;
 		},
 		methods: {
-			logoTime() {
-				this.touch = true;
-			},
-			loosenTime() {
-				this.touch = false;
-			},
 			amend(id) {
 				this.$emit("amend", id);
 			},
@@ -163,7 +97,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.listing {
 		.amount {
 			position: sticky;

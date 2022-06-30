@@ -6,8 +6,8 @@ function $postCheck(data) {
 }
 
 // 盘点列表
-function $getCheck() {
-	return request.get("check")
+function $getCheck(data) {
+	return request.get("check",data)
 }
 
 // 盘点详情

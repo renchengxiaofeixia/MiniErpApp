@@ -55,37 +55,32 @@
 			</view>
 		</view>
 
-		<view class="popup" :class="show">
-			<view class="mask" @click="handleClose()"></view>
-			<view class="layer">
-
-				<view class="header bg-green" :style="{height:height + 80  + 'px'}"
-					@click="$navto.navto('pages/user/personal')">
-					<view class="header-flex" :style="{'padding-top': paddingTop + 20 + 'px'}">
-						<view class="login-img">
-							<!-- <image src="../../static/image/adapter_supplier_search_result_item_phone_call.png" mode="">
+		<uni-drawer ref="isShow" mode="left" :width="320">
+			<view class="header bg-green" :style="{height:height + 80  + 'px'}"
+				@click="$navto.navto('pages/user/personal')">
+				<view class="header-flex" :style="{'padding-top': paddingTop + 20 + 'px'}">
+					<view class="login-img">
+						<!-- <image src="../../static/image/adapter_supplier_search_result_item_phone_call.png" mode="">
 							</image> -->
-							<text class="iconfont icon-yonghu"></text>
-						</view>
-						<view class="login-text">
-							<view class="login-name">
-								{{user.userName}}
-							</view>
+						<text class="iconfont icon-yonghu"></text>
+					</view>
+					<view class="login-text">
+						<view class="login-name">
+							{{user.userName}}
 						</view>
 					</view>
 				</view>
-
-				<view class="" style="padding-top: 30rpx;">
-					<view class="goods-flex set" hover-class="checkActive" @click="$navto.navto('pages/system/role')">
-						<view class="">
-							<text class="iconfont icon-yonghu"></text> 角色管理
-						</view>
-						<text class="iconfont icon-right-1-copy"></text>
-					</view>
-				</view>
-
 			</view>
-		</view>
+
+			<view class="" style="padding-top: 30rpx;">
+				<view class="goods-flex set" hover-class="checkActive" @click="$navto.navto('pages/system/role')">
+					<view class="">
+						<text class="iconfont icon-yonghu"></text> 角色管理
+					</view>
+					<text class="iconfont icon-right-1-copy"></text>
+				</view>
+			</view>
+		</uni-drawer>
 	</view>
 </template>
 
@@ -94,7 +89,7 @@
 	export default {
 		data() {
 			return {
-				show: 'none',
+				isshow: false,
 				user: app.globalData.userName,
 
 			}
@@ -132,7 +127,7 @@
 				let _this = this;
 				if (app.globalData.userLogin) {
 					// _this.
-					_this.handleClose();
+					_this.showDrawer();
 				} else {
 					uni.showModal({
 						title: '提示',
@@ -147,16 +142,14 @@
 					});
 				}
 			},
-			handleClose() {
-				if (this.show == 'none') {
-					this.show = 'show';
-				} else {
-					this.show = 'hide';
-					setTimeout(() => {
-						this.show = 'none';
-					}, 500);
-				}
-			}
+			// 打开窗口
+			showDrawer() {
+				this.$refs.isShow.open()
+			},
+			// 关闭
+			closeDrawer() {
+				this.$refs.isShow.close()
+			},
 		}
 	}
 </script>
@@ -380,45 +373,5 @@
 
 	.none {
 		display: none;
-	}
-
-	@keyframes showPopup {
-		0% {
-			opacity: 0;
-		}
-
-		100% {
-			opacity: 1;
-		}
-	}
-
-	@keyframes hidePopup {
-		0% {
-			opacity: 1;
-		}
-
-		100% {
-			opacity: 0;
-		}
-	}
-
-	@keyframes showLayer {
-		0% {
-			transform: translateX(-120%);
-		}
-
-		100% {
-			transform: translateX(0%);
-		}
-	}
-
-	@keyframes hideLayer {
-		0% {
-			transform: translateX(0);
-		}
-
-		100% {
-			transform: translateX(-120%);
-		}
 	}
 </style>

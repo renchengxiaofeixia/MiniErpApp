@@ -43,20 +43,17 @@
 					</view>
 				</swiper-item>
 				<swiper-item>
-					<view class="swiper-item">
-						<view class="header gray">
-							2022-05-05
-						</view>
-						<view class="table">
-							<view class="from diary goods-flex">
-								<text class="title black">供应商</text>
-								<text class="green"> ￥999</text>
+					<view class="table">
+						<view class="supplier" v-for="(item,index) in recordList" :key="index">
+							<view class="diary goods-flex" style="margin: 0;">
+								<text class="title black">{{item.customerName}}</text>
+								<text class="green"> ￥{{item.aggregateAmount}}</text>
 							</view>
-							<view class="from diary gray">
-								dd-262600-21626
+							<view class="diary gray">
+								{{item.orderNo}}
 							</view>
-							<view class="from diary gray">
-								￥990 x 1件
+							<view class="diary gray">
+								{{item.prodNos}}
 							</view>
 						</view>
 					</view>
@@ -84,7 +81,8 @@
 <script>
 	let {
 		$getClientId,
-		$delClient
+		$delClient,
+		$getClientRecord
 	} = require('@/api/client.js'); //客户
 
 	let {
@@ -125,6 +123,7 @@
 				operator: {},
 				list: {},
 				contactList: [],
+				recordList: [],
 
 			}
 		},
@@ -133,7 +132,8 @@
 		},
 		onShow() {
 			this.getData();
-			this.contactData()
+			this.contactData();
+
 		},
 		methods: {
 			async getData() {
@@ -152,6 +152,9 @@
 				operator.updator = res.data.updator;
 				_this.contact = contact;
 				_this.operator = operator;
+
+				let record = await $getClientRecord(_this.list.customerNo);
+				_this.recordList = record.data
 
 
 			},
@@ -204,27 +207,30 @@
 		.swiper-item {
 			height: 100%;
 
-			.header {
-				padding-left: 30rpx;
-				padding-top: 20rpx;
+
+		}
+
+		.supplier {
+			margin: 0 20rpx;
+			border-bottom: 1rpx solid #ccc;
+			padding: 14rpx 0;
+		}
+
+		.diary {
+			padding-top: 6rpx;
+			border: none;
+		}
+
+		.record {
+			padding: 14rpx 0;
+
+			.content {
+				margin-left: 20rpx;
+				margin-top: 10rpx;
 			}
 
-			.diary {
-				padding-top: 6rpx;
-				border: none;
-			}
-
-			.record {
-				padding: 14rpx 0;
-
-				.content {
-					margin-left: 20rpx;
-					margin-top: 10rpx;
-				}
-
-				.date {
-					margin-right: 10rpx;
-				}
+			.date {
+				margin-right: 10rpx;
 			}
 		}
 	}

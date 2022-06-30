@@ -26,54 +26,57 @@
 		</view>
 
 		<view class="table">
-			<pulldown headline="入库方">
-				<view class="goods-flex shove">
-					<view>
-						<view class="track">
-							<text class="gray">联系人：</text>
-							<text class="black"> 阿三</text>
+			<uni-collapse>
+				<uni-collapse-item title="入库方">
+					<view class="goods-flex shove">
+						<view>
+							<view class="track">
+								<text class="gray">联系人：</text>
+								<text class="black"> 阿三</text>
+							</view>
+							<view class="track">
+								<text class="gray">电话：</text>
+								<text class="black"> 110</text>
+							</view>
 						</view>
-						<view class="track">
-							<text class="gray">电话：</text>
-							<text class="black"> 110</text>
+						<view class="phone">
+							<text class="icon-huchudianhuatianchong iconfont"></text>
+							<view>呼叫</view>
 						</view>
 					</view>
-					<view class="phone">
-						<text class="icon-huchudianhuatianchong iconfont"></text>
-						<view>呼叫</view>
-					</view>
-				</view>
-
-			</pulldown>
+				</uni-collapse-item>
+			</uni-collapse>
 		</view>
 
 		<productMessage></productMessage>
 
 		<view class="table">
-			<pulldown headline="相关信息">
-				<view class="shove">
-					<view class="track">
-						<text class="gray">项目：</text>
-						<text class="black"> 阿三</text>
+			<uni-collapse>
+				<uni-collapse-item title="相关信息">
+					<view class="shove">
+						<view class="track">
+							<text class="gray">项目：</text>
+							<text class="black"> 阿三</text>
+						</view>
+						<view class="track">
+							<text class="gray">物流公司：</text>
+							<text class="black"> 110</text>
+						</view>
+						<view class="track">
+							<text class="gray">物流单号：</text>
+							<text class="black"> 110</text>
+						</view>
+						<view class="track">
+							<text class="gray">经办人：</text>
+							<text class="black"> 110</text>
+						</view>
+						<view class="track">
+							<text class="gray">备注：</text>
+							<text class="black"> 110</text>
+						</view>
 					</view>
-					<view class="track">
-						<text class="gray">物流公司：</text>
-						<text class="black"> 110</text>
-					</view>
-					<view class="track">
-						<text class="gray">物流单号：</text>
-						<text class="black"> 110</text>
-					</view>
-					<view class="track">
-						<text class="gray">经办人：</text>
-						<text class="black"> 110</text>
-					</view>
-					<view class="track">
-						<text class="gray">备注：</text>
-						<text class="black"> 110</text>
-					</view>
-				</view>
-			</pulldown>
+				</uni-collapse-item>
+			</uni-collapse>
 		</view>
 		<operator></operator>
 		<copyreader :show="compileShow" @close="handleClose()">
@@ -96,7 +99,6 @@
 
 <script>
 	import headerTab from '@/components/headerTab/index.vue';
-	import pulldown from '@/components/pulldown.vue';
 	import productMessage from './components/productMessage.vue';
 	import operator from './components/operator.vue';
 	import addOrder from '@/components/addOrder.vue';
@@ -104,7 +106,6 @@
 	export default {
 		components: {
 			headerTab,
-			pulldown,
 			productMessage,
 			operator,
 			addOrder,

@@ -6,8 +6,8 @@ function $postTransfer(data) {
 }
 
 // 调拨列表
-function $getTransfer() {
-	return request.get("transfer")
+function $getTransfer(data) {
+	return request.get("transfer",data)
 }
 
 // 调拨详情

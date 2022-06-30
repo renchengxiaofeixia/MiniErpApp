@@ -2,12 +2,12 @@ import request from '@/libs/request.js'
 
 // 登入
 function $login(data) {
-	return request.post("signin", data)
+	return request.post("signin", data, true)
 }
 
 // 注册
 function $register(data) {
-	return request.post("signup", data)
+	return request.post("signup", data, true)
 }
 
 // 获取用户信息

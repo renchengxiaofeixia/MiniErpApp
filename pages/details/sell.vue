@@ -78,22 +78,24 @@
 		</view>
 
 		<view class="table">
-			<pulldown headline="销售员" size="32rpx" detail="详细" :switch="false">
-				<view class="goods-flex shove" style="margin: 0;">
-					<view>
-						<view class="track">
-							<text class="gray">销售员：</text>
-							<text class="black">
-								{{market.orderSaleUser || ''}}
-							</text>
-						</view>
-						<view class="track">
-							<text class="gray">联系电话：</text>
-							<text class="black">{{market.orderSaleUserMobile || ''}}</text>
+			<uni-collapse>
+				<uni-collapse-item title="销售员">
+					<view class="goods-flex shove">
+						<view>
+							<view class="track">
+								<text class="gray">销售员：</text>
+								<text class="black">
+									{{market.orderSaleUser || ''}}
+								</text>
+							</view>
+							<view class="track">
+								<text class="gray">联系电话：</text>
+								<text class="black">{{market.orderSaleUserMobile || ''}}</text>
+							</view>
 						</view>
 					</view>
-				</view>
-			</pulldown>
+				</uni-collapse-item>
+			</uni-collapse>
 		</view>
 
 		<operator :list="operation"></operator>
@@ -136,16 +138,15 @@
 		$getPay
 	} = require('@/api/market.js'); //物品
 	import headerTab from '@/components/headerTab/index.vue';
-	import pulldown from '@/components/pulldown.vue';
 	import productMessage from './components/productMessage.vue';
 	import linkman from './components/linkman.vue';
 	import operator from './components/operator.vue';
 	import addOrder from '@/components/addOrder.vue';
 	import copyreader from '@/components/copyreader/index.vue';
+
 	export default {
 		components: {
 			headerTab,
-			pulldown,
 			productMessage,
 			linkman,
 			operator,
@@ -252,11 +253,13 @@
 
 	.shove {
 		padding: 20rpx 0;
+		border-top: 1rpx solid #ccc;
 	}
 
 	.figure {
 		font-size: 32rpx;
 		border-bottom: 1rpx solid #ccc;
+		border-top: none;
 	}
 
 	.storage {

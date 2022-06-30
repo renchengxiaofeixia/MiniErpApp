@@ -1,8 +1,8 @@
 import request from '@/libs/request.js'
 
 //采购列表
-function $getPurchases() {
-	return request.get('purchases');
+function $getPurchases(data) {
+	return request.get('purchases',data);
 }
 
 //删除采购

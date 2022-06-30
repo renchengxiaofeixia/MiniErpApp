@@ -158,8 +158,7 @@
 		display: flex;
 		/* #endif */
 		flex-direction: row;
-		height: 50px;
-		padding-bottom: 10px;
+		height: 40px;
 		align-items: center;
 		justify-content: center;
 	}

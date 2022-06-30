@@ -5,7 +5,7 @@
 		</view>
 
 		<block v-for="(item,index) in list" :key="index">
-			<view class="" @click="$navto.navto('pages/details/product',{id:item.id})" hover-class="checkActive">
+			<view class="" hover-class="checkActive">
 				<view class="goods-flex back">
 					<view class="">
 						<text>{{item.prodName}}</text>
@@ -40,7 +40,6 @@
 			<text class="green">￥{{totalPrice}}</text>
 		</view>
 
-
 	</view>
 </template>
 
@@ -65,7 +64,7 @@
 			list: {
 				handler(item, index) {
 					item.forEach(e => {
-						this.totalPrice += e.totalPrice;
+						this.totalPrice += e.money;
 					})
 				},
 				deep: true // 深度监听父组件传过来对象变化
@@ -97,6 +96,7 @@
 		margin: 0 20rpx;
 		padding: 16rpx 0;
 		border-bottom: 1rpx solid #eee;
+		font-weight: 600;
 	}
 
 	.back {

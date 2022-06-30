@@ -30,18 +30,20 @@
 		<productMessage title="入库物品" :list="storageGoods"></productMessage>
 
 		<view class="table">
-			<pulldown headline="相关信息">
-				<view class="shove">
-					<view class="track">
-						<text class="gray">经办人：</text>
-						<text class="black"> {{storage.transactor}}</text>
+			<uni-collapse>
+				<uni-collapse-item title="相关信息">
+					<view class="shove">
+						<view class="track">
+							<text class="gray">经办人：</text>
+							<text class="black"> {{storage.transactor}}</text>
+						</view>
+						<view class="track">
+							<text class="gray">备注：</text>
+							<text class="black"> {{storage.remarks}}</text>
+						</view>
 					</view>
-					<view class="track">
-						<text class="gray">备注：</text>
-						<text class="black"> {{storage.remarks}}</text>
-					</view>
-				</view>
-			</pulldown>
+				</uni-collapse-item>
+			</uni-collapse>
 		</view>
 
 		<operator :list="operation"></operator>
@@ -76,7 +78,6 @@
 		$auditStorage
 	} = require('@/api/storage.js'); //入库
 	import headerTab from '@/components/headerTab/index.vue';
-	import pulldown from '@/components/pulldown.vue';
 	import productMessage from './components/productMessage.vue';
 	import linkman from './components/linkman.vue';
 	import operator from './components/operator.vue';
@@ -85,7 +86,6 @@
 	export default {
 		components: {
 			headerTab,
-			pulldown,
 			productMessage,
 			linkman,
 			operator,
@@ -189,7 +189,8 @@
 	}
 
 	.shove {
-		padding: 20rpx 0;
+		padding: 20rpx;
+		border-top: 1rpx solid #ccc;
 	}
 
 	.phone {

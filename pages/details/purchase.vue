@@ -26,7 +26,6 @@
 
 		<linkman :list="supplierContact"></linkman>
 
-
 		<productMessage title="采购物品" :list="goodsList"></productMessage>
 
 		<view class="table">
@@ -60,34 +59,23 @@
 		</view>
 
 		<view class="table">
-			<pulldown headline="相关约定" size="32rpx" detail="详细" :switch="false">
-				<view class="goods-flex shove" style="margin: 0;">
-					<view>
-						<view class="track">
-							<text class="gray">结算方式：</text>
-							<text class="black">{{purchase.settlementMode}}</text>
-						</view>
-						<view class="track">
-							<text class="gray">备注：</text>
-							<text class="black">{{purchase.remarks}}</text>
+			<uni-collapse>
+				<uni-collapse-item title="相关约定">
+					<view class="goods-flex shove">
+						<view>
+							<view class="track">
+								<text class="gray">结算方式：</text>
+								<text class="black">{{purchase.settlementMode}}</text>
+							</view>
+							<view class="track">
+								<text class="gray">备注：</text>
+								<text class="black">{{purchase.remarks}}</text>
+							</view>
 						</view>
 					</view>
-				</view>
-			</pulldown>
+				</uni-collapse-item>
+			</uni-collapse>
 		</view>
-
-		<!-- 	<view class="table">
-			<pulldown headline="往来日记" size="32rpx" detail="详细" :switch="false">
-				<view class="goods-flex shove" style="margin: 0;">
-					<view>
-						<view class="track">
-							<text class="gray">销售方：</text>
-							<text class="black"> 阿三</text>
-						</view>
-					</view>
-				</view>
-			</pulldown>
-		</view> -->
 
 		<operator :list="operation"></operator>
 
@@ -131,7 +119,6 @@
 		$getPayment
 	} = require('@/api/purchase.js'); //采购
 	import headerTab from '@/components/headerTab/index.vue';
-	import pulldown from '@/components/pulldown.vue';
 	import productMessage from './components/productMessage.vue';
 	import operator from './components/operator.vue';
 	import linkman from './components/linkman.vue';
@@ -140,7 +127,6 @@
 	export default {
 		components: {
 			headerTab,
-			pulldown,
 			productMessage,
 			operator,
 			linkman,
@@ -232,7 +218,7 @@
 			anewPurchase() {
 				let _this = this;
 				_this.$api.showModal('确定反审核采购订单？').then(() => {
-					$unauditPurchasess(_this.id).then(res => {
+					$unauditPurchases(_this.id).then(res => {
 						_this.$api.msg('反审核！');
 						_this.getData();
 					})
@@ -280,6 +266,7 @@
 
 	.shove {
 		padding: 20rpx 0;
+		border-top: 1rpx solid #ccc;
 	}
 
 	.figure {

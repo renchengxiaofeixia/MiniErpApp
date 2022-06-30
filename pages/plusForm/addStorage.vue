@@ -3,7 +3,7 @@
 		<headerTab :title="header"></headerTab>
 
 		<view class="table">
-			<view class="from from-new" style="margin: 0 40upx;">
+			<view class="from from-new">
 				<text class="title">采购日期</text>
 				<view class="fill">
 					<uni-datetime-picker v-model="storageDate" type="date" @change="selectStorage" :clear-icon="false">
@@ -12,11 +12,23 @@
 				</view>
 				<text class="iconfont icon-right-1-copy"></text>
 			</view>
-			<pulldown headline="仓库" :title="warehouseName"></pulldown>
-			<pulldown headline="库存状况">
-				<stateBar :list="stockState" breadth='20%' @switch="switchover">
-				</stateBar>
-			</pulldown>
+
+			<view class="from from-new">
+				<text class="title">仓库</text>
+				<view class="fill">
+					{{warehouseName}}
+				</view>
+				<text class="iconfont icon-right-1-copy"></text>
+			</view>
+
+			<uni-collapse>
+				<uni-collapse-item title="库存状况" :open="true">
+					<view class="state">
+						<stateBar :list="stockState" breadth='20%' @switch="switchover">
+						</stateBar>
+					</view>
+				</uni-collapse-item>
+			</uni-collapse>
 		</view>
 
 		<view class="table" v-if="inventoryState == 0">
@@ -89,14 +101,12 @@
 		$postStorage
 	} = require('@/api/storage.js'); //入库
 	import headerTab from '@/components/headerTab/index.vue';
-	import pulldown from "@/components/pulldown.vue"
 	import stateBar from "@/components/stateBar.vue"
 	import selectGoods from "@/components/selectGoods.vue"
 	import footerBtn from '@/components/footerBtn.vue';
 	export default {
 		components: {
 			headerTab,
-			pulldown,
 			stateBar,
 			selectGoods,
 			footerBtn
@@ -330,5 +340,10 @@
 		padding-top: 16rpx;
 		margin: 0 20rpx;
 		font-size: 30rpx;
+	}
+
+	.state {
+		border-top: 1rpx solid #ccc;
+		padding: 0 20rpx;
 	}
 </style>

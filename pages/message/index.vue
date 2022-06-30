@@ -1,16 +1,16 @@
 <template>
 	<view class="">
 		<headerTab :scrollTab="scrollTab" @tabKey="change" :tab="first.id"></headerTab>
-		<searchbox @filter="openFilter()" @confirm="confirm" :placeholder="first.placeholder"></searchbox>
+		<searchbox @filter="showDrawer()" @confirm="confirm" :placeholder="first.placeholder"></searchbox>
 
 		<view v-if="first.id == 0">
 			<dataGrid url="pages/details/product" :list="productList" tab="1" @drop="dropProduct" @amend="amendProduct"
-				:status="productStatus">
+				:status="productStatus" @load="productTolower">
 			</dataGrid>
 		</view>
 		<view v-if="first.id==1">
 			<dataGrid url="pages/details/supplier" :list="supplierList" tab="2" @drop="dropSupplier"
-				@amend="amendSupplier" :status="supplierStatus"  @load="supplierTolower">
+				@amend="amendSupplier" :status="supplierStatus" @load="supplierTolower">
 			</dataGrid>
 		</view>
 		<view v-if="first.id == 2">
@@ -19,9 +19,9 @@
 			</dataGrid>
 		</view>
 
-		<filtratePopup @close="openFilter()" :show="filterShow">
+		<filtratePopup ref="show">
 			<view>
-				<block v-if="first.id == 1">
+				<!-- <block v-if="first.id == 1">
 					<view class="table" style="padding: 0;">
 						<pulldown headline="类目" title="所有类目">
 						</pulldown>
@@ -38,14 +38,14 @@
 					<view class="contact-date">
 						下次联系日期
 					</view>
-					<uni-datetime-picker v-model="range" type="daterange" @maskClick="maskClick" :clear-icon="false"/>
+					<uni-datetime-picker v-model="range" type="daterange" @maskClick="maskClick" :clear-icon="false" />
 				</view>
 				<view class="table" style="padding: 0;">
 					<pulldown headline="展示状态">
 						<stateBar :list="[{monicker: '全部',id: 1}, {monicker: '显示',id: 2}, {monicker: '隐藏',id: 3}]">
 						</stateBar>
 					</pulldown>
-				</view>
+				</view> -->
 			</view>
 		</filtratePopup>
 		<addOrder :url="first.url"></addOrder>
@@ -72,7 +72,6 @@
 	import filtratePopup from '@/components/filtratePopup/index.vue';
 	import dataGrid from '@/components/dataGrid/index.vue';
 	import addOrder from '@/components/addOrder.vue';
-	import pulldown from "@/components/pulldown.vue"
 	import stateBar from "@/components/stateBar.vue"
 
 	export default {
@@ -82,7 +81,6 @@
 			filtratePopup, //筛选
 			dataGrid, //数据列表
 			addOrder, //新建页面
-			pulldown, //折叠样式
 			stateBar,
 
 		},
@@ -114,7 +112,6 @@
 					url: "pages/plusForm/addGoods",
 					placeholder: "物品编号/名称/规格型号"
 				},
-				filterShow: 'none',
 				productList: [], //物品
 				productPage: 1, //物品页数
 				productSize: 14, //物品页数量
@@ -154,6 +151,9 @@
 					size: _this.productSize,
 				};
 				let res = await $getProduct(data);
+				if (!res) {
+					return
+				}
 				if (sky) {
 					_this.productList = [];
 				}
@@ -187,6 +187,9 @@
 				}
 
 				let res = await $getSupplier(data);
+				if (!res) {
+					return
+				}
 				if (sky) {
 					_this.supplierList = [];
 				}
@@ -205,7 +208,6 @@
 
 					})
 				})
-
 				_this.supplierList.push(...list);
 
 			},
@@ -217,6 +219,10 @@
 					size: _this.clientSize,
 				}
 				let res = await $getClient(data);
+
+				if (!res) {
+					return
+				}
 				if (sky) {
 					_this.clientList = [];
 				}
@@ -292,38 +298,6 @@
 					type: 1
 				})
 			},
-			// 打开筛选
-			openFilter() {
-				if (this.filterShow == 'none') {
-					this.filterShow = 'show';
-				} else {
-					this.filterShow = 'hide';
-					setTimeout(() => {
-						this.filterShow = 'none';
-					}, 500);
-				}
-			},
-			//搜索
-			confirm(val) {
-				console.log(val);
-			},
-			// tab切换
-			change(item) {
-				this.first = item;
-				this.getData(item.id);
-			},
-			// 请求数据
-			getData(index) {
-				if (this.first.id == 0 && this.first.open) {
-					this.productData(true);
-				} else if (this.first.id == 1 && this.first.open) {
-					this.supplierData(true);
-				} else if (this.first.id == 2 && this.first.open) {
-					this.clientData(true);
-				}
-				this.scrollTab[index].open = false;
-				this.first.open = false;
-			},
 			// 物品下拉加载数据
 			productTolower(e) {
 				let _this = this;
@@ -362,7 +336,31 @@
 						_this.clientStatus = 'noMore';
 					}, 1000)
 				}
-			}
+			},
+			// 请求数据
+			getData(index) {
+				if (this.first.id == 0 && this.first.open) {
+					this.productData(true);
+				} else if (this.first.id == 1 && this.first.open) {
+					this.supplierData(true);
+				} else if (this.first.id == 2 && this.first.open) {
+					this.clientData(true);
+				}
+				this.scrollTab[index].open = false;
+				this.first.open = false;
+			},
+			//搜索
+			confirm(val) {
+				console.log(val);
+			},
+			// tab切换
+			change(item) {
+				this.first = item;
+				this.getData(item.id);
+			},
+			showDrawer() {
+				this.$refs.show.showDrawer()
+			},
 		}
 	}
 </script>
