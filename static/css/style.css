@@ -129,28 +129,28 @@
 	margin-top: 30rpx;
 }
 
-/* 确定按钮 */
-.newBtn {
-	width: 200rpx;
-	margin: 40rpx auto;
-	padding-bottom: 80rpx;
-
-}
-
-.newBtn button {
-	background-color: #2ea469;
-	color: #fff;
-	font-size: 30rpx;
-
-}
-
-.swiper {
-	height: 83vh;
-}
-
 .paddingBottom {
 	padding-bottom: 80rpx;
 
+}
+
+/* 没有数据 */
+.empty-log {
+	width: 500rpx;
+	height: 500rpx;
+	margin: auto;
+	text-align: center;
+}
+
+.empty-log text {
+	font-size: 32rpx;
+	margin-top: 20rpx;
+}
+
+.empty-log .isLog {
+	font-size: 30rpx;
+	color: #1ba8fe;
+	border-bottom: 1rpx solid #1ba8fe;
 }
 
 /* 颜色 */

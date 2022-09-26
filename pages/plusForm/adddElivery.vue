@@ -2,24 +2,26 @@
 	<view class="">
 		<headerTab title="新建出库单"></headerTab>
 
-		<pulldown headline="入库日期" title="2022-5-11"></pulldown>
-		<pulldown headline="仓库" title="本地"></pulldown>
-
-		<pulldown headline="库存状况">
-			<stateBar
-				:list="[{monicker: '内部领用',id: 1}, {monicker: '销售出库',id: 2}, {monicker: '退货出库',id: 3}, {monicker: '其他出库',id: 4}]"
-				breadth='20%' @switch="switchover">
-			</stateBar>
-		</pulldown>
+		<!-- <pulldown headline="入库日期" title="2022-5-11"></pulldown>
+		<pulldown headline="仓库" title="本地"></pulldown> -->
+		
+		<uni-collapse>
+			<uni-collapse-item title="库存状况" :open="true">
+					<stateBar
+						:list="[{monicker: '内部领用',id: 1}, {monicker: '销售出库',id: 2}, {monicker: '退货出库',id: 3}, {monicker: '其他出库',id: 4}]"
+						breadth='20%' @switch="switchover">
+					</stateBar>
+			</uni-collapse-item>
+		</uni-collapse>
 
 		<view class="table" v-if="indexes == 1">
-			<view class="from from-new" @click="$navto.navto('pages/address/storage',{title:'选择领用部门',id:1})">
+			<view class="from from-new" @click="$navto.navto('pages/conserve/storage',{title:'选择领用部门',id:1})">
 				<text class="title">领用部门</text>
 				<text class="fill gray">选择领用部门</text>
 				<text class="iconfont icon-right-1-copy"></text>
 			</view>
 
-			<view class="from from-new" @click="$navto.navto('pages/address/storage',{title:'选择领用人',id:1})">
+			<view class="from from-new" @click="$navto.navto('pages/conserve/storage',{title:'选择领用人',id:1})">
 				<text class="title">领用人</text>
 				<text class="fill gray">选择领用人</text>
 				<text class="iconfont icon-right-1-copy"></text>
@@ -70,14 +72,12 @@
 
 <script>
 	import headerTab from '@/components/headerTab/index.vue';
-	import pulldown from "@/components/pulldown.vue"
 	import stateBar from "@/components/stateBar.vue"
 	import selectGoods from "@/components/selectGoods.vue"
 
 	export default {
 		components: {
 			headerTab,
-			pulldown,
 			stateBar,
 			selectGoods
 

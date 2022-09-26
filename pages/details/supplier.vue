@@ -1,6 +1,6 @@
 <template>
 	<view class="">
-		<headerTab title="供应商详情"></headerTab>
+		<headerTab title="供应商详情" :record="true"></headerTab>
 
 		<liaisons :list="contact"></liaisons>
 		<slidingBlock :toggle="toggle" :tabIndex="current" @slideshow="slideshow"></slidingBlock>
@@ -23,30 +23,15 @@
 					</view>
 				</swiper-item>
 				<swiper-item>
-					<view class="swiper-item ">
-
+					<view class="swiper-item dispose">
+						<dataGrid url="" :list="goodsList" tab="1" :hide="false">
+						</dataGrid>
 					</view>
 				</swiper-item>
 				<swiper-item>
-					<view class="swiper-item">
-						<view class="header gray">
-							2022-05-05
-						</view>
-
-						<view class="table">
-							<view class="from diary goods-flex">
-								<text class="title">供应商</text>
-								<text class="green"> ￥999</text>
-							</view>
-							<view class="from diary gray">
-								dd-262600-21626
-							</view>
-							<view class="from diary gray">
-								￥990 x 1件
-							</view>
-
-						</view>
-
+					<view class="swiper-item dispose">
+						<dataGrid url="" :list="purchaseRecord" tab="4" :hide="false">
+						</dataGrid>
 					</view>
 				</swiper-item>
 			</swiper>
@@ -66,12 +51,21 @@
 </template>
 
 <script>
+	let {
+		$getSupplierId,
+		$delSupplier,
+		$getSupplierGoods,
+		$getPurchaseRecord
+	} = require('@/api/supplier.js'); //供应商
+
 	import headerTab from '@/components/headerTab/index.vue';
 	import slidingBlock from './components/slidingBlock.vue';
 	import operator from './components/operator.vue';
 	import liaisons from './components/liaisons.vue';
 	import addOrder from '@/components/addOrder.vue';
 	import copyreader from '@/components/copyreader/index.vue';
+	import dataGrid from '@/components/dataGrid/index.vue';
+
 	export default {
 		components: {
 			headerTab,
@@ -79,7 +73,8 @@
 			addOrder,
 			copyreader,
 			operator,
-			liaisons
+			liaisons,
+			dataGrid
 		},
 		data() {
 			return {
@@ -87,10 +82,10 @@
 					name: "基本信息",
 					id: 0
 				}, {
-					name: "库存信息",
+					name: "可供物品",
 					id: 1
 				}, {
-					name: "可供应商",
+					name: "采购记录",
 					id: 2
 				}],
 				current: 0,
@@ -99,34 +94,61 @@
 				list: [],
 				contact: {}, //联络方式
 				operator: {}, //操作日记
+				goodsList: [], //可供物品
+				purchaseRecord: [], //采购记录
 
 			}
 		},
 		onLoad(option) {
 			this.id = option.id;
-			
+
 		},
 		onShow() {
 			this.getData();
 		},
 		methods: {
-			getData() {
+			async getData() {
 				let _this = this;
-				_this.$request.get('supplier/' + _this.id).then(res => {
-					let operator = {};
-					let contact = {};
-					_this.list = res.data;
-					contact.contacterName = res.data.contacterName;
-					contact.mobile = res.data.mobile;
-					contact.supplierName = res.data.supplierName;
+				let res = await $getSupplierId(_this.id)
+				let operator = {};
+				let contact = {};
 
-					operator.createTime = res.data.createTime;
-					operator.creator = res.data.creator;
-					operator.updatedTime = res.data.updatedTime;
-					operator.updator = res.data.updator;
-					_this.contact = contact;
-					_this.operator = operator;
+				_this.list = res.data;
+				contact.contacterName = res.data.contacterName;
+				contact.mobile = res.data.mobile;
+				contact.supplierName = res.data.supplierName;
 
+				operator.createTime = res.data.createTime;
+				operator.creator = res.data.creator;
+				operator.updatedTime = res.data.updatedTime;
+				operator.updator = res.data.updator;
+				_this.contact = contact;
+				_this.operator = operator;
+
+				let goods = await $getSupplierGoods(_this.id);
+				goods.data.forEach(e => {
+					_this.goodsList.push({
+						id: e.id,
+						name: e.prodCustomNo,
+						model: e.prodModel,
+						No: e.prodNo,
+						count: e.prodNos,
+						num: e.salePrice + e.unit,
+
+					})
+				})
+
+				let record = await $getPurchaseRecord(_this.id);
+				record.data.forEach(e => {
+					_this.purchaseRecord.push({
+						id: e.id,
+						name: e.supplierName,
+						model: e.prodModel,
+						No: e.purchaseNo,
+						count: e.prodNos,
+						price: e.aggregateAmount.toString()
+
+					})
 				})
 			},
 			handleClose() {
@@ -141,20 +163,12 @@
 			},
 			supplierDel() {
 				let _this = this;
-				uni.showModal({
-					title: '提示',
-					content: '确定要删除供应商',
-					success: function(res) {
-						if (res.confirm) {
-							_this.$request.del('supplier/' + _this.id);
-							setTimeout(() => {
-								_this.$navto.navtab('pages/message/index')
-							}, 1000)
-							_this.$api.msg('删除成功')
-						} else if (res.cancel) {
-							// console.log('用户点击取消');
-						}
-					}
+				_this.$api.showModal('确定要删除供应商').then(() => {
+					$delSupplier(_this.id);
+					setTimeout(() => {
+						_this.$navto.navtab('pages/message/index')
+					}, 1000)
+					_this.$api.msg('删除成功')
 				});
 
 			},
@@ -175,15 +189,10 @@
 		.swiper-item {
 			height: 100%;
 
-			.header {
-				padding-left: 30rpx;
-				padding-top: 20rpx;
-			}
-
-			.diary {
-				padding-top: 6rpx;
-				border: none;
-			}
 		}
+	}
+
+	.dispose {
+		margin-top: 20rpx;
 	}
 </style>

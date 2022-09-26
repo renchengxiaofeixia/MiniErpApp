@@ -1,17 +1,22 @@
 <template>
-	<view class="search">
-		<view class="search-input">
-			<text class="iconfont icon-sousuotianchong"></text>
-			<input type="text" value="" placeholder="客户/销售/物品名称" />
+	<view>
+		<view class="search">
+			<view class="search-input">
+				<text class="iconfont icon-sousuotianchong"></text>
+				<input type="text" :placeholder="placeholder" @blur="blurSearch" />
+			</view>
+			<text class="iconfont icon-shaixuan" @click="filterShow()"></text>
 		</view>
-		<text class="iconfont icon-shaixuan" @click="filterShow()"></text>
 	</view>
 </template>
 
 <script>
 	export default {
 		props: {
-	
+			placeholder: {
+				type: String,
+				default: ''
+			}
 		},
 		data() {
 			return {};
@@ -19,16 +24,25 @@
 		methods: {
 			filterShow() {
 				this.$emit("filter")
-			}
+			},
+			blurSearch(event) {
+				let val = event.detail.value;
+				if (!val) {
+					return
+				}
+				this.$emit('confirm', val.replace(/\s+/g, ''))
+			},
 		}
 	}
 </script>
 
 <style lang="scss">
 	.search {
+		width: 100%;
 		display: flex;
 		align-items: center;
-		margin: 20rpx;
+		padding: 20rpx;
+		background-color: #f2f2f2;
 
 		.search-input {
 			display: flex;

@@ -14,7 +14,7 @@
 				<view class="personal-text">
 					<view class="dial">
 						<text class="iconfont icon-huchudianhuatianchong green"></text>
-						<view class="green">
+						<view class="green" @click="$api.dialPhone(list.mobile)">
 							呼叫
 						</view>
 					</view>

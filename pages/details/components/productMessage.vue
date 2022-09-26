@@ -1,44 +1,43 @@
 <template>
 	<view class="table">
 		<view class="headline">
-			入库物品
+			{{title}}
 		</view>
 
-		<view class="goods-flex back">
-			<view class="">
-				<text>李三</text>
-				<text class="gray">(8888)</text>
+		<block v-for="(item,index) in list" :key="index">
+			<view class="" hover-class="checkActive">
+				<view class="goods-flex back">
+					<view class="">
+						<text>{{item.prodName}}</text>
+						<text class="gray">({{item.prodModel}})</text>
+					</view>
+					<view class="" v-if="hide">
+						￥{{item.money}}
+					</view>
+					<view class="green" v-else>
+						库存: {{item.actualNum}}
+					</view>
+				</view>
+				<view class="come gray back">
+					{{item.prodNo}}
+				</view>
+				<view class="goods-flex" style="padding-bottom: 14rpx; border-bottom: 1rpx solid #ccc;" v-if="hide">
+					<view class="gray">
+						￥{{item.unitPrice}} x {{item.quantity}}件
+					</view>
+					<view class="gray" v-if="item.receiverStatus">
+						{{item.receiverStatus}}
+					</view>
+				</view>
+				<view class="goods-flex" v-else>
+					计件：{{item.systemNum}}
+				</view>
 			</view>
-			<view class="">
-				￥1000
-			</view>
-		</view>
-		<view class="come gray back">
-			wp00001
-		</view>
-		<view class="goods-flex" style="padding-bottom: 14rpx;">
-			<view class="gray">
-				￥1000 x 1件
-			</view>
-			<view class="gray">
-				一件未入库
-			</view>
-		</view>
-		
-		<view class="money">
-			<view class="price">
-				<text>合计：</text>
-				<text class="green">￥10000</text>
-			</view>
-			<view class="price">
-				<text>优惠：</text>
-				<text class="green">￥10000</text>
-			</view>
+		</block>
 
-			<view class="price back">
-				<text class="price-text">优惠后金额：</text>
-				<text class="green">￥10000</text>
-			</view>
+		<view class="money" v-if="hide">
+			<text class="total">合计：</text>
+			<text class="green">￥{{totalPrice}}</text>
 		</view>
 
 	</view>
@@ -46,16 +45,46 @@
 
 <script>
 	export default {
-		data() {
-			return {
+		props: {
+			title: {
+				type: String,
+				default: ''
+			},
+			list: {
+				type: Array,
+				default: []
+			},
+			hide: {
+				type: Boolean,
+				default: true
+			}
 
+		},
+		watch: {
+			list: {
+				handler(item, index) {
+					item.forEach(e => {
+						this.totalPrice += e.money;
+					})
+				},
+				deep: true // 深度监听父组件传过来对象变化
 			}
 		},
-		onLoad() {
+		data() {
+			return {
+				totalPrice: 0,
+			}
+		},
+		created() {
 
 		},
+		mounted() {
+			this.getData();
+		},
 		methods: {
+			getData() {
 
+			}
 
 		}
 	}
@@ -67,6 +96,7 @@
 		margin: 0 20rpx;
 		padding: 16rpx 0;
 		border-bottom: 1rpx solid #eee;
+		font-weight: 600;
 	}
 
 	.back {
@@ -79,21 +109,12 @@
 	}
 
 	.money {
-		display: flex;
-		align-items: center;
-		flex-wrap: wrap;
 		padding: 20rpx 0;
 		margin: 0 20rpx;
-		border-top: 1rpx solid #eee;
+		font-size: 32rpx;
 
-		.price {
-			margin-right: 20rpx;
-			font-size: 32rpx;
-		}
-
-		.price-text {
+		.total {
 			font-weight: 700;
-			font-size: 34rpx;
 		}
 	}
 </style>

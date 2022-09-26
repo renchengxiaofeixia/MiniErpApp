@@ -1,31 +1,35 @@
 <template>
 	<view class="table">
-		<pulldown headline="入库方" size="32rpx" detail="详细">
-			<view class="goods-flex shove">
-				<view>
-					<view class="track">
-						<text class="gray">联系人：</text>
-						<text class="black"> 阿三</text>
+		<uni-collapse>
+			<uni-collapse-item :title="list.name" :open="true">
+				<view class="goods-flex shove">
+					<view>
+						<view class="track">
+							<text class="gray">联系人：</text>
+							<text class="black">{{list.linkman}}</text>
+						</view>
+						<view class="track">
+							<text class="gray">电话：</text>
+							<text class="black">{{list.phone}}</text>
+						</view>
 					</view>
-					<view class="track">
-						<text class="gray">电话：</text>
-						<text class="black"> 110</text>
+					<view class="phone" @click.stop="$api.dialPhone(list.phone)">
+						<text class="icon-huchudianhuatianchong iconfont"></text>
+						<view>呼叫</view>
 					</view>
 				</view>
-				<view class="phone">
-					<text class="icon-huchudianhuatianchong iconfont"></text>
-					<view>呼叫</view>
-				</view>
-			</view>
-		</pulldown>
+			</uni-collapse-item>
+		</uni-collapse>
 	</view>
 </template>
 
 <script>
-	import pulldown from '@/components/pulldown.vue';
 	export default {
-		components: {
-			pulldown
+		props: {
+			list: {
+				type: Object,
+				default: {}
+			},
 		},
 		data() {
 			return {
@@ -45,5 +49,6 @@
 <style lang="scss">
 	.shove {
 		padding: 20rpx 0;
+		border-top: 1rpx solid #ccc;
 	}
 </style>

@@ -1,6 +1,6 @@
 <template>
 	<view class="">
-		<headerTab title="客户详情"></headerTab>
+		<headerTab title="客户详情" :record="true"></headerTab>
 
 		<liaisons :list="contact"></liaisons>
 		<slidingBlock :toggle="toggle" :tabIndex="current" @slideshow="slideshow"></slidingBlock>
@@ -24,39 +24,36 @@
 				</swiper-item>
 				<swiper-item>
 					<view class="swiper-item">
-						<view class="table record">
+						<view class="table record" v-for="(item,index) in contactList" :key="index"
+							@click="$navto.navto('pages/details/contactRecord',{id: item.id})">
 							<view class="goods-flex ">
 								<view>
 									<text class="gray date">联系日期：</text>
-									<text class="">2022-5-11</text>
+									<text class="">{{item.contactTime}}</text>
 								</view>
 								<view>
 									<text class="gray date">下次联系时间：</text>
-									<text class="">2022-5-11</text>
+									<text class="">{{item.nextContactTime}}</text>
 								</view>
 							</view>
 							<view class="content">
-								你好
+								{{item.contactContent}}
 							</view>
 						</view>
 					</view>
 				</swiper-item>
 				<swiper-item>
-					<view class="swiper-item">
-						<view class="header gray">
-							2022-05-05
-						</view>
-
-						<view class="table">
-							<view class="from diary goods-flex">
-								<text class="title black">供应商</text>
-								<text class="green"> ￥999</text>
+					<view class="table">
+						<view class="supplier" v-for="(item,index) in recordList" :key="index">
+							<view class="diary goods-flex" style="margin: 0;">
+								<text class="title black">{{item.customerName}}</text>
+								<text class="green"> ￥{{item.aggregateAmount}}</text>
 							</view>
-							<view class="from diary gray">
-								dd-262600-21626
+							<view class="diary gray">
+								{{item.orderNo}}
 							</view>
-							<view class="from diary gray">
-								￥990 x 1件
+							<view class="diary gray">
+								{{item.prodNos}}
 							</view>
 						</view>
 					</view>
@@ -71,7 +68,8 @@
 			<view class="operation red" hover-class="checkActive" @click="clientDel">
 				删除
 			</view>
-			<view class="operation" hover-class="checkActive">
+			<view class="operation" hover-class="checkActive"
+				@click="$navto.navto('pages/plusForm/addContactRecord',{name: contact.supplierName,id: id})">
 				新建联系记录
 			</view>
 		</copyreader>
@@ -81,6 +79,16 @@
 </template>
 
 <script>
+	let {
+		$getClientId,
+		$delClient,
+		$getClientRecord
+	} = require('@/api/client.js'); //客户
+
+	let {
+		$getContactrecords
+	} = require('@/api/contactrecords.js'); //联系
+
 	import headerTab from '@/components/headerTab/index.vue';
 	import slidingBlock from './components/slidingBlock.vue';
 	import operator from './components/operator.vue';
@@ -114,6 +122,8 @@
 				contact: {},
 				operator: {},
 				list: {},
+				contactList: [],
+				recordList: [],
 
 			}
 		},
@@ -121,44 +131,54 @@
 			this.id = e.id;
 		},
 		onShow() {
-			this.getData()
+			this.getData();
+			this.contactData();
+
 		},
 		methods: {
-			getData() {
+			async getData() {
 				let _this = this;
-				_this.$request.get('customer/' + _this.id).then(res => {
-					let operator = {};
-					let contact = {};
-					_this.list = res.data;
+				let res = await $getClientId(_this.id)
+				let operator = {};
+				let contact = {};
+				_this.list = res.data;
+				contact.contacterName = res.data.customerName;
+				contact.mobile = res.data.mobile;
+				contact.supplierName = res.data.customerNo;
 
-					contact.contacterName = res.data.customerName;
-					contact.mobile = res.data.mobile;
-					contact.supplierName = res.data.customerNo;
+				operator.createTime = res.data.createTime;
+				operator.creator = res.data.creator;
+				operator.updatedTime = res.data.updatedTime;
+				operator.updator = res.data.updator;
+				_this.contact = contact;
+				_this.operator = operator;
 
-					operator.createTime = res.data.createTime;
-					operator.creator = res.data.creator;
-					operator.updatedTime = res.data.updatedTime;
-					operator.updator = res.data.updator;
-					_this.contact = contact;
-					_this.operator = operator;
+				let record = await $getClientRecord(_this.list.customerNo);
+				_this.recordList = record.data
 
-				})
+
 			},
-			clientDel(){
+			// 联系记录
+			async contactData() {
 				let _this = this;
-				uni.showModal({
-					title: '提示',
-					content: '确定要删除供应商',
-					success: function(res) {
-						if (res.confirm) {
-							_this.$request.del('customer/' + _this.id);
-							setTimeout(() => {
-								_this.$navto.navtab('pages/message/index')
-							}, 1000)
-							_this.$api.msg('删除成功')
-						} else if (res.cancel) {}
-					}
+				let res = await $getContactrecords(_this.id);
+				_this.contactList = res.data
+
+			},
+			// 删除
+			clientDel() {
+				let _this = this;
+
+				_this.$api.showModal('确定要删除供应商?').then(() => {
+					$delClient(_this.id).then(res => {
+						setTimeout(() => {
+							_this.$navto.navtab('pages/message/index')
+						}, 500)
+						_this.$api.msg('删除成功')
+					});;
+
 				});
+
 			},
 			handleClose() {
 				if (this.compileShow == 'none') {
@@ -187,27 +207,30 @@
 		.swiper-item {
 			height: 100%;
 
-			.header {
-				padding-left: 30rpx;
-				padding-top: 20rpx;
+
+		}
+
+		.supplier {
+			margin: 0 20rpx;
+			border-bottom: 1rpx solid #ccc;
+			padding: 14rpx 0;
+		}
+
+		.diary {
+			padding-top: 6rpx;
+			border: none;
+		}
+
+		.record {
+			padding: 14rpx 0;
+
+			.content {
+				margin-left: 20rpx;
+				margin-top: 10rpx;
 			}
 
-			.diary {
-				padding-top: 6rpx;
-				border: none;
-			}
-
-			.record {
-				padding: 14rpx 0;
-
-				.content {
-					margin-left: 20rpx;
-					margin-top: 10rpx;
-				}
-
-				.date {
-					margin-right: 10rpx;
-				}
+			.date {
+				margin-right: 10rpx;
 			}
 		}
 	}

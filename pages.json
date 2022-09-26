@@ -40,6 +40,42 @@
 		"root": "pages/plusForm",
 		"name": "plusForm",
 		"pages": [{
+			"path": "addInventory",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}, {
+			"path": "addAddress",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}, {
+			"path": "addProceeds",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}, {
 			"path": "addGoods",
 			"style": {
 				"navigationStyle": "custom",
@@ -135,12 +171,60 @@
 					// #endif
 				}
 			}
+		}, {
+			"path": "addContactRecord",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}, {
+			"path": "addPayment",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
 		}]
 	}, {
 		"root": "pages/details",
 		"name": "details",
 		"pages": [{
-			"path": "commodity",
+			"path": "inventory",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}, {
+			"path": "proceeds",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}, {
+			"path": "product",
 			"style": {
 				"navigationStyle": "custom",
 				"app-plus": {
@@ -235,12 +319,84 @@
 					// #endif
 				}
 			}
+		}, {
+			"path": "contactRecord",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}, {
+			"path": "payment",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
 		}]
 	}, {
-		"root": "pages/address",
-		"name": "address",
+		"root": "pages/conserve",
+		"name": "conserve",
 		"pages": [{
 			"path": "storage",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}, {
+			"path": "category",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}, {
+			"path": "choiceCargo",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}, {
+			"path": "warehouse",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}, {
+			"path": "salesman",
 			"style": {
 				"navigationStyle": "custom",
 				"app-plus": {
@@ -257,34 +413,6 @@
 		"name": "print",
 		"pages": [{
 			"path": "index",
-			"style": {
-				"navigationStyle": "custom",
-				"app-plus": {
-					// #ifdef APP-PLUS
-					"titleNView": {
-						"type": "default"
-					}
-					// #endif
-				}
-			}
-		}]
-	}, {
-		"root": "pages/addend",
-		"name": "addend",
-		"pages": [{
-			"path": "payment",
-			"style": {
-				"navigationStyle": "custom",
-				"app-plus": {
-					// #ifdef APP-PLUS
-					"titleNView": {
-						"type": "default"
-					}
-					// #endif
-				}
-			}
-		}, {
-			"path": "tickets",
 			"style": {
 				"navigationStyle": "custom",
 				"app-plus": {
@@ -327,7 +455,7 @@
 					// #endif
 				}
 			}
-		},{
+		}, {
 			"path": "register",
 			"style": {
 				"navigationStyle": "custom",
@@ -339,8 +467,24 @@
 					// #endif
 				}
 			}
-		},{
+		}, {
 			"path": "personal",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		}]
+	}, {
+		"root": "pages/system",
+		"name": "system",
+		"pages": [{
+			"path": "role",
 			"style": {
 				"navigationStyle": "custom",
 				"app-plus": {

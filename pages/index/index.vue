@@ -1,11 +1,11 @@
 <template>
 	<view>
-		<view class="header" :style="{height:height}">
-			<view class="header-flex" :style="{'padding-top': paddingTop}">
+		<view class="header" :style="{height:height + 'px'}">
+			<view class="header-flex" :style="{'padding-top': paddingTop + 'px'}">
 				<button @click="login()" class="login-btn" hover-class='none'>
 					<text class="iconfont icon-31wode"></text>
 				</button>
-				<text class="header-text">采购订单</text>
+				<text class="header-text">首页</text>
 			</view>
 		</view>
 
@@ -55,13 +55,42 @@
 			</view>
 		</view>
 
+		<uni-drawer ref="isShow" mode="left" :width="320">
+			<view class="header bg-green" :style="{height:height + 80  + 'px'}"
+				@click="$navto.navto('pages/user/personal')">
+				<view class="header-flex" :style="{'padding-top': paddingTop + 20 + 'px'}">
+					<view class="login-img">
+						<!-- <image src="../../static/image/adapter_supplier_search_result_item_phone_call.png" mode="">
+							</image> -->
+						<text class="iconfont icon-yonghu"></text>
+					</view>
+					<view class="login-text">
+						<view class="login-name">
+							{{user.userName}}
+						</view>
+					</view>
+				</view>
+			</view>
+
+			<view class="" style="padding-top: 30rpx;">
+				<view class="goods-flex set" hover-class="checkActive" @click="$navto.navto('pages/system/role')">
+					<view class="">
+						<text class="iconfont icon-yonghu"></text> 角色管理
+					</view>
+					<text class="iconfont icon-right-1-copy"></text>
+				</view>
+			</view>
+		</uni-drawer>
 	</view>
 </template>
 
 <script>
+	let app = getApp();
 	export default {
 		data() {
 			return {
+				isshow: false,
+				user: app.globalData.userName,
 
 			}
 		},
@@ -75,7 +104,7 @@
 				if (platform.toLowerCase() == "android") {
 					height += 4
 				}
-				return height + 38 + "px"
+				return height + 38;
 			},
 			paddingTop() {
 				const {
@@ -86,17 +115,19 @@
 				if (platform.toLowerCase() == "android") {
 					height += 8
 				}
-				return height + "px"
+				return height
 			},
 		},
 		onLoad() {
 
 		},
+		onShow() {},
 		methods: {
 			login() {
 				let _this = this;
-				if (_this.$api.token) {
-					_this.$navto.navto('pages/user/personal')
+				if (app.globalData.userLogin) {
+					// _this.
+					_this.showDrawer();
 				} else {
 					uni.showModal({
 						title: '提示',
@@ -109,10 +140,16 @@
 							}
 						}
 					});
-
 				}
-
-			}
+			},
+			// 打开窗口
+			showDrawer() {
+				this.$refs.isShow.open()
+			},
+			// 关闭
+			closeDrawer() {
+				this.$refs.isShow.close()
+			},
 		}
 	}
 </script>
@@ -252,5 +289,89 @@
 				}
 			}
 		}
+	}
+
+	.popup {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 99;
+
+		.mask {
+			position: fixed;
+			top: 0;
+			bottom: 0;
+			right: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.3);
+		}
+
+		.layer {
+			position: fixed;
+			top: 0;
+			left: 0;
+			background-color: #fff;
+			width: 580rpx;
+			height: 100%;
+			border-radius: 14rpx;
+
+			.login-img {
+				background-color: #2da66a;
+				width: 120rpx;
+				height: 120rpx;
+				margin-left: 40rpx;
+				margin-right: 30rpx;
+			}
+
+			.login-text {
+				color: #fff;
+				margin-top: 10rpx;
+				font-size: 30rpx;
+			}
+
+			.set {
+				margin: 0;
+				font-size: 32rpx;
+				padding: 20rpx 50rpx;
+
+				.icon-right-1-copy {
+					font-size: 36rpx;
+					color: #ccc;
+				}
+			}
+		}
+	}
+
+	/* 动画 */
+	.show {
+		display: block;
+
+		.mask {
+			animation: showPopup 0.3s linear both;
+		}
+
+		.layer {
+			animation: showLayer 0.3s linear both;
+		}
+	}
+
+	.hide {
+		.mask {
+			animation: hidePopup 0.4s linear both;
+		}
+
+		.layer {
+			animation: hideLayer 0.4s linear both;
+		}
+	}
+
+	.none {
+		display: none;
 	}
 </style>

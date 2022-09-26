@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<block v-if="type == 1">
-			<view class="add bg-green" @click="navto() ">
+			<view class="add bg-green" @click="navto()" :style="{top: top}">
 				<text class="iconfont icon-tianjia"></text>
 			</view>
 		</block>
@@ -29,12 +29,17 @@
 </template>
 
 <script>
+	let  app = getApp();
 	export default {
 		props: {
 			url: String,
 			type: {
 				type: Number,
 				default: 1
+			},
+			top: {
+				type: String,
+				default: "90%"
 			}
 		},
 		data() {
@@ -56,7 +61,8 @@
 			},
 			navto() {
 				this.$api.isLogin();
-				if (this.$api.token) {
+				console.log(app);
+				if (app.globalData.userLogin) {
 					this.$navto.navto(this.url);
 				}
 
@@ -69,10 +75,12 @@
 	.recompile,
 	.add {
 		position: fixed;
-		right: 18rpx;
-		bottom: 40rpx;
+		right: 30rpx;
+		bottom: 0;
+		margin: auto;
 		width: 90rpx;
 		height: 90rpx;
+		z-index: 40;
 	}
 
 	.add {
