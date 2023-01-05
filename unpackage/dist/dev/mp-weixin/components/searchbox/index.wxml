@@ -1,0 +1,1 @@
+<view><view class="search"><view class="search-input"><text class="iconfont icon-sousuotianchong"></text><input type="text" placeholder="{{placeholder}}" data-event-opts="{{[['blur',[['blurSearch',['$event']]]]]}}" bindblur="__e"/></view><text data-event-opts="{{[['tap',[['filterShow']]]]}}" class="iconfont icon-shaixuan" bindtap="__e"></text></view></view>

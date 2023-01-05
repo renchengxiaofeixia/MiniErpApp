@@ -1,0 +1,11 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "header-tab": "/components/headerTab/index",
+    "searchbox": "/components/searchbox/index",
+    "data-grid": "/components/dataGrid/index",
+    "add-order": "/components/addOrder",
+    "footer-btn": "/components/footerBtn",
+    "uni-number-box": "/uni_modules/uni-number-box/components/uni-number-box/uni-number-box"
+  }
+}

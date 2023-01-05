@@ -1,0 +1,13 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "uni-collapse": "/uni_modules/uni-collapse/components/uni-collapse/uni-collapse",
+    "uni-collapse-item": "/uni_modules/uni-collapse/components/uni-collapse-item/uni-collapse-item",
+    "header-tab": "/components/headerTab/index",
+    "product-message": "/pages/details/components/productMessage",
+    "linkman": "/pages/details/components/linkman",
+    "operator": "/pages/details/components/operator",
+    "add-order": "/components/addOrder",
+    "copyreader": "/components/copyreader/index"
+  }
+}

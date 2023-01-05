@@ -1,0 +1,1 @@
+<view class="footer"><view class="footer-btn"><button data-event-opts="{{[['tap',[['e0',['$event']]]]]}}" class="cancel" bindtap="__e">取消</button><button data-event-opts="{{[['tap',[['confirm',['$event']]]]]}}" class="confirm" catchtap="__e">确定</button></view></view>

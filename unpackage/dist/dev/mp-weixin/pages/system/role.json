@@ -1,0 +1,8 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "header-tab": "/components/headerTab/index",
+    "add-order": "/components/addOrder",
+    "copyreader": "/components/copyreader/index"
+  }
+}

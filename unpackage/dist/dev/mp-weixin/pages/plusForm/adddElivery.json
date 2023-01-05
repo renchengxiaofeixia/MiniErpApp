@@ -1,0 +1,10 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "uni-collapse": "/uni_modules/uni-collapse/components/uni-collapse/uni-collapse",
+    "uni-collapse-item": "/uni_modules/uni-collapse/components/uni-collapse-item/uni-collapse-item",
+    "header-tab": "/components/headerTab/index",
+    "state-bar": "/components/stateBar",
+    "select-goods": "/components/selectGoods"
+  }
+}

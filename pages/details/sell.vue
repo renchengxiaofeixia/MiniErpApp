@@ -105,7 +105,7 @@
 				打印
 			</view>
 			<view class="operation" hover-class="checkActive"
-				@click="$navto.navto('pages/plusForm/addMarket',{id:id,header:'修改采购订单',type: 1})">
+				@click="$navto.navto('pages/plusForm/addMarket',{id:id,header:'修改销售订单',type: 1})">
 				修改
 			</view>
 			<view class="operation red" hover-class="checkActive" @click="delSell()">

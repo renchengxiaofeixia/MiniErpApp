@@ -1,0 +1,1 @@
+<view><header-tab vue-id="4737bbea-1" title="账号信息" bind:__l="__l"></header-tab><view class="table"><view class="goods-flex mgs"><view class="gray name">登录名：</view><view class="black fill">{{user.userName}}</view></view><view class="goods-flex mgs"><view class="gray name">手机号：</view><view class="black fill">{{user.mobile}}</view></view></view></view>

@@ -6,6 +6,7 @@
 					<text class="iconfont icon-31wode"></text>
 				</button>
 				<text class="header-text">首页</text>
+				<text class="header-right-space"></text>
 			</view>
 		</view>
 
@@ -175,6 +176,11 @@
 				flex: 1;
 				text-align: center;
 				font-size: 30rpx;
+				color: #fff;
+			}
+			
+			.header-right-space{				
+				margin-right: 80rpx;
 				color: #fff;
 			}
 

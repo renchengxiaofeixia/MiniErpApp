@@ -22,6 +22,27 @@
 				<text class="fill gray">选择仓库(必填)</text>
 				<text class="iconfont icon-right-1-copy"></text>
 			</view>
+			<view class="table">
+				<view class="from from-new" @click="navWarehouse()">
+					<text class="title">调入仓库</text>
+					<text class="fill">
+						<text v-if="warehouse.warehouseName">{{warehouse.warehouseName}}</text>
+						<text class="gray" v-else>选择调入仓库(必填)</text>
+					</text>
+					<text class="iconfont icon-right-1-copy"></text>
+				</view>
+			</view>
+			<view class="table">
+				<view class="from from-new" @click="navWarehouse()">
+					<text class="title">调出仓库</text>
+					<text class="fill">
+						<text v-if="warehouse.warehouseName">{{warehouse.warehouseName}}</text>
+						<text class="gray" v-else>选择调出仓库(必填)</text>
+					</text>
+					<text class="iconfont icon-right-1-copy"></text>
+				</view>
+			</view>
+			
 		</view>
 		<selectGoods @shape="accept" ref="goods" :ids="4" :hide="false"></selectGoods>
 

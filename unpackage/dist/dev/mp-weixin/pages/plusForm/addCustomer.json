@@ -1,0 +1,7 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "header-tab": "/components/headerTab/index",
+    "footer-btn": "/components/footerBtn"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "navigationBarTitleText": "",
+  "navigationStyle": "custom",
+  "navigationBarTextStyle": "white",
+  "usingComponents": {
+    "header-tab": "/components/headerTab/index",
+    "searchbox": "/components/searchbox/index",
+    "filtrate-popup": "/components/filtratePopup/index",
+    "data-grid": "/components/dataGrid/index",
+    "add-order": "/components/addOrder",
+    "state-bar": "/components/stateBar"
+  }
+}

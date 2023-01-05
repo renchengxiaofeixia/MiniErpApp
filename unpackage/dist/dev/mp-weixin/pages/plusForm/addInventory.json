@@ -1,0 +1,10 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "uni-datetime-picker": "/uni_modules/uni-datetime-picker/components/uni-datetime-picker/uni-datetime-picker",
+    "header-tab": "/components/headerTab/index",
+    "state-bar": "/components/stateBar",
+    "select-goods": "/components/selectGoods",
+    "footer-btn": "/components/footerBtn"
+  }
+}

@@ -8,7 +8,7 @@
 				</view>
 				<view v-if="item.inWarehouseName">
 					{{item.inWarehouseName}}
-					<text class="gray shift">调拨到</text>
+					<text class="gray shift"> 调拨到 </text>
 					{{item.inWarehouseName}}
 				</view>
 

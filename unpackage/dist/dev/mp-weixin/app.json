@@ -1,0 +1,128 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/order/index",
+    "pages/warehouse/index",
+    "pages/message/index"
+  ],
+  "subPackages": [
+    {
+      "root": "pages/plusForm",
+      "pages": [
+        "addInventory",
+        "addAddress",
+        "addProceeds",
+        "addGoods",
+        "addSupplier",
+        "addCustomer",
+        "addStorage",
+        "adddElivery",
+        "addAllot",
+        "addPurchase",
+        "addMarket",
+        "addContactRecord",
+        "addPayment"
+      ],
+      "name": "plusForm"
+    },
+    {
+      "root": "pages/details",
+      "pages": [
+        "inventory",
+        "proceeds",
+        "product",
+        "storage",
+        "delivery",
+        "allocate",
+        "purchase",
+        "sell",
+        "supplier",
+        "client",
+        "contactRecord",
+        "payment"
+      ],
+      "name": "details"
+    },
+    {
+      "root": "pages/conserve",
+      "pages": [
+        "storage",
+        "category",
+        "choiceCargo",
+        "warehouse",
+        "salesman"
+      ],
+      "name": "conserve"
+    },
+    {
+      "root": "pages/print",
+      "pages": [
+        "index"
+      ],
+      "name": "print"
+    },
+    {
+      "root": "pages/shortcutKey",
+      "pages": [
+        "index"
+      ],
+      "name": "shortcutKey"
+    },
+    {
+      "root": "pages/user",
+      "pages": [
+        "login",
+        "register",
+        "personal"
+      ],
+      "name": "user"
+    },
+    {
+      "root": "pages/system",
+      "pages": [
+        "role"
+      ],
+      "name": "system"
+    }
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#282828",
+    "selectedColor": "#2b9262",
+    "borderStyle": "white",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "static/tabBar/home_main_btn_tab_home1.png",
+        "selectedIconPath": "static/tabBar/home_main_btn_tab_home2.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/order/index",
+        "iconPath": "static/tabBar/home_main_btn_tab_order_unselected.png",
+        "selectedIconPath": "static/tabBar/home_main_btn_tab_order_selected.png",
+        "text": "订单"
+      },
+      {
+        "pagePath": "pages/warehouse/index",
+        "iconPath": "static/tabBar/home_main_btn_tab_supplier1.png",
+        "selectedIconPath": "static/tabBar/home_main_btn_tab_supplier2.png",
+        "text": "出入库"
+      },
+      {
+        "pagePath": "pages/message/index",
+        "iconPath": "static/tabBar/home_main_btn_tab_product1.png",
+        "selectedIconPath": "static/tabBar/home_main_btn_tab_product2.png",
+        "text": "基础资料"
+      }
+    ]
+  },
+  "lazyCodeLoading": "requiredComponents",
+  "usingComponents": {}
+}

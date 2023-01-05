@@ -1,0 +1,10 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "tki-tree": "/components/tki-tree/tki-tree",
+    "header-tab": "/components/headerTab/index",
+    "add-order": "/components/addOrder",
+    "add-popup": "/components/addPopup",
+    "copyreader": "/components/copyreader/index"
+  }
+}

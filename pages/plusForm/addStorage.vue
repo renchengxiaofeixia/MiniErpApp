@@ -12,13 +12,15 @@
 				</view>
 				<text class="iconfont icon-right-1-copy"></text>
 			</view>
-
-			<view class="from from-new">
-				<text class="title">仓库</text>
-				<view class="fill">
-					{{warehouseName}}
+			<view class="table">
+				<view class="from from-new" @click="navWarehouse()">
+					<text class="title">仓库</text>
+					<text class="fill">
+						<text v-if="warehouse.warehouseName">{{warehouse.warehouseName}}</text>
+						<text class="gray" v-else>选择仓库(必填)</text>
+					</text>
+					<text class="iconfont icon-right-1-copy"></text>
 				</view>
-				<text class="iconfont icon-right-1-copy"></text>
 			</view>
 
 			<uni-collapse>
@@ -119,7 +121,7 @@
 				header: '新建入库单',
 				inventoryState: 0,
 				storageDate: this.$api.dateTime("yyyy-MM-dd"), //入库日期
-				warehouseName: "本地",
+				warehouse:{warehouseName: "本地"},
 				productList: [], //接收物品数据
 
 				enterType: "采购入库", //库存状态
@@ -245,7 +247,7 @@
 
 				let data = {};
 				data.enterDate = _this.storageDate;
-				data.warehouseName = _this.warehouseName;
+				data.warehouseName = _this.warehouse.warehouseName;
 				data.enterType = _this.enterType;
 				data.purchaseNo = _this.purchaseNo;
 
@@ -304,6 +306,12 @@
 
 				}
 
+			},
+			navWarehouse(){
+				this.$navto.navto('pages/conserve/warehouse', {
+					id: 2,
+					headline: '选择仓库'
+				})
 			},
 			// 供应商选择
 			navSupplier() {

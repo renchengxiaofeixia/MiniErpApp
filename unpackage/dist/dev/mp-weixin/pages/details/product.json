@@ -1,0 +1,11 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "header-tab": "/components/headerTab/index",
+    "sliding-block": "/pages/details/components/slidingBlock",
+    "add-order": "/components/addOrder",
+    "copyreader": "/components/copyreader/index",
+    "operator": "/pages/details/components/operator",
+    "data-grid": "/components/dataGrid/index"
+  }
+}
